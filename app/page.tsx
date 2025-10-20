@@ -1378,10 +1378,10 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
             O endereço perfeito para quem quer praticidade no dia a dia sem abrir mão de qualidade de vida.
           </p>
 
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-center">
             {/* Google Map - Left Side */}
-            <div className="flex-1">
-              <div className="w-full h-[400px] md:h-[500px] rounded-2xl overflow-hidden bg-gray-200">
+            <div className="w-full lg:w-[55%]">
+              <div className="w-full h-[500px] md:h-[600px] rounded-2xl overflow-hidden bg-gray-200">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3603.6891234567!2d-49.2054321!3d-25.5326789!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94dce3d8c8c8c8c8%3A0x1234567890abcdef!2sR.%20Ver%C3%ADssimo%20Marques%2C%201753%20-%20Centro%2C%20S%C3%A3o%20Jos%C3%A9%20dos%20Pinhais%20-%20PR%2C%2083005-410!5e0!3m2!1spt-BR!2sbr!4v1234567890123!5m2!1spt-BR!2sbr"
                   width="100%"
@@ -1395,69 +1395,69 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
             </div>
 
             {/* Location Bars - Right Side */}
-            <div className="flex-1 space-y-4">
+            <div className="w-full lg:w-[45%] space-y-3">
               {/* Bar 1 */}
-              <div className="relative bg-[#3E0D11] rounded-full px-6 py-4 flex items-center">
-                <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-6 flex items-center justify-center min-w-[80px]">
-                  <span className="font-new-black text-sm md:text-base text-white font-normal">900m</span>
+              <div className="relative bg-[#3E0D11] rounded-full px-5 py-2.5 flex items-center">
+                <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-4 flex items-center justify-center min-w-[70px]">
+                  <span className="font-new-black text-xs md:text-sm text-white font-normal">900m</span>
                 </div>
-                <span className="font-new-black text-sm md:text-base text-white font-normal ml-[100px]">Shopping São José</span>
+                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[85px]">Shopping São José</span>
               </div>
 
               {/* Bar 2 */}
-              <div className="relative bg-[#3E0D11] rounded-full px-6 py-4 flex items-center">
-                <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-6 flex items-center justify-center min-w-[80px]">
-                  <span className="font-new-black text-sm md:text-base text-white font-normal">4,6km</span>
+              <div className="relative bg-[#3E0D11] rounded-full px-5 py-2.5 flex items-center">
+                <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-4 flex items-center justify-center min-w-[70px]">
+                  <span className="font-new-black text-xs md:text-sm text-white font-normal">4,6km</span>
                 </div>
-                <span className="font-new-black text-sm md:text-base text-white font-normal ml-[100px]">Aeroporto Afonso Pena</span>
+                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[85px]">Aeroporto Afonso Pena</span>
               </div>
 
               {/* Bar 3 */}
-              <div className="relative bg-[#3E0D11] rounded-full px-6 py-4 flex items-center">
-                <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-6 flex items-center justify-center min-w-[80px]">
-                  <span className="font-new-black text-sm md:text-base text-white font-normal">600m</span>
+              <div className="relative bg-[#3E0D11] rounded-full px-5 py-2.5 flex items-center">
+                <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-4 flex items-center justify-center min-w-[70px]">
+                  <span className="font-new-black text-xs md:text-sm text-white font-normal">600m</span>
                 </div>
-                <span className="font-new-black text-sm md:text-base text-white font-normal ml-[100px]">Supermercado Festval</span>
+                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[85px]">Supermercado Festval</span>
               </div>
 
               {/* Bar 4 */}
-              <div className="relative bg-[#3E0D11] rounded-full px-6 py-4 flex items-center">
-                <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-6 flex items-center justify-center min-w-[80px]">
-                  <span className="font-new-black text-sm md:text-base text-white font-normal">450m</span>
+              <div className="relative bg-[#3E0D11] rounded-full px-5 py-2.5 flex items-center">
+                <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-4 flex items-center justify-center min-w-[70px]">
+                  <span className="font-new-black text-xs md:text-sm text-white font-normal">450m</span>
                 </div>
-                <span className="font-new-black text-sm md:text-base text-white font-normal ml-[100px]">Rua XV de Novembro</span>
+                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[85px]">Rua XV de Novembro</span>
               </div>
 
               {/* Bar 5 */}
-              <div className="relative bg-[#3E0D11] rounded-full px-6 py-4 flex items-center">
-                <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-6 flex items-center justify-center min-w-[80px]">
-                  <span className="font-new-black text-sm md:text-base text-white font-normal">2,9km</span>
+              <div className="relative bg-[#3E0D11] rounded-full px-5 py-2.5 flex items-center">
+                <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-4 flex items-center justify-center min-w-[70px]">
+                  <span className="font-new-black text-xs md:text-sm text-white font-normal">2,9km</span>
                 </div>
-                <span className="font-new-black text-sm md:text-base text-white font-normal ml-[100px]">Parque São José</span>
+                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[85px]">Parque São José</span>
               </div>
 
               {/* Bar 6 */}
-              <div className="relative bg-[#3E0D11] rounded-full px-6 py-4 flex items-center">
-                <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-6 flex items-center justify-center min-w-[90px]">
-                  <span className="font-new-black text-sm md:text-base text-white font-normal">20 min</span>
+              <div className="relative bg-[#3E0D11] rounded-full px-5 py-2.5 flex items-center">
+                <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-4 flex items-center justify-center min-w-[75px]">
+                  <span className="font-new-black text-xs md:text-sm text-white font-normal">20 min</span>
                 </div>
-                <span className="font-new-black text-sm md:text-base text-white font-normal ml-[110px]">Centro de Curitiba</span>
+                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[90px]">Centro de Curitiba</span>
               </div>
 
               {/* Bar 7 */}
-              <div className="relative bg-[#3E0D11] rounded-full px-6 py-4 flex items-center">
-                <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-6 flex items-center justify-center min-w-[100px]">
-                  <span className="font-new-black text-xs md:text-sm text-white font-normal">Próximo</span>
+              <div className="relative bg-[#3E0D11] rounded-full px-5 py-2.5 flex items-center">
+                <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-4 flex items-center justify-center min-w-[85px]">
+                  <span className="font-new-black text-xs text-white font-normal">Próximo</span>
                 </div>
-                <span className="font-new-black text-sm md:text-base text-white font-normal ml-[120px]">BR 376 - Ligação Curitiba / SC</span>
+                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[100px]">BR 376 - Ligação Curitiba / SC</span>
               </div>
 
               {/* Bar 8 */}
-              <div className="relative bg-[#3E0D11] rounded-full px-6 py-4 flex items-center">
-                <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-6 flex items-center justify-center min-w-[100px]">
-                  <span className="font-new-black text-xs md:text-sm text-white font-normal">Próximo</span>
+              <div className="relative bg-[#3E0D11] rounded-full px-5 py-2.5 flex items-center">
+                <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-4 flex items-center justify-center min-w-[85px]">
+                  <span className="font-new-black text-xs text-white font-normal">Próximo</span>
                 </div>
-                <span className="font-new-black text-sm md:text-base text-white font-normal ml-[120px]">Caminho do Vinho</span>
+                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[100px]">Caminho do Vinho</span>
               </div>
             </div>
           </div>
