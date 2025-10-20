@@ -91,7 +91,7 @@ export default function HomePage() {
     {
       image: "/lazer/ED.VERUS.ACADEMIA.png",
       title: "Academia",
-      description: "Espaço completo para corpo em movimento e mente em equilíbrio"
+      description: "Espaço completo para corpo em movimento e mente em equilÍbrio"
     },
     {
       image: "/lazer/ED.VERUS.PET.PLACE.png",
@@ -548,17 +548,22 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
         </div>
       </section>
 
-      {/* Video Section */}
-      <section className="bg-gray-200">
-        <div className="relative w-full bg-gray-200 overflow-hidden" style={{aspectRatio: '21/9'}}>
-          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-300 to-gray-400">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4 mx-auto">
-                <svg className="w-8 h-8 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M8 5v10l8-5-8-5z"/>
-                </svg>
-              </div>
-              <p className="text-gray-600 font-new-black text-lg">Video Placeholder</p>
+      {/* Lazer Section */}
+      <section className="relative">
+        <div className="relative w-full overflow-hidden" style={{aspectRatio: '21/9'}}>
+          <Image
+            src="/lazer/ED.VERUS.PISCINA.R01.png"
+            alt="Piscina climatizada Verus"
+            fill
+            className="object-cover"
+            quality={100}
+            priority
+          />
+          <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+            <div className="text-center px-6 md:px-20">
+              <h2 className="font-carla-sans text-2xl md:text-4xl lg:text-6xl font-normal text-white leading-tight">
+                Piscina climatizada com hidromassagem e academia para corpo e mente em equilÍbrio.
+              </h2>
             </div>
           </div>
         </div>
@@ -1478,14 +1483,6 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
       {/* Sobre Section */}
       <section id="autoria" className="bg-white py-16 md:py-24 px-6 md:px-20">
         <div className="max-w-6xl mx-auto">
-          {/* Section Tag */}
-          <div className="flex items-center mb-8 md:mb-12">
-            <div className="w-3 h-3 bg-[#C2816B] rounded-full mr-3"></div>
-            <div className="border border-[#171715] rounded-full px-4 py-1">
-              <span className="font-mirante text-xs text-[#171715] font-normal">SOBRE</span>
-            </div>
-          </div>
-
           <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
             {/* Left Side - Logo */}
             <div className="flex-shrink-0">
@@ -1617,14 +1614,6 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
       {/* Grifo Arquitetura Section */}
       <section className="bg-gray-100 relative py-16 md:py-24 px-6 md:px-20">
         <div className="max-w-6xl mx-auto">
-          {/* Section Tag */}
-          <div className="flex items-center mb-8 md:mb-12">
-            <div className="w-3 h-3 bg-[#C2816B] rounded-full mr-3"></div>
-            <div className="border border-[#171715] rounded-full px-4 py-1">
-              <span className="font-mirante text-xs text-[#171715] font-normal">SOBRE</span>
-            </div>
-          </div>
-
           <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
             {/* Left Side - Grifo Logo */}
             <div className="flex-shrink-0 lg:w-1/3">
@@ -1694,100 +1683,100 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
             Atualizado Outubro de 2025.
           </p>
 
-          <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
+          <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-stretch">
             {/* Left Side - Progress Bars */}
-            <div className="flex-1 space-y-6">
+            <div className="flex-1 flex flex-col justify-between space-y-4">
               {/* Progress Bar 1 */}
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <div className="flex justify-between items-center">
-                  <span className="font-new-black text-sm md:text-base font-normal text-gray-700">Fundação e Estrutura</span>
-                  <span className="font-new-black text-sm md:text-base font-normal text-gray-700">85%</span>
+                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">Fundação e Estrutura</span>
+                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">85%</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-3">
-                  <div className="bg-[#3E0D11] h-3 rounded-full" style={{width: '85%'}}></div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="bg-[#3E0D11] h-2 rounded-full" style={{width: '85%'}}></div>
                 </div>
               </div>
 
               {/* Progress Bar 2 */}
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <div className="flex justify-between items-center">
-                  <span className="font-new-black text-sm md:text-base font-normal text-gray-700">Alvenaria e Vedação</span>
-                  <span className="font-new-black text-sm md:text-base font-normal text-gray-700">72%</span>
+                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">Alvenaria e Vedação</span>
+                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">72%</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-3">
-                  <div className="bg-[#3E0D11] h-3 rounded-full" style={{width: '72%'}}></div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="bg-[#3E0D11] h-2 rounded-full" style={{width: '72%'}}></div>
                 </div>
               </div>
 
               {/* Progress Bar 3 */}
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <div className="flex justify-between items-center">
-                  <span className="font-new-black text-sm md:text-base font-normal text-gray-700">Instalações Elétricas</span>
-                  <span className="font-new-black text-sm md:text-base font-normal text-gray-700">68%</span>
+                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">Instalações Elétricas</span>
+                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">68%</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-3">
-                  <div className="bg-[#3E0D11] h-3 rounded-full" style={{width: '68%'}}></div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="bg-[#3E0D11] h-2 rounded-full" style={{width: '68%'}}></div>
                 </div>
               </div>
 
               {/* Progress Bar 4 */}
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <div className="flex justify-between items-center">
-                  <span className="font-new-black text-sm md:text-base font-normal text-gray-700">Instalações Hidráulicas</span>
-                  <span className="font-new-black text-sm md:text-base font-normal text-gray-700">55%</span>
+                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">Instalações Hidráulicas</span>
+                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">55%</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-3">
-                  <div className="bg-[#3E0D11] h-3 rounded-full" style={{width: '55%'}}></div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="bg-[#3E0D11] h-2 rounded-full" style={{width: '55%'}}></div>
                 </div>
               </div>
 
               {/* Progress Bar 5 */}
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <div className="flex justify-between items-center">
-                  <span className="font-new-black text-sm md:text-base font-normal text-gray-700">Acabamentos Internos</span>
-                  <span className="font-new-black text-sm md:text-base font-normal text-gray-700">42%</span>
+                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">Acabamentos Internos</span>
+                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">42%</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-3">
-                  <div className="bg-[#3E0D11] h-3 rounded-full" style={{width: '42%'}}></div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="bg-[#3E0D11] h-2 rounded-full" style={{width: '42%'}}></div>
                 </div>
               </div>
 
               {/* Progress Bar 6 */}
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <div className="flex justify-between items-center">
-                  <span className="font-new-black text-sm md:text-base font-normal text-gray-700">Acabamentos Externos</span>
-                  <span className="font-new-black text-sm md:text-base font-normal text-gray-700">38%</span>
+                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">Acabamentos Externos</span>
+                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">38%</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-3">
-                  <div className="bg-[#3E0D11] h-3 rounded-full" style={{width: '38%'}}></div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="bg-[#3E0D11] h-2 rounded-full" style={{width: '38%'}}></div>
                 </div>
               </div>
 
               {/* Progress Bar 7 */}
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <div className="flex justify-between items-center">
-                  <span className="font-new-black text-sm md:text-base font-normal text-gray-700">Paisagismo</span>
-                  <span className="font-new-black text-sm md:text-base font-normal text-gray-700">25%</span>
+                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">Paisagismo</span>
+                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">25%</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-3">
-                  <div className="bg-[#3E0D11] h-3 rounded-full" style={{width: '25%'}}></div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="bg-[#3E0D11] h-2 rounded-full" style={{width: '25%'}}></div>
                 </div>
               </div>
 
               {/* Progress Bar 8 */}
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <div className="flex justify-between items-center">
-                  <span className="font-new-black text-sm md:text-base font-normal text-gray-700">Entrega Final</span>
-                  <span className="font-new-black text-sm md:text-base font-normal text-gray-700">15%</span>
+                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">Entrega Final</span>
+                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">15%</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-3">
-                  <div className="bg-[#3E0D11] h-3 rounded-full" style={{width: '15%'}}></div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="bg-[#3E0D11] h-2 rounded-full" style={{width: '15%'}}></div>
                 </div>
               </div>
 
               {/* Paragraph below progress bars */}
-              <div className="mt-8">
-                <p className="font-new-black text-base md:text-lg font-normal text-gray-600 leading-relaxed text-left">
+              <div className="mt-6">
+                <p className="font-new-black text-sm md:text-base font-normal text-gray-600 leading-relaxed text-left">
                   Cada etapa da obra revela um novo capítulo da história do Verus.<br />
                   Acompanhe o progresso e veja o futuro tomando forma diante dos seus olhos.
                 </p>
@@ -1801,7 +1790,7 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
                 alt="Verus Building Construction"
                 width={600}
                 height={800}
-                className="w-full h-auto rounded-lg"
+                className="w-full h-full object-cover rounded-lg"
               />
             </div>
           </div>
