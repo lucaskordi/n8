@@ -25,6 +25,12 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
 }
 
 @layer utilities {
@@ -34,106 +40,122 @@ body {
 }
 
 @keyframes fadeInUp {
-  from {
+  0% {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
   }
-  to {
+  100% {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
 @keyframes fadeIn {
-  from {
+  0% {
     opacity: 0;
   }
-  to {
+  100% {
     opacity: 1;
   }
 }
 
 @keyframes slideInLeft {
-  from {
+  0% {
     opacity: 0;
-    transform: translateX(-30px);
+    transform: translateX(-20px);
   }
-  to {
+  100% {
     opacity: 1;
     transform: translateX(0);
   }
 }
 
 @keyframes slideInRight {
-  from {
+  0% {
     opacity: 0;
-    transform: translateX(30px);
+    transform: translateX(20px);
   }
-  to {
+  100% {
     opacity: 1;
     transform: translateX(0);
   }
 }
 
 @keyframes progressGrow {
-  from {
+  0% {
     width: 0;
   }
-  to {
+  100% {
     width: var(--target-width);
   }
 }
 
 @keyframes modalFadeIn {
-  from {
+  0% {
     opacity: 0;
   }
-  to {
+  100% {
     opacity: 1;
   }
 }
 
 @keyframes modalSlideIn {
-  from {
+  0% {
     opacity: 0;
-    transform: scale(0.95) translateY(-20px);
+    transform: scale(0.95) translateY(-10px);
   }
-  to {
+  100% {
     opacity: 1;
     transform: scale(1) translateY(0);
   }
 }
 
 .animate-fade-in-up {
-  animation: fadeInUp 0.8s ease-out forwards;
+  animation: fadeInUp 0.6s ease-out both;
+  will-change: transform, opacity;
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.8s ease-out forwards;
+  animation: fadeIn 0.6s ease-out both;
+  will-change: opacity;
 }
 
 .animate-slide-in-left {
-  animation: slideInLeft 0.8s ease-out forwards;
+  animation: slideInLeft 0.6s ease-out both;
+  will-change: transform, opacity;
 }
 
 .animate-slide-in-right {
-  animation: slideInRight 0.8s ease-out forwards;
+  animation: slideInRight 0.6s ease-out both;
+  will-change: transform, opacity;
 }
 
 .animate-progress-grow {
-  animation: progressGrow 1.2s ease-out forwards;
-  width: 0;
+  animation: progressGrow 1s ease-out both;
+  will-change: width;
 }
 
 .animate-modal-fade-in {
-  animation: modalFadeIn 0.3s ease-out forwards;
+  animation: modalFadeIn 0.2s ease-out both;
+  will-change: opacity;
 }
 
 .animate-modal-slide-in {
-  animation: modalSlideIn 0.3s ease-out forwards;
+  animation: modalSlideIn 0.3s ease-out both;
+  will-change: transform, opacity;
 }
 
 .opacity-0 {
   opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 

@@ -3,16 +3,24 @@
 import Image from 'next/image'
 import { useState, useEffect, useRef } from 'react'
 
-function useIntersectionObserver(options = {}) {
-  const ref = useRef(null)
+function useIntersectionObserver() {
+  const ref = useRef<HTMLDivElement>(null)
   const [isVisible, setIsVisible] = useState(false)
+  const [hasAnimated, setHasAnimated] = useState(false)
 
   useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setIsVisible(true)
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasAnimated) {
+          setIsVisible(true)
+          setHasAnimated(true)
+        }
+      },
+      { 
+        threshold: 0.1,
+        rootMargin: '50px'
       }
-    }, { threshold: 0.1, ...options })
+    )
 
     const currentRef = ref.current
     if (currentRef) {
@@ -24,9 +32,9 @@ function useIntersectionObserver(options = {}) {
         observer.unobserve(currentRef)
       }
     }
-  }, [options])
+  }, [hasAnimated])
 
-  return [ref, isVisible]
+  return [ref, isVisible] as const
 }
 
 function AnimatedSection({ children, animation = 'fade-in-up', delay = 0 }: { children: React.ReactNode, animation?: string, delay?: number }) {
@@ -34,9 +42,11 @@ function AnimatedSection({ children, animation = 'fade-in-up', delay = 0 }: { ch
   
   return (
     <div
-      ref={ref as React.RefObject<HTMLDivElement>}
-      className={`${!isVisible ? 'opacity-0' : `animate-${animation}`}`}
-      style={{ animationDelay: `${delay}ms` }}
+      ref={ref}
+      className={!isVisible ? 'opacity-0' : `animate-${animation}`}
+      style={{ 
+        animationDelay: delay > 0 ? `${delay}ms` : undefined
+      }}
     >
       {children}
     </div>
@@ -52,12 +62,12 @@ function AnimatedProgressBar({ label, percentage, delay = 0 }: { label: string, 
         <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">{label}</span>
         <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">{percentage}%</span>
       </div>
-      <div ref={ref as React.RefObject<HTMLDivElement>} className="w-full bg-gray-200 rounded-full h-2">
+      <div ref={ref} className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
         <div 
-          className={`bg-[#3E0D11] h-2 rounded-full ${isVisible ? 'animate-progress-grow' : ''}`}
+          className={`bg-[#3E0D11] h-2 rounded-full ${isVisible ? 'animate-progress-grow' : 'w-0'}`}
           style={{
             '--target-width': `${percentage}%`,
-            animationDelay: `${delay}ms`
+            animationDelay: delay > 0 ? `${delay}ms` : undefined
           } as React.CSSProperties}
         ></div>
       </div>
@@ -612,15 +622,6 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                 <br className="md:hidden" />
                 Descubra plantas, diferenciais e tudo o que torna este projeto único.
               </p>
-              <div className="hidden md:inline-flex items-center gap-2 ml-2">
-                <Image
-                  src="/logo_white.svg"
-                  alt="Verus Logo"
-                  width={80}
-                  height={26}
-                  className="h-6 w-auto"
-                />
-              </div>
             </div>
             
             {/* Download Button - Right */}
