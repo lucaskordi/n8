@@ -14,16 +14,17 @@ function useIntersectionObserver(options = {}) {
       }
     }, { threshold: 0.1, ...options })
 
-    if (ref.current) {
-      observer.observe(ref.current)
+    const currentRef = ref.current
+    if (currentRef) {
+      observer.observe(currentRef)
     }
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current)
+      if (currentRef) {
+        observer.unobserve(currentRef)
       }
     }
-  }, [])
+  }, [options])
 
   return [ref, isVisible]
 }
@@ -1729,7 +1730,7 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
 
               <div className="space-y-4">
                 <blockquote className="font-new-black text-base md:text-lg font-normal text-gray-700 italic">
-                  "Projetamos para pessoas reais, em lugares reais."
+                  &quot;Projetamos para pessoas reais, em lugares reais.&quot;
                 </blockquote>
                 <p className="font-new-black text-base md:text-lg font-normal text-gray-700">
                   Grifo Arquitetura
