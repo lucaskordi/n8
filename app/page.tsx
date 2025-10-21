@@ -332,6 +332,13 @@ export default function HomePage() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
+
   return (
     <main className="min-h-screen bg-white">
       {/* Header */}
@@ -394,9 +401,9 @@ export default function HomePage() {
             </div>
             
             {/* Contact Button */}
-            <button className="bg-[#C2816B] hover:bg-[#3E0D11] text-white font-mirante font-normal px-3 md:px-6 py-2 md:py-3 rounded-full hover:scale-105 transition-all duration-300 text-sm md:text-base">
+            <a href="http://wa.me/5541997188421?text=Vim%20do%20Site%20e%20Gostaria%20de%20Saber%20Mais%20sobre%20o%20Verus" target="_blank" rel="noopener noreferrer" className="bg-[#C2816B] hover:bg-[#3E0D11] text-white font-mirante font-normal px-3 md:px-6 py-2 md:py-3 rounded-full hover:scale-105 transition-all duration-300 text-sm md:text-base">
               Entrar em Contato
-            </button>
+            </a>
           </div>
         </div>
       </header>
@@ -427,7 +434,7 @@ export default function HomePage() {
             </p>
           </AnimatedSection>
           <AnimatedSection animation="fade-in-up" delay={600}>
-            <button className="group flex items-center space-x-3 mt-4 md:mt-6 font-new-black text-base md:text-lg font-normal text-white border-2 border-white rounded-full px-4 md:px-6 py-2 md:py-3 hover:bg-[#C2816B] hover:border-[#C2816B] transition-all duration-300 md:ml-[190px]">
+            <button onClick={() => scrollToSection('projeto')} className="group flex items-center space-x-3 mt-4 md:mt-6 font-new-black text-base md:text-lg font-normal text-white border-2 border-white rounded-full px-4 md:px-6 py-2 md:py-3 hover:bg-[#C2816B] hover:border-[#C2816B] transition-all duration-300 md:ml-[190px]">
               <span>Saiba Mais</span>
               <div className="group-hover:rotate-45 transition-transform duration-300">
                 <Image
@@ -503,7 +510,7 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                       <input 
                         type="text" 
                         placeholder="Nome*" 
-                        className="w-full px-4 py-3 bg-white border border-[#E6E5EA] rounded-lg text-[#E6E5EA] focus:outline-none focus:border-[#C2816B] transition-colors"
+                        className="w-full px-4 py-3 bg-white border border-[#E6E5EA] rounded-lg text-gray-900 placeholder:text-[#E6E5EA] focus:outline-none focus:border-[#C2816B] transition-colors"
                       />
                     </div>
                     
@@ -514,7 +521,7 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                       <input 
                         type="tel" 
                         placeholder="Telefone" 
-                        className="w-full px-4 py-3 bg-white border border-[#E6E5EA] rounded-lg text-[#E6E5EA] focus:outline-none focus:border-[#C2816B] transition-colors"
+                        className="w-full px-4 py-3 bg-white border border-[#E6E5EA] rounded-lg text-gray-900 placeholder:text-[#E6E5EA] focus:outline-none focus:border-[#C2816B] transition-colors"
                       />
                     </div>
                     
@@ -525,7 +532,7 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                       <input 
                         type="email" 
                         placeholder="E-mail" 
-                        className="w-full px-4 py-3 bg-white border border-[#E6E5EA] rounded-lg text-[#E6E5EA] focus:outline-none focus:border-[#C2816B] transition-colors"
+                        className="w-full px-4 py-3 bg-white border border-[#E6E5EA] rounded-lg text-gray-900 placeholder:text-[#E6E5EA] focus:outline-none focus:border-[#C2816B] transition-colors"
                       />
                     </div>
                   </div>
@@ -595,7 +602,7 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
             
             {/* Download Button - Right */}
             <div className="flex-shrink-0">
-              <button className="group flex items-center space-x-3 font-new-black text-base md:text-lg font-normal text-white border-2 border-white rounded-full px-6 py-3 hover:bg-[#C2816B] hover:border-[#C2816B] transition-all duration-300">
+              <button onClick={() => scrollToSection('projeto')} className="group flex items-center space-x-3 font-new-black text-base md:text-lg font-normal text-white border-2 border-white rounded-full px-6 py-3 hover:bg-[#C2816B] hover:border-[#C2816B] transition-all duration-300">
                 <span>Baixe Agora</span>
                 <div className="group-hover:rotate-45 transition-transform duration-300">
                   <Image
@@ -1825,7 +1832,7 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
 
             {/* WhatsApp Button */}
             <a
-              href="http://wa.me/5541997188421"
+              href="http://wa.me/5541997188421?text=Vim%20do%20Site%20e%20Gostaria%20de%20Saber%20Mais%20sobre%20o%20Verus"
               target="_blank"
               rel="noopener noreferrer"
               className="flex flex-col items-center gap-1 px-6 py-3 border-2 border-[#171715] rounded-lg hover:bg-[#3E0D11] hover:border-[#3E0D11] hover:scale-105 transition-all duration-300 group"
@@ -1936,9 +1943,9 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
             </nav>
 
             {/* Contact Button */}
-            <button className="bg-[#C2816B] hover:bg-[#3E0D11] text-white font-mirante font-normal px-6 md:px-8 py-3 md:py-4 rounded-full hover:scale-105 transition-all duration-300 text-sm md:text-base">
+            <a href="http://wa.me/5541997188421?text=Vim%20do%20Site%20e%20Gostaria%20de%20Saber%20Mais%20sobre%20o%20Verus" target="_blank" rel="noopener noreferrer" className="bg-[#C2816B] hover:bg-[#3E0D11] text-white font-mirante font-normal px-6 md:px-8 py-3 md:py-4 rounded-full hover:scale-105 transition-all duration-300 text-sm md:text-base">
               Entrar em Contato
-            </button>
+            </a>
           </div>
         </div>
       </footer>
