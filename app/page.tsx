@@ -1,7 +1,68 @@
 'use client'
 
 import Image from 'next/image'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
+
+function useIntersectionObserver(options = {}) {
+  const ref = useRef(null)
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setIsVisible(true)
+      }
+    }, { threshold: 0.1, ...options })
+
+    if (ref.current) {
+      observer.observe(ref.current)
+    }
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current)
+      }
+    }
+  }, [])
+
+  return [ref, isVisible]
+}
+
+function AnimatedSection({ children, animation = 'fade-in-up', delay = 0 }: { children: React.ReactNode, animation?: string, delay?: number }) {
+  const [ref, isVisible] = useIntersectionObserver()
+  
+  return (
+    <div
+      ref={ref as React.RefObject<HTMLDivElement>}
+      className={`${!isVisible ? 'opacity-0' : `animate-${animation}`}`}
+      style={{ animationDelay: `${delay}ms` }}
+    >
+      {children}
+    </div>
+  )
+}
+
+function AnimatedProgressBar({ label, percentage, delay = 0 }: { label: string, percentage: number, delay?: number }) {
+  const [ref, isVisible] = useIntersectionObserver()
+  
+  return (
+    <div className="space-y-1">
+      <div className="flex justify-between items-center">
+        <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">{label}</span>
+        <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">{percentage}%</span>
+      </div>
+      <div ref={ref as React.RefObject<HTMLDivElement>} className="w-full bg-gray-200 rounded-full h-2">
+        <div 
+          className={`bg-[#3E0D11] h-2 rounded-full ${isVisible ? 'animate-progress-grow' : ''}`}
+          style={{
+            '--target-width': `${percentage}%`,
+            animationDelay: `${delay}ms`
+          } as React.CSSProperties}
+        ></div>
+      </div>
+    </div>
+  )
+}
 
 export default function HomePage() {
   const [activeGallery, setActiveGallery] = useState('apartamentos')
@@ -70,7 +131,7 @@ export default function HomePage() {
     },
     {
       image: "/lazer/ED.VERUS.SOLARIUM.png",
-      title: "Solário",
+      title: "SolÁrio",
       description: "Solário, Jacuzzi e Champanheira: relaxamento com exclusividade"
     },
     {
@@ -352,26 +413,32 @@ export default function HomePage() {
         
         {/* Hero Content */}
         <div className="absolute top-1/2 left-4 md:left-[130px] transform -translate-y-1/2 z-10 px-4 md:px-0">
-          <h1 className="font-carla-sans text-4xl md:text-6xl lg:text-8xl font-light text-white leading-tight">
-            A verdade em<br />
-            cada detalhe
-          </h1>
-          <p className="font-new-black text-base md:text-lg font-normal text-white mt-4 md:mt-6 md:ml-[190px]">
-          Um projeto que une autenticidade, conforto e<br>
-          </br>design contemporâneo no coração de São José dos Pinhais
-          </p>
-          <button className="group flex items-center space-x-3 mt-4 md:mt-6 font-new-black text-base md:text-lg font-normal text-white border-2 border-white rounded-full px-4 md:px-6 py-2 md:py-3 hover:bg-[#C2816B] hover:border-[#C2816B] transition-all duration-300 md:ml-[190px]">
-            <span>Saiba Mais</span>
-            <div className="group-hover:rotate-45 transition-transform duration-300">
-              <Image
-                src="/arrow.png"
-                alt="Arrow"
-                width={24}
-                height={24}
-                className="w-5 h-5 md:w-6 md:h-6"
-              />
-            </div>
-          </button>
+          <AnimatedSection animation="fade-in-up" delay={200}>
+            <h1 className="font-carla-sans text-4xl md:text-6xl lg:text-8xl font-light text-white leading-tight">
+              A verdade em<br />
+              cada detalhe
+            </h1>
+          </AnimatedSection>
+          <AnimatedSection animation="fade-in-up" delay={400}>
+            <p className="font-new-black text-base md:text-lg font-normal text-white mt-4 md:mt-6 md:ml-[190px]">
+            Um projeto que une autenticidade, conforto e<br>
+            </br>design contemporâneo no coração de São José dos Pinhais
+            </p>
+          </AnimatedSection>
+          <AnimatedSection animation="fade-in-up" delay={600}>
+            <button className="group flex items-center space-x-3 mt-4 md:mt-6 font-new-black text-base md:text-lg font-normal text-white border-2 border-white rounded-full px-4 md:px-6 py-2 md:py-3 hover:bg-[#C2816B] hover:border-[#C2816B] transition-all duration-300 md:ml-[190px]">
+              <span>Saiba Mais</span>
+              <div className="group-hover:rotate-45 transition-transform duration-300">
+                <Image
+                  src="/arrow.png"
+                  alt="Arrow"
+                  width={24}
+                  height={24}
+                  className="w-5 h-5 md:w-6 md:h-6"
+                />
+              </div>
+            </button>
+          </AnimatedSection>
         </div>
       </div>
 
@@ -386,37 +453,33 @@ export default function HomePage() {
         />
         
         {/* Projeto Image - Top Left Corner */}
-        <div className="absolute top-[10px] left-[20px] md:left-[130px] z-50">
-          <Image
-            src="/projeto.png"
-            alt="Projeto"
-            width={900}
-            height={900}
-            className="w-[120px] md:w-[540px] h-auto"
-          />
-        </div>
+       
         
         <div className="relative z-10 min-h-screen flex items-center justify-center px-6 md:px-20">
           
           {/* Centered Container with Image and Text */}
           <div className="flex flex-col lg:flex-row items-stretch gap-8 lg:gap-16 max-w-6xl w-full">
             {/* Building Image - Left Side */}
-            <div className="flex justify-center lg:justify-start">
-              <Image
-                src="/buildingcontact.png"
-                alt="Verus Building"
-                width={400}
-                height={800}
-                className="w-full max-w-sm lg:max-w-md h-full object-contain rounded-lg"
-              />
-            </div>
+            <AnimatedSection animation="slide-in-left">
+              <div className="flex justify-center lg:justify-start">
+                <Image
+                  src="/buildingcontact.png"
+                  alt="Verus Building"
+                  width={400}
+                  height={800}
+                  className="w-full max-w-sm lg:max-w-md h-full object-contain rounded-lg"
+                />
+              </div>
+            </AnimatedSection>
             
             {/* Text Content - Right Side */}
             <div className="text-left max-w-xl flex flex-col justify-between h-full">
-              <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight mb-8">
-                VERUS, ONDE A VERDADE<br />
-                SE TRANSFORMA EM <span className="text-[#C2816B]">LAR.</span>
-              </h2>
+              <AnimatedSection animation="fade-in-up">
+                <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight mb-8">
+                  VERUS, ONDE A VERDADE<br />
+                  SE TRANSFORMA EM <span className="text-[#C2816B]">LAR.</span>
+                </h2>
+              </AnimatedSection>
               
               <div className="font-new-black text-sm md:text-base font-normal text-gray-600 leading-relaxed mb-8">
                 <p className="mb-6">
@@ -560,11 +623,13 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
             priority
           />
           <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
-            <div className="text-center px-6 md:px-20">
-              <h2 className="font-carla-sans text-2xl md:text-4xl lg:text-6xl font-normal text-white leading-tight">
-                Piscina climatizada com hidromassagem e academia para corpo e mente em equilÍbrio.
-              </h2>
-            </div>
+            <AnimatedSection animation="fade-in-up">
+              <div className="text-center px-6 md:px-20">
+                <h2 className="font-carla-sans text-2xl md:text-4xl lg:text-6xl font-normal text-white leading-tight">
+                  Piscina climatizada com hidromassagem e academia para corpo e mente em equilÍbrio.
+                </h2>
+              </div>
+            </AnimatedSection>
           </div>
         </div>
       </section>
@@ -580,14 +645,18 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
         />
         
         <div className="relative z-10 max-w-6xl mx-auto">
-          <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight text-center mb-8">
-            SEU ESPAÇO DO<br />
-            <span className="text-[#C2816B]">SEU JEITO.</span>
-          </h2>
+          <AnimatedSection animation="fade-in-up">
+            <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight text-center mb-8">
+              SEU ESPAÇO DO<br />
+              <span className="text-[#C2816B]">SEU JEITO.</span>
+            </h2>
+          </AnimatedSection>
 
-          <p className="font-new-black text-base md:text-lg font-normal text-gray-600 text-center max-w-3xl mx-auto mb-12">
-            Mais que espaços, o Verus oferece liberdade para viver cada momento do seu jeito — com conforto, lazer e praticidade em harmonia.
-          </p>
+          <AnimatedSection animation="fade-in-up" delay={200}>
+            <p className="font-new-black text-base md:text-lg font-normal text-gray-600 text-center max-w-3xl mx-auto mb-12">
+              Mais que espaços, o Verus oferece liberdade para viver cada momento do seu jeito — com conforto, lazer e praticidade em harmonia.
+            </p>
+          </AnimatedSection>
 
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mb-16">
             <button 
@@ -828,14 +897,18 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
           <div className="lg:w-1/2 flex items-center py-16 px-6 md:px-12 lg:px-16">
             <div className="max-w-2xl">
               {/* Headline */}
-              <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-white leading-tight mb-8">
-                Tecnologia, conforto e consciência em <span className="text-[#C2816B]">cada detalhe.</span>
-              </h2>
+              <AnimatedSection animation="fade-in-up">
+                <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-white leading-tight mb-8">
+                  Tecnologia, conforto e consciência em <span className="text-[#C2816B]">cada detalhe.</span>
+                </h2>
+              </AnimatedSection>
 
               {/* Paragraph */}
-              <p className="font-new-black text-base md:text-lg font-normal text-white leading-relaxed mb-12">
-                O VERUS foi pensado para oferecer mais do que um bom lugar para viver. Ele entrega soluções modernas, sustentáveis e funcionais, que elevam a experiência de morar com praticidade, segurança e eficiência.
-              </p>
+              <AnimatedSection animation="fade-in-up" delay={200}>
+                <p className="font-new-black text-base md:text-lg font-normal text-white leading-relaxed mb-12">
+                  O VERUS foi pensado para oferecer mais do que um bom lugar para viver. Ele entrega soluções modernas, sustentáveis e funcionais, que elevam a experiência de morar com praticidade, segurança e eficiência.
+                </p>
+              </AnimatedSection>
 
               {/* Topics List */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1063,15 +1136,19 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
         />
         
         <div className="relative z-10 max-w-6xl mx-auto">
-          <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight text-center mb-8">
-            PLANTAS DAS <span className="text-[#C2816B]">UNIDADES</span>
-          </h2>
+          <AnimatedSection animation="fade-in-up">
+            <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight text-center mb-8">
+              PLANTAS DAS <span className="text-[#C2816B]">UNIDADES</span>
+            </h2>
+          </AnimatedSection>
 
-          <p className="font-new-black text-base md:text-lg font-normal text-gray-600 text-center max-w-3xl mx-auto mb-12">
-            Cada detalhe pensado para traduzir o seu estilo de vida. Descubra plantas versáteis que se adaptam aos seus sonhos
-          </p>
+          <AnimatedSection animation="fade-in-up" delay={200}>
+            <p className="font-new-black text-base md:text-lg font-normal text-gray-600 text-center max-w-3xl mx-auto mb-12">
+              Cada detalhe pensado para traduzir o seu estilo de vida. Descubra plantas versáteis que se adaptam aos seus sonhos
+            </p>
+          </AnimatedSection>
 
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mb-16 flex-wrap">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mb-4 flex-wrap">
             <button 
               onClick={() => setActivePlanta('studios-funcionais')}
               className={`font-mirante text-base md:text-lg font-normal border-2 border-[#3E0D11] rounded-full px-8 py-3 transition-all duration-300 w-full md:w-auto ${
@@ -1373,15 +1450,19 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
         />
         
         <div className="relative z-10 max-w-6xl mx-auto">
-          <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight text-center mb-8">
-            VIVA NO CENTRO DE TUDO.<br />
-            <span className="text-[#C2816B]">VIVA NO SEU TEMPO.</span>
-          </h2>
+          <AnimatedSection animation="fade-in-up">
+            <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight text-center mb-8">
+              VIVA NO CENTRO DE TUDO.<br />
+              <span className="text-[#C2816B]">VIVA NO SEU TEMPO.</span>
+            </h2>
+          </AnimatedSection>
 
-          <p className="font-new-black text-base md:text-lg font-normal text-gray-600 text-center max-w-3xl mx-auto mb-12">
-            Viva cercado pelo que realmente importa: cultura, serviços, lazer e mobilidade.<br />
-            O endereço perfeito para quem quer praticidade no dia a dia sem abrir mão de qualidade de vida.
-          </p>
+          <AnimatedSection animation="fade-in-up" delay={200}>
+            <p className="font-new-black text-base md:text-lg font-normal text-gray-600 text-center max-w-3xl mx-auto mb-12">
+              Viva cercado pelo que realmente importa: cultura, serviços, lazer e mobilidade.<br />
+              O endereço perfeito para quem quer praticidade no dia a dia sem abrir mão de qualidade de vida.
+            </p>
+          </AnimatedSection>
 
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-center">
             {/* Google Map - Left Side */}
@@ -1499,34 +1580,38 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
 
             {/* Right Side - Content */}
             <div className="flex-1">
-              <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight mb-8">
-                A <span className="text-[#C2816B]">N8 INCORPORADORA.</span>
-              </h2>
+              <AnimatedSection animation="fade-in-up">
+                <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight mb-8">
+                  A <span className="text-[#C2816B]">N8 INCORPORADORA.</span>
+                </h2>
+              </AnimatedSection>
 
-              <div className="font-new-black text-base md:text-lg font-normal text-gray-700 leading-relaxed space-y-6 mb-8">
-                <p>
-                  A N8 Incorporadora nasceu com o propósito de transformar espaços em lugares que fazem sentido para as pessoas. Somos movidos pelo compromisso com a excelência em cada etapa – da concepção do projeto à entrega das chaves.
-                </p>
-                <p>
-                  Com uma atuação sólida no mercado de construção e incorporação imobiliária, desenvolvemos empreendimentos que unem arquitetura inteligente, inovação e qualidade construtiva. Buscamos ir além das expectativas, criando soluções que valorizam o bem-estar, a mobilidade e o investimento dos nossos clientes.
-                </p>
-                <p>
-                  Mais do que construir, acreditamos em criar experiências de vida – com responsabilidade, transparência e um olhar atento ao que realmente importa: pessoas.
-                </p>
-              </div>
-
-              <button className="group flex items-center space-x-3 font-new-black text-base md:text-lg font-normal text-[#171715] border border-[#E6E5EA] rounded-full px-6 py-3 hover:bg-[#C2816B] hover:border-[#C2816B] hover:text-white transition-all duration-300">
-                <span>Conheça</span>
-                <div className="group-hover:rotate-45 transition-transform duration-300">
-                  <Image
-                    src="/arrow.png"
-                    alt="Arrow"
-                    width={24}
-                    height={24}
-                    className="w-5 h-5 md:w-6 md:h-6"
-                  />
+              <AnimatedSection animation="fade-in-up" delay={200}>
+                <div className="font-new-black text-base md:text-lg font-normal text-gray-700 leading-relaxed space-y-6 mb-8">
+                  <p>
+                    A N8 Incorporadora nasceu com o propósito de transformar espaços em lugares que fazem sentido para as pessoas. Somos movidos pelo compromisso com a excelência em cada etapa – da concepção do projeto à entrega das chaves.
+                  </p>
+                  <p>
+                    Com uma atuação sólida no mercado de construção e incorporação imobiliária, desenvolvemos empreendimentos que unem arquitetura inteligente, inovação e qualidade construtiva. Buscamos ir além das expectativas, criando soluções que valorizam o bem-estar, a mobilidade e o investimento dos nossos clientes.
+                  </p>
+                  <p>
+                    Mais do que construir, acreditamos em criar experiências de vida – com responsabilidade, transparência e um olhar atento ao que realmente importa: pessoas.
+                  </p>
                 </div>
-              </button>
+
+                <button className="group flex items-center space-x-3 font-new-black text-base md:text-lg font-normal text-[#171715] border border-[#E6E5EA] rounded-full px-6 py-3 hover:bg-[#C2816B] hover:border-[#C2816B] hover:text-white transition-all duration-300">
+                  <span>Conheça</span>
+                  <div className="group-hover:rotate-45 transition-transform duration-300">
+                    <Image
+                      src="/arrow.png"
+                      alt="Arrow"
+                      width={24}
+                      height={24}
+                      className="w-5 h-5 md:w-6 md:h-6"
+                    />
+                  </div>
+                </button>
+              </AnimatedSection>
             </div>
           </div>
 
@@ -1675,104 +1760,27 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
       {/* Obra Section */}
       <section id="obras" className="bg-white py-16 md:py-24 px-6 md:px-20">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight mb-4">
-            ESTÁGIO DA <span className="text-[#C2816B]">OBRA.</span>
-          </h2>
-          
-          <p className="font-new-black text-base md:text-lg font-normal text-gray-600 mb-12">
-            Atualizado Outubro de 2025.
-          </p>
+          <AnimatedSection animation="fade-in-up">
+            <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight mb-4">
+              ESTÁGIO DA <span className="text-[#C2816B]">OBRA.</span>
+            </h2>
+            
+            <p className="font-new-black text-base md:text-lg font-normal text-gray-600 mb-12">
+              Atualizado Outubro de 2025.
+            </p>
+          </AnimatedSection>
 
           <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-stretch">
             {/* Left Side - Progress Bars */}
             <div className="flex-1 flex flex-col justify-between space-y-4">
-              {/* Progress Bar 1 */}
-              <div className="space-y-1">
-                <div className="flex justify-between items-center">
-                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">Fundação e Estrutura</span>
-                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">85%</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-[#3E0D11] h-2 rounded-full" style={{width: '85%'}}></div>
-                </div>
-              </div>
-
-              {/* Progress Bar 2 */}
-              <div className="space-y-1">
-                <div className="flex justify-between items-center">
-                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">Alvenaria e Vedação</span>
-                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">72%</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-[#3E0D11] h-2 rounded-full" style={{width: '72%'}}></div>
-                </div>
-              </div>
-
-              {/* Progress Bar 3 */}
-              <div className="space-y-1">
-                <div className="flex justify-between items-center">
-                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">Instalações Elétricas</span>
-                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">68%</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-[#3E0D11] h-2 rounded-full" style={{width: '68%'}}></div>
-                </div>
-              </div>
-
-              {/* Progress Bar 4 */}
-              <div className="space-y-1">
-                <div className="flex justify-between items-center">
-                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">Instalações Hidráulicas</span>
-                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">55%</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-[#3E0D11] h-2 rounded-full" style={{width: '55%'}}></div>
-                </div>
-              </div>
-
-              {/* Progress Bar 5 */}
-              <div className="space-y-1">
-                <div className="flex justify-between items-center">
-                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">Acabamentos Internos</span>
-                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">42%</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-[#3E0D11] h-2 rounded-full" style={{width: '42%'}}></div>
-                </div>
-              </div>
-
-              {/* Progress Bar 6 */}
-              <div className="space-y-1">
-                <div className="flex justify-between items-center">
-                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">Acabamentos Externos</span>
-                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">38%</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-[#3E0D11] h-2 rounded-full" style={{width: '38%'}}></div>
-                </div>
-              </div>
-
-              {/* Progress Bar 7 */}
-              <div className="space-y-1">
-                <div className="flex justify-between items-center">
-                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">Paisagismo</span>
-                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">25%</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-[#3E0D11] h-2 rounded-full" style={{width: '25%'}}></div>
-                </div>
-              </div>
-
-              {/* Progress Bar 8 */}
-              <div className="space-y-1">
-                <div className="flex justify-between items-center">
-                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">Entrega Final</span>
-                  <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">15%</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-[#3E0D11] h-2 rounded-full" style={{width: '15%'}}></div>
-                </div>
-              </div>
+              <AnimatedProgressBar label="Fundação e Estrutura" percentage={85} delay={0} />
+              <AnimatedProgressBar label="Alvenaria e Vedação" percentage={72} delay={100} />
+              <AnimatedProgressBar label="Instalações Elétricas" percentage={68} delay={200} />
+              <AnimatedProgressBar label="Instalações Hidráulicas" percentage={55} delay={300} />
+              <AnimatedProgressBar label="Acabamentos Internos" percentage={42} delay={400} />
+              <AnimatedProgressBar label="Acabamentos Externos" percentage={38} delay={500} />
+              <AnimatedProgressBar label="Paisagismo" percentage={25} delay={600} />
+              <AnimatedProgressBar label="Entrega Final" percentage={15} delay={700} />
 
               {/* Paragraph below progress bars */}
               <div className="mt-6">
@@ -1784,15 +1792,17 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
             </div>
 
             {/* Right Side - Building Image */}
-            <div className="flex-1">
-              <Image
-                src="/predio2.png"
-                alt="Verus Building Construction"
-                width={600}
-                height={800}
-                className="w-full h-full object-cover rounded-lg"
-              />
-            </div>
+            <AnimatedSection animation="slide-in-right" delay={200}>
+              <div className="flex-1">
+                <Image
+                  src="/predio2.png"
+                  alt="Verus Building Construction"
+                  width={600}
+                  height={800}
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </div>
+            </AnimatedSection>
           </div>
         </div>
       </section>
@@ -1812,45 +1822,57 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
               />
             </div>
 
-            {/* Contact Information */}
-            <div className="flex flex-col md:flex-row items-center gap-6">
-              <div className="flex flex-col items-center">
-                <span className="font-new-black text-sm md:text-base font-normal text-[#171715]">Fale pelo</span>
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 flex items-center justify-center">
-                    <svg className="w-5 h-5 text-[#171715]" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
-                    </svg>
-                  </div>
-                  <span className="font-new-black text-sm md:text-base font-normal text-[#171715]">WhatsApp</span>
+            {/* WhatsApp Button */}
+            <a
+              href="http://wa.me/5541997188421"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col items-center gap-1 px-6 py-3 border-2 border-[#171715] rounded-lg hover:bg-[#3E0D11] hover:border-[#3E0D11] hover:scale-105 transition-all duration-300 group"
+            >
+              <span className="font-new-black text-sm md:text-base font-normal text-[#171715] group-hover:text-white transition-colors">
+                Fale pelo
+              </span>
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-[#171715] group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
+                  </svg>
                 </div>
+                <span className="font-new-black text-sm md:text-base font-normal text-[#171715] group-hover:text-white transition-colors">
+                  WhatsApp
+                </span>
               </div>
-              
-              <div className="flex flex-col items-center md:ml-8">
-                <span className="font-new-black text-sm md:text-base font-normal text-[#171715]">Telefone</span>
-                <span className="font-new-black text-sm md:text-base font-normal text-[#171715]">41 9 9718-8421</span>
-              </div>
-            </div>
+            </a>
 
             {/* Social Media Icons */}
             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 border border-[#171715] flex items-center justify-center">
-                <svg className="w-5 h-5 text-[#171715]" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                </svg>
-              </div>
+              <a
+                href="https://www.instagram.com/n8.inc/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 flex items-center justify-center hover:scale-110 transition-transform duration-300"
+              >
+                <Image
+                  src="/iglogo.svg"
+                  alt="Instagram"
+                  width={40}
+                  height={40}
+                  className="w-full h-full object-contain"
+                />
+              </a>
               
-              <div className="w-10 h-10 border border-[#171715] flex items-center justify-center">
-                <svg className="w-5 h-5 text-[#171715]" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987 6.62 0 11.987-5.367 11.987-11.987C24.014 5.367 18.637.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297C4.198 14.895 3.708 13.744 3.708 12.447s.49-2.448 1.418-3.323c.875-.807 2.026-1.297 3.323-1.297s2.448.49 3.323 1.297c.928.875 1.418 2.026 1.418 3.323s-.49 2.448-1.418 3.244c-.875.807-2.026 1.297-3.323 1.297zm7.83-9.281c-.49 0-.928-.175-1.297-.49-.368-.315-.49-.753-.49-1.243 0-.49.122-.928.49-1.243.369-.315.807-.49 1.297-.49s.928.175 1.297.49c.368.315.49.753.49 1.243 0 .49-.122.928-.49 1.243-.369.315-.807.49-1.297.49z"/>
-                </svg>
-              </div>
-              
-              <div className="w-10 h-10 border border-[#171715] flex items-center justify-center">
-                <svg className="w-5 h-5 text-[#171715]" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                </svg>
-              </div>
+              <a
+                href="mailto:falecom@n8incorporadora.com"
+                className="w-10 h-10 flex items-center justify-center hover:scale-110 transition-transform duration-300"
+              >
+                <Image
+                  src="/maillogo.svg"
+                  alt="Email"
+                  width={40}
+                  height={40}
+                  className="w-full h-full object-contain"
+                />
+              </a>
             </div>
           </div>
         </div>
