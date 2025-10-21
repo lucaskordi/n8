@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 
 function useIntersectionObserver() {
   const ref = useRef<HTMLDivElement>(null)
@@ -86,6 +86,9 @@ export default function HomePage() {
   const [doisQuartosIndex, setDoisQuartosIndex] = useState(0)
   const [tresQuartosIndex, setTresQuartosIndex] = useState(0)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [imageModalOpen, setImageModalOpen] = useState(false)
+  const [currentImageGallery, setCurrentImageGallery] = useState<'apartamentos' | 'lazer' | 'comodidades' | 'studios-funcionais' | 'studios-loft' | 'dois-quartos' | 'tres-quartos'>('apartamentos')
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
   const apartments = [
     {
@@ -350,8 +353,55 @@ export default function HomePage() {
     }
   }
 
+  const openImageModal = (gallery: 'apartamentos' | 'lazer' | 'comodidades' | 'studios-funcionais' | 'studios-loft' | 'dois-quartos' | 'tres-quartos', index: number) => {
+    setCurrentImageGallery(gallery)
+    setCurrentImageIndex(index)
+    setImageModalOpen(true)
+  }
+
+  const nextImageInModal = useCallback(() => {
+    const galleries = {
+      'apartamentos': apartments,
+      'lazer': lazerItems,
+      'comodidades': comodidadesItems,
+      'studios-funcionais': studiosFuncionais,
+      'studios-loft': studiosLoft,
+      'dois-quartos': doisQuartos,
+      'tres-quartos': tresQuartos
+    }
+    const currentGallery = galleries[currentImageGallery]
+    setCurrentImageIndex((prev) => (prev + 1) % currentGallery.length)
+  }, [currentImageGallery, apartments, lazerItems, comodidadesItems, studiosFuncionais, studiosLoft, doisQuartos, tresQuartos])
+
+  const prevImageInModal = useCallback(() => {
+    const galleries = {
+      'apartamentos': apartments,
+      'lazer': lazerItems,
+      'comodidades': comodidadesItems,
+      'studios-funcionais': studiosFuncionais,
+      'studios-loft': studiosLoft,
+      'dois-quartos': doisQuartos,
+      'tres-quartos': tresQuartos
+    }
+    const currentGallery = galleries[currentImageGallery]
+    setCurrentImageIndex((prev) => (prev - 1 + currentGallery.length) % currentGallery.length)
+  }, [currentImageGallery, apartments, lazerItems, comodidadesItems, studiosFuncionais, studiosLoft, doisQuartos, tresQuartos])
+
+  const getCurrentImageData = () => {
+    const galleries = {
+      'apartamentos': apartments,
+      'lazer': lazerItems,
+      'comodidades': comodidadesItems,
+      'studios-funcionais': studiosFuncionais,
+      'studios-loft': studiosLoft,
+      'dois-quartos': doisQuartos,
+      'tres-quartos': tresQuartos
+    }
+    return galleries[currentImageGallery][currentImageIndex]
+  }
+
   useEffect(() => {
-    if (isModalOpen) {
+    if (isModalOpen || imageModalOpen) {
       document.body.style.overflow = 'hidden'
     } else {
       document.body.style.overflow = 'unset'
@@ -359,17 +409,28 @@ export default function HomePage() {
     return () => {
       document.body.style.overflow = 'unset'
     }
-  }, [isModalOpen])
+  }, [isModalOpen, imageModalOpen])
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isModalOpen) {
-        setIsModalOpen(false)
+      if (e.key === 'Escape') {
+        if (imageModalOpen) {
+          setImageModalOpen(false)
+        } else if (isModalOpen) {
+          setIsModalOpen(false)
+        }
+      }
+      if (imageModalOpen) {
+        if (e.key === 'ArrowRight') {
+          nextImageInModal()
+        } else if (e.key === 'ArrowLeft') {
+          prevImageInModal()
+        }
       }
     }
     window.addEventListener('keydown', handleEscape)
     return () => window.removeEventListener('keydown', handleEscape)
-  }, [isModalOpen])
+  }, [isModalOpen, imageModalOpen, nextImageInModal, prevImageInModal])
 
   return (
     <main className="min-h-screen bg-white">
@@ -733,7 +794,10 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                   >
                     {apartments.map((apartment, index) => (
                       <div key={index} className="w-full flex-shrink-0">
-                        <div className="bg-gray-200 rounded-lg overflow-hidden aspect-[16/10] mb-6 relative">
+                        <div 
+                          onClick={() => openImageModal('apartamentos', index)}
+                          className="bg-gray-200 rounded-lg overflow-hidden aspect-[16/10] mb-6 relative cursor-pointer hover:opacity-90 transition-opacity"
+                        >
                           <Image
                             src={apartment.image}
                             alt={apartment.title}
@@ -794,7 +858,10 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                   >
                     {lazerItems.map((item, index) => (
                       <div key={index} className="w-full flex-shrink-0">
-                        <div className="bg-gray-200 rounded-lg overflow-hidden aspect-[16/10] mb-6 relative">
+                        <div 
+                          onClick={() => openImageModal('lazer', index)}
+                          className="bg-gray-200 rounded-lg overflow-hidden aspect-[16/10] mb-6 relative cursor-pointer hover:opacity-90 transition-opacity"
+                        >
                           <Image
                             src={item.image}
                             alt={item.title}
@@ -855,7 +922,10 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                   >
                     {comodidadesItems.map((item, index) => (
                       <div key={index} className="w-full flex-shrink-0">
-                        <div className="bg-gray-200 rounded-lg overflow-hidden aspect-[16/10] mb-6 relative">
+                        <div 
+                          onClick={() => openImageModal('comodidades', index)}
+                          className="bg-gray-200 rounded-lg overflow-hidden aspect-[16/10] mb-6 relative cursor-pointer hover:opacity-90 transition-opacity"
+                        >
                           <Image
                             src={item.image}
                             alt={item.title}
@@ -1233,7 +1303,10 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                   >
                     {studiosFuncionais.map((item, index) => (
                       <div key={index} className="w-full flex-shrink-0">
-                        <div className="rounded-lg overflow-hidden aspect-[16/10] mb-6 relative">
+                        <div 
+                          onClick={() => openImageModal('studios-funcionais', index)}
+                          className="rounded-lg overflow-hidden aspect-[16/10] mb-6 relative cursor-pointer hover:opacity-90 transition-opacity"
+                        >
                           <Image
                             src={item.image}
                             alt={item.title}
@@ -1294,7 +1367,10 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                   >
                     {studiosLoft.map((item, index) => (
                       <div key={index} className="w-full flex-shrink-0">
-                        <div className="rounded-lg overflow-hidden aspect-[16/10] mb-6 relative">
+                        <div 
+                          onClick={() => openImageModal('studios-loft', index)}
+                          className="rounded-lg overflow-hidden aspect-[16/10] mb-6 relative cursor-pointer hover:opacity-90 transition-opacity"
+                        >
                           <Image
                             src={item.image}
                             alt={item.title}
@@ -1355,7 +1431,10 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                   >
                     {doisQuartos.map((item, index) => (
                       <div key={index} className="w-full flex-shrink-0">
-                        <div className="rounded-lg overflow-hidden aspect-[16/10] mb-6 relative">
+                        <div 
+                          onClick={() => openImageModal('dois-quartos', index)}
+                          className="rounded-lg overflow-hidden aspect-[16/10] mb-6 relative cursor-pointer hover:opacity-90 transition-opacity"
+                        >
                           <Image
                             src={item.image}
                             alt={item.title}
@@ -1416,7 +1495,10 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                   >
                     {tresQuartos.map((item, index) => (
                       <div key={index} className="w-full flex-shrink-0">
-                        <div className="rounded-lg overflow-hidden aspect-[16/10] mb-6 relative">
+                        <div 
+                          onClick={() => openImageModal('tres-quartos', index)}
+                          className="rounded-lg overflow-hidden aspect-[16/10] mb-6 relative cursor-pointer hover:opacity-90 transition-opacity"
+                        >
                           <Image
                             src={item.image}
                             alt={item.title}
@@ -1973,6 +2055,70 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
           </div>
         </div>
       </footer>
+
+      {/* Image Modal */}
+      {imageModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-95">
+          <button
+            onClick={() => setImageModalOpen(false)}
+            className="absolute top-4 right-4 w-12 h-12 flex items-center justify-center rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 text-white transition-all duration-300 z-20"
+            aria-label="Fechar"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+          <button
+            onClick={prevImageInModal}
+            className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full flex items-center justify-center text-white transition-all duration-300 z-20"
+            aria-label="Imagem anterior"
+          >
+            <Image
+              src="/arrowleft.png"
+              alt="Arrow Left"
+              width={24}
+              height={24}
+              className="w-6 h-auto"
+            />
+          </button>
+
+          <button
+            onClick={nextImageInModal}
+            className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full flex items-center justify-center text-white transition-all duration-300 z-20"
+            aria-label="Próxima imagem"
+          >
+            <Image
+              src="/arrowright.png"
+              alt="Arrow Right"
+              width={24}
+              height={24}
+              className="w-6 h-auto"
+            />
+          </button>
+
+          <div className="w-full max-w-6xl mx-auto flex flex-col items-center">
+            <div className="relative w-full aspect-video mb-6">
+              <Image
+                src={getCurrentImageData().image}
+                alt={getCurrentImageData().title}
+                fill
+                className="object-contain"
+                quality={100}
+              />
+            </div>
+            
+            <div className="text-center px-4">
+              <h3 className="font-carla-sans text-2xl md:text-3xl font-normal text-white mb-3">
+                {getCurrentImageData().title}
+              </h3>
+              <p className="font-new-black text-base md:text-lg font-normal text-white text-opacity-90">
+                {getCurrentImageData().description}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Download Modal */}
       {isModalOpen && (
