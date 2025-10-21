@@ -89,6 +89,7 @@ export default function HomePage() {
   const [imageModalOpen, setImageModalOpen] = useState(false)
   const [currentImageGallery, setCurrentImageGallery] = useState<'apartamentos' | 'lazer' | 'comodidades' | 'studios-funcionais' | 'studios-loft' | 'dois-quartos' | 'tres-quartos'>('apartamentos')
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [imagesPreloaded, setImagesPreloaded] = useState(false)
 
   const apartments = [
     {
@@ -432,6 +433,61 @@ export default function HomePage() {
     return () => window.removeEventListener('keydown', handleEscape)
   }, [isModalOpen, imageModalOpen, nextImageInModal, prevImageInModal])
 
+  useEffect(() => {
+    const preloadImages = () => {
+      const allImages = [
+        ...apartments.map(item => item.image),
+        ...lazerItems.map(item => item.image),
+        ...comodidadesItems.map(item => item.image),
+        ...studiosFuncionais.map(item => item.image),
+        ...studiosLoft.map(item => item.image),
+        ...doisQuartos.map(item => item.image),
+        ...tresQuartos.map(item => item.image),
+        '/hero_img.png',
+        '/buildingcontact.png',
+        '/lazer/ED.VERUS.PISCINA.R01.png',
+        '/girl.png',
+        '/predio2.png',
+        '/divider.png',
+        '/footerbg.png',
+        '/SHADOWUPLEFT.png',
+        '/logo_white.svg',
+        '/logo_n8.png',
+        '/logo_grifo.svg',
+        '/arrow.png',
+        '/arrowleft.png',
+        '/arrowright.png',
+        '/arrowup.png'
+      ]
+
+      let loadedCount = 0
+      const totalImages = allImages.length
+
+      allImages.forEach((src) => {
+        const img = new window.Image()
+        img.onload = () => {
+          loadedCount++
+          if (loadedCount === totalImages) {
+            setImagesPreloaded(true)
+          }
+        }
+        img.onerror = () => {
+          loadedCount++
+          if (loadedCount === totalImages) {
+            setImagesPreloaded(true)
+          }
+        }
+        img.src = src
+      })
+    }
+
+    const timer = setTimeout(() => {
+      preloadImages()
+    }, 100)
+
+    return () => clearTimeout(timer)
+  }, [apartments, lazerItems, comodidadesItems, studiosFuncionais, studiosLoft, doisQuartos, tresQuartos])
+
   return (
     <main className="min-h-screen bg-white">
       {/* Header */}
@@ -705,7 +761,7 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
       </section>
 
       {/* Lazer Section */}
-      <section className="relative py-16 md:py-24">
+      <section className="relative">
         <div className="relative w-full overflow-hidden" style={{aspectRatio: '21/9'}}>
           <Image
             src="/lazer/ED.VERUS.PISCINA.R01.png"
@@ -981,7 +1037,7 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
       </section>
 
       {/* Diferenciais Section */}
-      <section id="diferenciais" className="bg-[#3E0D11] relative py-16 md:py-0">
+      <section id="diferenciais" className="bg-[#3E0D11] relative py-0 md:py-0">
         <div className="flex flex-col lg:flex-row min-h-screen">
           {/* Left Side - Image */}
           <div className="lg:w-1/2 relative h-64 lg:h-auto">
@@ -1855,15 +1911,15 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
       </section>
 
       {/* Divider with Text */}
-      <section className="relative py-12 md:py-16">
+      <section className="relative pb-12 md:pb-16">
         <Image
           src="/divider.png"
           alt="Divider"
           width={1920}
           height={400}
-          className="w-full h-auto"
+          className="w-full object-cover min-h-[200px] md:h-[400px]"
         />
-        <div className="absolute inset-0 flex items-center justify-center">
+        <div className="absolute inset-0 flex items-center justify-center px-4 max-h-[200px] md:max-h-[400px]">
           <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-white text-center leading-tight">
             SEU ESPAÇO<br />
             DO SEU JEITO.

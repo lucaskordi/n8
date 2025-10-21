@@ -91,7 +91,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <body className={`${mirante.variable} ${carlaSans.variable} ${newBlack.variable} antialiased`}>
         {children}
       </body>
