@@ -75,6 +75,7 @@ export default function HomePage() {
   const [studiosLoftIndex, setStudiosLoftIndex] = useState(0)
   const [doisQuartosIndex, setDoisQuartosIndex] = useState(0)
   const [tresQuartosIndex, setTresQuartosIndex] = useState(0)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const apartments = [
     {
@@ -339,6 +340,27 @@ export default function HomePage() {
     }
   }
 
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+    return () => {
+      document.body.style.overflow = 'unset'
+    }
+  }, [isModalOpen])
+
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isModalOpen) {
+        setIsModalOpen(false)
+      }
+    }
+    window.addEventListener('keydown', handleEscape)
+    return () => window.removeEventListener('keydown', handleEscape)
+  }, [isModalOpen])
+
   return (
     <main className="min-h-screen bg-white">
       {/* Header */}
@@ -602,7 +624,7 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
             
             {/* Download Button - Right */}
             <div className="flex-shrink-0">
-              <button onClick={() => scrollToSection('projeto')} className="group flex items-center space-x-3 font-new-black text-base md:text-lg font-normal text-white border-2 border-white rounded-full px-6 py-3 hover:bg-[#C2816B] hover:border-[#C2816B] transition-all duration-300">
+              <button onClick={() => setIsModalOpen(true)} className="group flex items-center space-x-3 font-new-black text-base md:text-lg font-normal text-white border-2 border-white rounded-full px-6 py-3 hover:bg-[#C2816B] hover:border-[#C2816B] transition-all duration-300">
                 <span>Baixe Agora</span>
                 <div className="group-hover:rotate-45 transition-transform duration-300">
                   <Image
@@ -1949,6 +1971,102 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
           </div>
         </div>
       </footer>
+
+      {/* Download Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-modal-fade-in">
+          <div 
+            className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm"
+            onClick={() => setIsModalOpen(false)}
+          ></div>
+          
+          <div className="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-modal-slide-in">
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-[#C2816B] text-gray-600 hover:text-white transition-all duration-300 z-10"
+              aria-label="Fechar"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            <div className="p-8 md:p-12">
+              <h2 className="font-carla-sans text-3xl md:text-4xl font-normal text-gray-800 leading-tight mb-4">
+                Baixe o Material <span className="text-[#C2816B]">Exclusivo</span>
+              </h2>
+              
+              <p className="font-new-black text-base md:text-lg font-normal text-gray-600 mb-8">
+                Cadastre-se e faça o download do material exclusivo do Verus. Descubra as plantas, diferenciais e todos os detalhes que tornam este projeto único.
+              </p>
+
+              <form className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block font-new-black text-sm font-normal text-gray-700 mb-2">
+                      Nome
+                    </label>
+                    <input 
+                      type="text" 
+                      placeholder="Nome*" 
+                      className="w-full px-4 py-3 bg-white border border-[#E6E5EA] rounded-lg text-gray-900 placeholder:text-[#E6E5EA] focus:outline-none focus:border-[#C2816B] transition-colors"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block font-new-black text-sm font-normal text-gray-700 mb-2">
+                      Telefone
+                    </label>
+                    <input 
+                      type="tel" 
+                      placeholder="Telefone" 
+                      className="w-full px-4 py-3 bg-white border border-[#E6E5EA] rounded-lg text-gray-900 placeholder:text-[#E6E5EA] focus:outline-none focus:border-[#C2816B] transition-colors"
+                    />
+                  </div>
+                  
+                  <div className="md:col-span-2">
+                    <label className="block font-new-black text-sm font-normal text-gray-700 mb-2">
+                      E-mail
+                    </label>
+                    <input 
+                      type="email" 
+                      placeholder="E-mail" 
+                      className="w-full px-4 py-3 bg-white border border-[#E6E5EA] rounded-lg text-gray-900 placeholder:text-[#E6E5EA] focus:outline-none focus:border-[#C2816B] transition-colors"
+                    />
+                  </div>
+                </div>
+                
+                <div className="flex items-center space-x-3">
+                  <input 
+                    type="checkbox" 
+                    className="w-4 h-4 text-[#C2816B] border-[#E6E5EA] rounded focus:ring-[#C2816B]"
+                  />
+                  <label className="font-new-black text-sm font-normal text-gray-700">
+                    Eu concordo em receber comunicações
+                  </label>
+                </div>
+                
+                <p className="font-new-black text-xs font-normal text-gray-500">
+                  Ao informar meus dados, estou ciente das diretrizes da <a href="#" className="underline hover:text-[#C2816B] transition-colors">Política de Privacidade</a>
+                </p>
+                
+                <button type="submit" className="group flex items-center justify-center space-x-3 w-full font-new-black text-base md:text-lg font-normal text-white bg-[#C2816B] border border-[#C2816B] rounded-full px-6 py-3 hover:bg-[#3E0D11] hover:border-[#3E0D11] transition-all duration-300">
+                  <span>Baixar Material</span>
+                  <div className="group-hover:rotate-45 transition-transform duration-300">
+                    <Image
+                      src="/arrow.png"
+                      alt="Arrow"
+                      width={24}
+                      height={24}
+                      className="w-5 h-5 md:w-6 md:h-6"
+                    />
+                  </div>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Scroll to Top Button */}
       <button

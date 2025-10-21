@@ -84,6 +84,26 @@ body {
   }
 }
 
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
 .animate-fade-in-up {
   animation: fadeInUp 0.8s ease-out forwards;
 }
@@ -103,6 +123,14 @@ body {
 .animate-progress-grow {
   animation: progressGrow 1.2s ease-out forwards;
   width: 0;
+}
+
+.animate-modal-fade-in {
+  animation: modalFadeIn 0.3s ease-out forwards;
+}
+
+.animate-modal-slide-in {
+  animation: modalSlideIn 0.3s ease-out forwards;
 }
 
 .opacity-0 {
