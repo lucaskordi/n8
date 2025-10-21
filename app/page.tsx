@@ -1600,7 +1600,7 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
                   </p>
                 </div>
 
-                <button className="group flex items-center space-x-3 font-new-black text-base md:text-lg font-normal text-[#171715] border border-[#E6E5EA] rounded-full px-6 py-3 hover:bg-[#C2816B] hover:border-[#C2816B] hover:text-white transition-all duration-300">
+                <a href="https://www.n8incorporadora.com/" target="_blank" rel="noopener noreferrer" className="group flex items-center space-x-3 font-new-black text-base md:text-lg font-normal text-[#171715] border border-[#E6E5EA] rounded-full px-6 py-3 hover:bg-[#C2816B] hover:border-[#C2816B] hover:text-white transition-all duration-300">
                   <span>Conheça</span>
                   <div className="group-hover:rotate-45 transition-transform duration-300">
                     <Image
@@ -1611,7 +1611,7 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
                       className="w-5 h-5 md:w-6 md:h-6"
                     />
                   </div>
-                </button>
+                </a>
               </AnimatedSection>
             </div>
           </div>
