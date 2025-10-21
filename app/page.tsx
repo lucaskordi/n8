@@ -473,7 +473,7 @@ export default function HomePage() {
       </div>
 
       {/* Projeto Section */}
-      <section id="projeto" className="bg-white relative min-h-screen">
+      <section id="projeto" className="bg-white relative min-h-screen py-16 md:py-24">
         <Image
           src="/SHADOWUPLEFT.png"
           alt="Shadow"
@@ -607,19 +607,20 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
             
             {/* Text - Center */}
             <div className="text-center md:text-left flex-1">
-              <p className="font-new-black text-lg md:text-xl font-normal text-white flex items-center justify-center md:justify-start gap-2">
-              Cadastre-se e tenha acesso ao material exclusivo do Verus. <br></br>
-Descubra plantas, diferenciais e tudo o que torna este projeto único.
-
+              <p className="font-new-black text-lg md:text-xl font-normal text-white text-center md:text-left">
+                Cadastre-se e tenha acesso ao material exclusivo do Verus.
+                <br className="md:hidden" />
+                Descubra plantas, diferenciais e tudo o que torna este projeto único.
+              </p>
+              <div className="hidden md:inline-flex items-center gap-2 ml-2">
                 <Image
                   src="/logo_white.svg"
                   alt="Verus Logo"
                   width={80}
                   height={26}
                   className="h-6 w-auto"
-                  style={{ marginLeft: '20px' }}
                 />
-              </p>
+              </div>
             </div>
             
             {/* Download Button - Right */}
@@ -642,7 +643,7 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
       </section>
 
       {/* Lazer Section */}
-      <section className="relative">
+      <section className="relative py-16 md:py-24">
         <div className="relative w-full overflow-hidden" style={{aspectRatio: '21/9'}}>
           <Image
             src="/lazer/ED.VERUS.PISCINA.R01.png"
@@ -909,7 +910,7 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
       </section>
 
       {/* Diferenciais Section */}
-      <section id="diferenciais" className="bg-[#3E0D11] relative">
+      <section id="diferenciais" className="bg-[#3E0D11] relative py-16 md:py-0">
         <div className="flex flex-col lg:flex-row min-h-screen">
           {/* Left Side - Image */}
           <div className="lg:w-1/2 relative h-64 lg:h-auto">
@@ -1581,7 +1582,7 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
       </section>
 
       {/* Logo Divider */}
-      <section className="bg-[#3E0D11] py-4 md:py-6 flex items-center justify-center">
+      <section className="bg-[#3E0D11] py-8 md:py-6 flex items-center justify-center">
         <Image
           src="/logo_white.svg"
           alt="Verus Logo"
@@ -1771,7 +1772,7 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
       </section>
 
       {/* Divider with Text */}
-      <section className="relative">
+      <section className="relative py-12 md:py-16">
         <Image
           src="/divider.png"
           alt="Divider"
@@ -1838,7 +1839,7 @@ Descubra plantas, diferenciais e tudo o que torna este projeto único.
       </section>
 
       {/* Information Bar */}
-      <section className="bg-gray-50 py-8 px-6 md:px-20">
+      <section className="bg-gray-50 py-12 md:py-8 px-6 md:px-20">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             {/* Logo */}
