@@ -1,561 +1,607 @@
-'use client'
+"use client";
 
-import Image from 'next/image'
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { Header } from "@/components/header";
+import { cn } from "@/lib/cn";
+import Image from "next/image";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 function useIntersectionObserver() {
-  const ref = useRef<HTMLDivElement>(null)
-  const [isVisible, setIsVisible] = useState(false)
-  const [hasAnimated, setHasAnimated] = useState(false)
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [hasAnimated, setHasAnimated] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasAnimated) {
-          setIsVisible(true)
-          setHasAnimated(true)
+          setIsVisible(true);
+          setHasAnimated(true);
         }
       },
-      { 
+      {
         threshold: 0.1,
-        rootMargin: '50px'
+        rootMargin: "50px",
       }
-    )
+    );
 
-    const currentRef = ref.current
+    const currentRef = ref.current;
     if (currentRef) {
-      observer.observe(currentRef)
+      observer.observe(currentRef);
     }
 
     return () => {
       if (currentRef) {
-        observer.unobserve(currentRef)
+        observer.unobserve(currentRef);
       }
-    }
-  }, [hasAnimated])
+    };
+  }, [hasAnimated]);
 
-  return [ref, isVisible] as const
+  return [ref, isVisible] as const;
 }
 
-function AnimatedSection({ children, animation = 'fade-in-up', delay = 0 }: { children: React.ReactNode, animation?: string, delay?: number }) {
-  const [ref, isVisible] = useIntersectionObserver()
-  
+function AnimatedSection({
+  children,
+  animation = "fade-in-up",
+  delay = 0,
+  className = "",
+}: {
+  children: React.ReactNode;
+  animation?: string;
+  delay?: number;
+  className?: string;
+}) {
+  const [ref, isVisible] = useIntersectionObserver();
+
   return (
     <div
       ref={ref}
-      className={!isVisible ? 'opacity-0' : `animate-${animation}`}
-      style={{ 
-        animationDelay: delay > 0 ? `${delay}ms` : undefined
+      className={cn(
+        !isVisible ? "opacity-0" : `animate-${animation}`,
+        className
+      )}
+      style={{
+        animationDelay: delay > 0 ? `${delay}ms` : undefined,
       }}
     >
       {children}
     </div>
-  )
+  );
 }
 
-function AnimatedProgressBar({ label, percentage, delay = 0 }: { label: string, percentage: number, delay?: number }) {
-  const [ref, isVisible] = useIntersectionObserver()
-  
+function AnimatedProgressBar({
+  label,
+  percentage,
+  delay = 0,
+}: {
+  label: string;
+  percentage: number;
+  delay?: number;
+}) {
+  const [ref, isVisible] = useIntersectionObserver();
+
   return (
     <div className="space-y-1">
       <div className="flex justify-between items-center">
-        <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">{label}</span>
-        <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">{percentage}%</span>
+        <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">
+          {label}
+        </span>
+        <span className="font-new-black text-xs md:text-sm font-normal text-gray-700">
+          {percentage}%
+        </span>
       </div>
-      <div ref={ref} className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-        <div 
-          className={`bg-[#3E0D11] h-2 rounded-full ${isVisible ? 'animate-progress-grow' : 'w-0'}`}
-          style={{
-            '--target-width': `${percentage}%`,
-            animationDelay: delay > 0 ? `${delay}ms` : undefined
-          } as React.CSSProperties}
+      <div
+        ref={ref}
+        className="w-full bg-gray-200 rounded-full h-2 overflow-hidden"
+      >
+        <div
+          className={`bg-[#3E0D11] h-2 rounded-full ${
+            isVisible ? "animate-progress-grow" : "w-0"
+          }`}
+          style={
+            {
+              "--target-width": `${percentage}%`,
+              animationDelay: delay > 0 ? `${delay}ms` : undefined,
+            } as React.CSSProperties
+          }
         ></div>
       </div>
     </div>
-  )
+  );
 }
 
 export default function HomePage() {
-  const [activeGallery, setActiveGallery] = useState('apartamentos')
-  const [activePlanta, setActivePlanta] = useState('studios-funcionais')
-  const [apartmentIndex, setApartmentIndex] = useState(0)
-  const [lazerIndex, setLazerIndex] = useState(0)
-  const [comodidadesIndex, setComodidadesIndex] = useState(0)
-  const [studiosFuncionaisIndex, setStudiosFuncionaisIndex] = useState(0)
-  const [studiosLoftIndex, setStudiosLoftIndex] = useState(0)
-  const [doisQuartosIndex, setDoisQuartosIndex] = useState(0)
-  const [tresQuartosIndex, setTresQuartosIndex] = useState(0)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [imageModalOpen, setImageModalOpen] = useState(false)
-  const [currentImageGallery, setCurrentImageGallery] = useState<'apartamentos' | 'lazer' | 'comodidades' | 'studios-funcionais' | 'studios-loft' | 'dois-quartos' | 'tres-quartos'>('apartamentos')
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const [imagesPreloaded, setImagesPreloaded] = useState(false)
+  const [activeGallery, setActiveGallery] = useState("apartamentos");
+  const [activePlanta, setActivePlanta] = useState("studios-funcionais");
+  const [apartmentIndex, setApartmentIndex] = useState(0);
+  const [lazerIndex, setLazerIndex] = useState(0);
+  const [comodidadesIndex, setComodidadesIndex] = useState(0);
+  const [studiosFuncionaisIndex, setStudiosFuncionaisIndex] = useState(0);
+  const [studiosLoftIndex, setStudiosLoftIndex] = useState(0);
+  const [doisQuartosIndex, setDoisQuartosIndex] = useState(0);
+  const [tresQuartosIndex, setTresQuartosIndex] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [imageModalOpen, setImageModalOpen] = useState(false);
+  const [currentImageGallery, setCurrentImageGallery] = useState<
+    | "apartamentos"
+    | "lazer"
+    | "comodidades"
+    | "studios-funcionais"
+    | "studios-loft"
+    | "dois-quartos"
+    | "tres-quartos"
+  >("apartamentos");
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [imagesPreloaded, setImagesPreloaded] = useState(false);
 
   const apartments = [
     {
       image: "/65m/grifo_ed_verus_65_sala.png",
       title: "Unidade 65 m²",
-      description: "Ampla, iluminada e acolhedora: a sala perfeita para compartilhar momentos."
+      description:
+        "Ampla, iluminada e acolhedora: a sala perfeita para compartilhar momentos.",
     },
     {
       image: "/65m/grifo_ed_verus_65_suite.png",
       title: "Unidade 65 m²",
-      description: "Suíte aconchegante, iluminada e feita para relaxar com estilo."
+      description:
+        "Suíte aconchegante, iluminada e feita para relaxar com estilo.",
     },
     {
       image: "/75m/grifo_ed_verus_75m2.png",
       title: "Unidade 75 m²",
-      description: "Ambientes integrados, elegantes e pensados para receber com estilo."
+      description:
+        "Ambientes integrados, elegantes e pensados para receber com estilo.",
     },
     {
       image: "/95m/grifo_ed_verus_95_sala_estar.png",
       title: "Unidade 95 m²",
-      description: "Um espaço amplo e elegante para viver grandes momentos."
+      description: "Um espaço amplo e elegante para viver grandes momentos.",
     },
     {
       image: "/95m/grifo_ed_verus_95_sala2.png",
       title: "Unidade 95 m²",
-      description: "Convivência elevada: cozinha e jantar integrados para receber com estilo."
+      description:
+        "Convivência elevada: cozinha e jantar integrados para receber com estilo.",
     },
     {
       image: "/loft/grifo_ed_verus_Loft.png",
       title: "Loft",
-      description: "Loft com pé-direito duplo: amplitude e estilo em cada detalhe."
+      description:
+        "Loft com pé-direito duplo: amplitude e estilo em cada detalhe.",
     },
     {
       image: "/studio/GRIFO_ED_VERUS_STUDIO.png",
       title: "Studio",
-      description: "Um espaço versátil para viver com estilo e autenticidade."
-    }
-  ]
+      description: "Um espaço versátil para viver com estilo e autenticidade.",
+    },
+  ];
 
   const lazerItems = [
     {
       image: "/lazer/ED.VERUS.PISCINA.R01.png",
       title: "Piscina Climatizada",
-      description: "Piscina climatizada com fundo artístico: elegância até nos detalhes"
+      description:
+        "Piscina climatizada com fundo artístico: elegância até nos detalhes",
     },
     {
       image: "/lazer/ED.VERUS.FIREPLACE.R00.png",
       title: "Fireplace",
-      description: "Um espaço acolhedor para brindar momentos especiais"
+      description: "Um espaço acolhedor para brindar momentos especiais",
     },
     {
       image: "/lazer/ED.VERUS.QUIOSQUE.png",
       title: "Quiosque",
-      description: "Ambiente completo com churrasqueira e bar molhado para reunir e brindar"
+      description:
+        "Ambiente completo com churrasqueira e bar molhado para reunir e brindar",
     },
     {
       image: "/lazer/ED.VERUS.SOLARIUM.png",
       title: "SolÁrio",
-      description: "Solário, Jacuzzi e Champanheira: relaxamento com exclusividade"
+      description:
+        "Solário, Jacuzzi e Champanheira: relaxamento com exclusividade",
     },
     {
       image: "/lazer/QUADRA.png",
       title: "Quadra",
-      description: "Quadra para esporte, diversão e momentos em movimento"
+      description: "Quadra para esporte, diversão e momentos em movimento",
     },
     {
       image: "/lazer/PLAYGROUND.png",
       title: "Playground",
-      description: "Para brincar, crescer e se divertir com segurança"
+      description: "Para brincar, crescer e se divertir com segurança",
     },
     {
       image: "/lazer/ED.VERUS.KIDS.png",
       title: "Espaço Kids",
-      description: "Um universo de diversão e descobertas para os pequenos"
+      description: "Um universo de diversão e descobertas para os pequenos",
     },
     {
       image: "/lazer/ED.VERUS.ACADEMIA.png",
       title: "Academia",
-      description: "Espaço completo para corpo em movimento e mente em equilÍbrio"
+      description:
+        "Espaço completo para corpo em movimento e mente em equilÍbrio",
     },
     {
       image: "/lazer/ED.VERUS.PET.PLACE.png",
       title: "Pet Place",
-      description: "Porque viver bem também é proporcionar momentos especiais ao seu pet"
+      description:
+        "Porque viver bem também é proporcionar momentos especiais ao seu pet",
     },
     {
       image: "/lazer/ED.VERUS.PET.CARE.png",
       title: "Pet Care",
-      description: "Mais do que praticidade, um cuidado especial para quem faz parte da família"
+      description:
+        "Mais do que praticidade, um cuidado especial para quem faz parte da família",
     },
     {
       image: "/lazer/ED.VERUS.BEAUTY.png",
       title: "Espaço Beauty",
-      description: "Seu refúgio de cuidado e renovação dentro do Verus"
-    }
-  ]
+      description: "Seu refúgio de cuidado e renovação dentro do Verus",
+    },
+  ];
 
   const comodidadesItems = [
     {
       image: "/comodidades/ED_VERUS_GOURMET.R00 (2).png",
       title: "EspaÇo Gourmet",
-      description: "Conforto e sofisticação para celebrar bons momentos"
+      description: "Conforto e sofisticação para celebrar bons momentos",
     },
     {
       image: "/comodidades/ED.VERUS.COZINHA.GOURMET (1).png",
       title: "Cozinha Gourmet",
-      description: "Cenário ideal para receber e celebrar momentos especiais"
+      description: "Cenário ideal para receber e celebrar momentos especiais",
     },
     {
       image: "/comodidades/ED.VERUS.COWORKING (1).png",
       title: "Coworking",
-      description: "Ambiente ideal para reuniões, estudos e novas ideias"
+      description: "Ambiente ideal para reuniões, estudos e novas ideias",
     },
     {
       image: "/comodidades/ED.VERUS.BIKE (1).png",
       title: "BicicletÁrio",
-      description: "Um espaço exclusivo para guardar e cuidar da sua bike"
+      description: "Um espaço exclusivo para guardar e cuidar da sua bike",
     },
     {
       image: "/comodidades/ED.VERUS.MARKET (1).png",
       title: "Mini Market",
-      description: "Conveniência 24h dentro do seu condomínio"
+      description: "Conveniência 24h dentro do seu condomínio",
     },
     {
       image: "/comodidades/ED.VERUS.LAVANDERIA (1).png",
       title: "Lavanderia",
-      description: "Mais conforto, menos preocupação"
+      description: "Mais conforto, menos preocupação",
     },
     {
       image: "/comodidades/ED.VERUS.HALL (1).png",
       title: "Hall de Entrada",
-      description: "Elegância e sofisticação logo na chegada"
-    }
-  ]
+      description: "Elegância e sofisticação logo na chegada",
+    },
+  ];
 
   const studiosFuncionais = [
     {
       image: "/studio funcional/studio_terraco.png",
       title: "Studio com TerraÇo",
-      description: "25 m² internos + 10,25 m² externos que ampliam sua experiência de viver bem"
+      description:
+        "25 m² internos + 10,25 m² externos que ampliam sua experiência de viver bem",
     },
     {
       image: "/studio funcional/studio_funcional.png",
       title: "Studio Funcional – 25 m²",
-      description: "Conforto otimizado com varanda integrada ao ambiente"
-    }
-  ]
+      description: "Conforto otimizado com varanda integrada ao ambiente",
+    },
+  ];
 
   const studiosLoft = [
     {
       image: "/loft com varanda/loft_varanda.png",
       title: "Loft com varanda",
-      description: "Design inteligente em 25 m² e pé-direito que chega a 5,7 m, trazendo sofisticação e amplitude."
-    }
-  ]
+      description:
+        "Design inteligente em 25 m² e pé-direito que chega a 5,7 m, trazendo sofisticação e amplitude.",
+    },
+  ];
 
   const doisQuartos = [
     {
       image: "/2qt/2qt_terraco.png",
       title: "2 Quartos e Amplo TerraÇo",
-      description: "47 m² internos + 29 m² de terraço: mais conforto em cada detalhe"
+      description:
+        "47 m² internos + 29 m² de terraço: mais conforto em cada detalhe",
     },
     {
       image: "/2qt/2qt_suite.png",
       title: "2 Quartos com SuÍte",
-      description: "65 m² com suíte: o espaço ideal para receber, descansar e aproveitar a vida"
+      description:
+        "65 m² com suíte: o espaço ideal para receber, descansar e aproveitar a vida",
     },
     {
       image: "/2qt/2qt_suite_2.png",
       title: "2 Quartos com SuÍte",
-      description: "65 m² que equilibram espaço, conforto e estilo de vida"
-    }
-  ]
+      description: "65 m² que equilibram espaço, conforto e estilo de vida",
+    },
+  ];
 
   const tresQuartos = [
     {
       image: "/3qt/3qt_suite.png",
       title: "3 Quartos com SuÍte",
-      description: "75 m² que unem espaço, privacidade e bem-estar para toda a família"
+      description:
+        "75 m² que unem espaço, privacidade e bem-estar para toda a família",
     },
     {
       image: "/3qt/3qt_2vg.png",
       title: "3 Quartos com SuÍte e 2 Vagas",
-      description: "88 m² de amplitude, modernidade e praticidade para viver com mais liberdade"
+      description:
+        "88 m² de amplitude, modernidade e praticidade para viver com mais liberdade",
     },
     {
       image: "/3qt/3qt_terraco.png",
       title: "3 Quartos com SuÍte – TerraÇo de 43 m²",
-      description: "Mais que um apartamento, 131 m² no total para viver intensamente dentro e fora de casa."
+      description:
+        "Mais que um apartamento, 131 m² no total para viver intensamente dentro e fora de casa.",
     },
     {
       image: "/3qt/3qt_2vg.png",
       title: "3 Quartos com SuÍte e 2 Vagas",
-      description: "95 m² planejados para oferecer amplitude, conforto e praticidade no dia a dia"
-    }
-  ]
+      description:
+        "95 m² planejados para oferecer amplitude, conforto e praticidade no dia a dia",
+    },
+  ];
 
   const nextApartment = () => {
-    setApartmentIndex((prev) => (prev + 1) % apartments.length)
-  }
+    setApartmentIndex((prev) => (prev + 1) % apartments.length);
+  };
 
   const prevApartment = () => {
-    setApartmentIndex((prev) => (prev - 1 + apartments.length) % apartments.length)
-  }
+    setApartmentIndex(
+      (prev) => (prev - 1 + apartments.length) % apartments.length
+    );
+  };
 
   const nextLazer = () => {
-    setLazerIndex((prev) => (prev + 1) % lazerItems.length)
-  }
+    setLazerIndex((prev) => (prev + 1) % lazerItems.length);
+  };
 
   const prevLazer = () => {
-    setLazerIndex((prev) => (prev - 1 + lazerItems.length) % lazerItems.length)
-  }
+    setLazerIndex((prev) => (prev - 1 + lazerItems.length) % lazerItems.length);
+  };
 
   const nextComodidades = () => {
-    setComodidadesIndex((prev) => (prev + 1) % comodidadesItems.length)
-  }
+    setComodidadesIndex((prev) => (prev + 1) % comodidadesItems.length);
+  };
 
   const prevComodidades = () => {
-    setComodidadesIndex((prev) => (prev - 1 + comodidadesItems.length) % comodidadesItems.length)
-  }
+    setComodidadesIndex(
+      (prev) => (prev - 1 + comodidadesItems.length) % comodidadesItems.length
+    );
+  };
 
   const nextStudiosFuncionais = () => {
-    setStudiosFuncionaisIndex((prev) => (prev + 1) % studiosFuncionais.length)
-  }
+    setStudiosFuncionaisIndex((prev) => (prev + 1) % studiosFuncionais.length);
+  };
 
   const prevStudiosFuncionais = () => {
-    setStudiosFuncionaisIndex((prev) => (prev - 1 + studiosFuncionais.length) % studiosFuncionais.length)
-  }
+    setStudiosFuncionaisIndex(
+      (prev) => (prev - 1 + studiosFuncionais.length) % studiosFuncionais.length
+    );
+  };
 
   const nextStudiosLoft = () => {
-    setStudiosLoftIndex((prev) => (prev + 1) % studiosLoft.length)
-  }
+    setStudiosLoftIndex((prev) => (prev + 1) % studiosLoft.length);
+  };
 
   const prevStudiosLoft = () => {
-    setStudiosLoftIndex((prev) => (prev - 1 + studiosLoft.length) % studiosLoft.length)
-  }
+    setStudiosLoftIndex(
+      (prev) => (prev - 1 + studiosLoft.length) % studiosLoft.length
+    );
+  };
 
   const nextDoisQuartos = () => {
-    setDoisQuartosIndex((prev) => (prev + 1) % doisQuartos.length)
-  }
+    setDoisQuartosIndex((prev) => (prev + 1) % doisQuartos.length);
+  };
 
   const prevDoisQuartos = () => {
-    setDoisQuartosIndex((prev) => (prev - 1 + doisQuartos.length) % doisQuartos.length)
-  }
+    setDoisQuartosIndex(
+      (prev) => (prev - 1 + doisQuartos.length) % doisQuartos.length
+    );
+  };
 
   const nextTresQuartos = () => {
-    setTresQuartosIndex((prev) => (prev + 1) % tresQuartos.length)
-  }
+    setTresQuartosIndex((prev) => (prev + 1) % tresQuartos.length);
+  };
 
   const prevTresQuartos = () => {
-    setTresQuartosIndex((prev) => (prev - 1 + tresQuartos.length) % tresQuartos.length)
-  }
+    setTresQuartosIndex(
+      (prev) => (prev - 1 + tresQuartos.length) % tresQuartos.length
+    );
+  };
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId)
+    const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-  }
+  };
 
-  const openImageModal = (gallery: 'apartamentos' | 'lazer' | 'comodidades' | 'studios-funcionais' | 'studios-loft' | 'dois-quartos' | 'tres-quartos', index: number) => {
-    setCurrentImageGallery(gallery)
-    setCurrentImageIndex(index)
-    setImageModalOpen(true)
-  }
+  const openImageModal = (
+    gallery:
+      | "apartamentos"
+      | "lazer"
+      | "comodidades"
+      | "studios-funcionais"
+      | "studios-loft"
+      | "dois-quartos"
+      | "tres-quartos",
+    index: number
+  ) => {
+    setCurrentImageGallery(gallery);
+    setCurrentImageIndex(index);
+    setImageModalOpen(true);
+  };
 
   const nextImageInModal = useCallback(() => {
     const galleries = {
-      'apartamentos': apartments,
-      'lazer': lazerItems,
-      'comodidades': comodidadesItems,
-      'studios-funcionais': studiosFuncionais,
-      'studios-loft': studiosLoft,
-      'dois-quartos': doisQuartos,
-      'tres-quartos': tresQuartos
-    }
-    const currentGallery = galleries[currentImageGallery]
-    setCurrentImageIndex((prev) => (prev + 1) % currentGallery.length)
-  }, [currentImageGallery, apartments, lazerItems, comodidadesItems, studiosFuncionais, studiosLoft, doisQuartos, tresQuartos])
+      apartamentos: apartments,
+      lazer: lazerItems,
+      comodidades: comodidadesItems,
+      "studios-funcionais": studiosFuncionais,
+      "studios-loft": studiosLoft,
+      "dois-quartos": doisQuartos,
+      "tres-quartos": tresQuartos,
+    };
+    const currentGallery = galleries[currentImageGallery];
+    setCurrentImageIndex((prev) => (prev + 1) % currentGallery.length);
+  }, [
+    currentImageGallery,
+    apartments,
+    lazerItems,
+    comodidadesItems,
+    studiosFuncionais,
+    studiosLoft,
+    doisQuartos,
+    tresQuartos,
+  ]);
 
   const prevImageInModal = useCallback(() => {
     const galleries = {
-      'apartamentos': apartments,
-      'lazer': lazerItems,
-      'comodidades': comodidadesItems,
-      'studios-funcionais': studiosFuncionais,
-      'studios-loft': studiosLoft,
-      'dois-quartos': doisQuartos,
-      'tres-quartos': tresQuartos
-    }
-    const currentGallery = galleries[currentImageGallery]
-    setCurrentImageIndex((prev) => (prev - 1 + currentGallery.length) % currentGallery.length)
-  }, [currentImageGallery, apartments, lazerItems, comodidadesItems, studiosFuncionais, studiosLoft, doisQuartos, tresQuartos])
+      apartamentos: apartments,
+      lazer: lazerItems,
+      comodidades: comodidadesItems,
+      "studios-funcionais": studiosFuncionais,
+      "studios-loft": studiosLoft,
+      "dois-quartos": doisQuartos,
+      "tres-quartos": tresQuartos,
+    };
+    const currentGallery = galleries[currentImageGallery];
+    setCurrentImageIndex(
+      (prev) => (prev - 1 + currentGallery.length) % currentGallery.length
+    );
+  }, [
+    currentImageGallery,
+    apartments,
+    lazerItems,
+    comodidadesItems,
+    studiosFuncionais,
+    studiosLoft,
+    doisQuartos,
+    tresQuartos,
+  ]);
 
   const getCurrentImageData = () => {
     const galleries = {
-      'apartamentos': apartments,
-      'lazer': lazerItems,
-      'comodidades': comodidadesItems,
-      'studios-funcionais': studiosFuncionais,
-      'studios-loft': studiosLoft,
-      'dois-quartos': doisQuartos,
-      'tres-quartos': tresQuartos
-    }
-    return galleries[currentImageGallery][currentImageIndex]
-  }
+      apartamentos: apartments,
+      lazer: lazerItems,
+      comodidades: comodidadesItems,
+      "studios-funcionais": studiosFuncionais,
+      "studios-loft": studiosLoft,
+      "dois-quartos": doisQuartos,
+      "tres-quartos": tresQuartos,
+    };
+    return galleries[currentImageGallery][currentImageIndex];
+  };
 
   useEffect(() => {
     if (isModalOpen || imageModalOpen) {
-      document.body.style.overflow = 'hidden'
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset'
+      document.body.style.overflow = "unset";
     }
     return () => {
-      document.body.style.overflow = 'unset'
-    }
-  }, [isModalOpen, imageModalOpen])
+      document.body.style.overflow = "unset";
+    };
+  }, [isModalOpen, imageModalOpen]);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         if (imageModalOpen) {
-          setImageModalOpen(false)
+          setImageModalOpen(false);
         } else if (isModalOpen) {
-          setIsModalOpen(false)
+          setIsModalOpen(false);
         }
       }
       if (imageModalOpen) {
-        if (e.key === 'ArrowRight') {
-          nextImageInModal()
-        } else if (e.key === 'ArrowLeft') {
-          prevImageInModal()
+        if (e.key === "ArrowRight") {
+          nextImageInModal();
+        } else if (e.key === "ArrowLeft") {
+          prevImageInModal();
         }
       }
-    }
-    window.addEventListener('keydown', handleEscape)
-    return () => window.removeEventListener('keydown', handleEscape)
-  }, [isModalOpen, imageModalOpen, nextImageInModal, prevImageInModal])
+    };
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
+  }, [isModalOpen, imageModalOpen, nextImageInModal, prevImageInModal]);
 
   useEffect(() => {
     const preloadImages = () => {
       const allImages = [
-        ...apartments.map(item => item.image),
-        ...lazerItems.map(item => item.image),
-        ...comodidadesItems.map(item => item.image),
-        ...studiosFuncionais.map(item => item.image),
-        ...studiosLoft.map(item => item.image),
-        ...doisQuartos.map(item => item.image),
-        ...tresQuartos.map(item => item.image),
-        '/hero_img.png',
-        '/buildingcontact.png',
-        '/lazer/ED.VERUS.PISCINA.R01.png',
-        '/girl.png',
-        '/predio2.png',
-        '/divider.png',
-        '/footerbg.png',
-        '/SHADOWUPLEFT.png',
-        '/logo_white.svg',
-        '/logo_n8.png',
-        '/logo_grifo.svg',
-        '/arrow.png',
-        '/arrowleft.png',
-        '/arrowright.png',
-        '/arrowup.png'
-      ]
+        ...apartments.map((item) => item.image),
+        ...lazerItems.map((item) => item.image),
+        ...comodidadesItems.map((item) => item.image),
+        ...studiosFuncionais.map((item) => item.image),
+        ...studiosLoft.map((item) => item.image),
+        ...doisQuartos.map((item) => item.image),
+        ...tresQuartos.map((item) => item.image),
+        "/hero_img.png",
+        "/buildingcontact.png",
+        "/lazer/ED.VERUS.PISCINA.R01.png",
+        "/girl.png",
+        "/predio2.png",
+        "/divider.png",
+        "/footerbg.png",
+        "/SHADOWUPLEFT.png",
+        "/logo_white.svg",
+        "/logo_n8.png",
+        "/logo_grifo.svg",
+        "/arrow.png",
+        "/arrowleft.png",
+        "/arrowright.png",
+        "/arrowup.png",
+      ];
 
-      let loadedCount = 0
-      const totalImages = allImages.length
+      let loadedCount = 0;
+      const totalImages = allImages.length;
 
       allImages.forEach((src) => {
-        const img = new window.Image()
+        const img = new window.Image();
         img.onload = () => {
-          loadedCount++
+          loadedCount++;
           if (loadedCount === totalImages) {
-            setImagesPreloaded(true)
+            setImagesPreloaded(true);
           }
-        }
+        };
         img.onerror = () => {
-          loadedCount++
+          loadedCount++;
           if (loadedCount === totalImages) {
-            setImagesPreloaded(true)
+            setImagesPreloaded(true);
           }
-        }
-        img.src = src
-      })
-    }
+        };
+        img.src = src;
+      });
+    };
 
     const timer = setTimeout(() => {
-      preloadImages()
-    }, 100)
+      preloadImages();
+    }, 100);
 
-    return () => clearTimeout(timer)
-  }, [apartments, lazerItems, comodidadesItems, studiosFuncionais, studiosLoft, doisQuartos, tresQuartos])
+    return () => clearTimeout(timer);
+  }, [
+    apartments,
+    lazerItems,
+    comodidadesItems,
+    studiosFuncionais,
+    studiosLoft,
+    doisQuartos,
+    tresQuartos,
+  ]);
 
   return (
     <main className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="fixed top-0 w-full z-50 h-16 md:h-20">
-        {/* Background Blur Effect */}
-        <div 
-          className="absolute inset-0 backdrop-blur-sm transition-opacity duration-300"
-          style={{
-            background: 'linear-gradient(to bottom, rgba(62, 13, 17, 0.9), rgba(62, 13, 17, 0.6), rgba(62, 13, 17, 0.3), rgba(62, 13, 17, 0.1), rgba(62, 13, 17, 0))'
-          }}
-        ></div>
-        
-        {/* Header Content */}
-        <div className="relative w-full px-4 md:px-[100px]">
-          <div className="flex justify-between items-center h-16 md:h-20">
-            {/* Logo and Navigation Group */}
-            <div className="flex items-center space-x-4 md:space-x-12">
-              {/* Logo */}
-              <div className="flex items-center">
-                <Image
-                  src="/logo_white.svg"
-                  alt="Verus Logo"
-                  width={160}
-                  height={52}
-                  className="h-8 md:h-10 w-auto"
-                />
-              </div>
-              
-              {/* Navigation */}
-              <nav className="hidden lg:flex items-center space-x-4 md:space-x-6">
-              <a href="#projeto" className="font-mirante text-white font-normal relative group text-sm md:text-base">
-                Projeto
-                <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-full h-0.5 bg-[#C2816B] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></div>
-              </a>
-              <a href="#galeria" className="font-mirante text-white font-normal relative group text-sm md:text-base">
-                Galeria
-                <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-full h-0.5 bg-[#C2816B] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></div>
-              </a>
-              <a href="#diferenciais" className="font-mirante text-white font-normal relative group text-sm md:text-base">
-                Diferenciais
-                <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-full h-0.5 bg-[#C2816B] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></div>
-              </a>
-              <a href="#plantas" className="font-mirante text-white font-normal relative group text-sm md:text-base">
-                Plantas
-                <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-full h-0.5 bg-[#C2816B] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></div>
-              </a>
-              <a href="#autoria" className="font-mirante text-white font-normal relative group text-sm md:text-base">
-                Autoria
-                <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-full h-0.5 bg-[#C2816B] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></div>
-              </a>
-              <a href="#localizacao" className="font-mirante text-white font-normal relative group text-sm md:text-base">
-                Localização
-                <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-full h-0.5 bg-[#C2816B] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></div>
-              </a>
-              <a href="#obras" className="font-mirante text-white font-normal relative group text-sm md:text-base">
-                Obras
-                <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-full h-0.5 bg-[#C2816B] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></div>
-              </a>
-              </nav>
-            </div>
-            
-            {/* Contact Button */}
-            <a href="http://wa.me/5541997188421?text=Vim%20do%20Site%20e%20Gostaria%20de%20Saber%20Mais%20sobre%20o%20Verus" target="_blank" rel="noopener noreferrer" className="bg-[#C2816B] hover:bg-[#3E0D11] text-white font-mirante font-normal px-3 md:px-6 py-2 md:py-3 rounded-full hover:scale-105 transition-all duration-300 text-sm md:text-base">
-              Entrar em Contato
-            </a>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Hero Section */}
       <div className="relative h-screen">
@@ -567,23 +613,31 @@ export default function HomePage() {
           quality={100}
           priority
         />
-        
+
         {/* Hero Content */}
         <div className="absolute top-1/2 left-4 md:left-[130px] transform -translate-y-1/2 z-10 px-4 md:px-0">
           <AnimatedSection animation="fade-in-up" delay={200}>
-            <h1 className="font-carla-sans text-4xl md:text-6xl lg:text-8xl font-light text-white leading-tight">
-              A verdade em<br />
+            <h1 className="font-carla-sans text-4xl  lg:text-8xl font-light text-white leading-tight">
+              A verdade em
+              <br />
               cada detalhe
             </h1>
           </AnimatedSection>
           <AnimatedSection animation="fade-in-up" delay={400}>
-            <p className="font-new-black text-base md:text-lg font-normal text-white mt-4 md:mt-6 md:ml-[190px]">
-            Um projeto que une autenticidade, conforto e<br>
-            </br>design contemporâneo no coração de São José dos Pinhais
+            <p className="font-new-black text-base md:text-lg font-normal text-white mt-4 md:mt-6 md:text-start md:flex md:justify-center md:items-center">
+              Um projeto que une autenticidade, conforto e<br></br>design
+              contemporâneo no coração de São José dos Pinhais
             </p>
           </AnimatedSection>
-          <AnimatedSection animation="fade-in-up" delay={600}>
-            <button onClick={() => scrollToSection('projeto')} className="group flex items-center space-x-3 mt-4 md:mt-6 font-new-black text-base md:text-lg font-normal text-white border-2 border-white rounded-full px-4 md:px-6 py-2 md:py-3 hover:bg-[#C2816B] hover:border-[#C2816B] transition-all duration-300 md:ml-[190px]">
+          <AnimatedSection
+            animation="fade-in-up"
+            delay={600}
+            className="md:flex md:justify-start md:items-start md:ml-[100px]"
+          >
+            <button
+              onClick={() => scrollToSection("projeto")}
+              className="group flex items-center space-x-3 mt-4 md:mt-6 font-new-black text-base md:text-lg font-normal text-white border-2 border-white rounded-full px-4 md:px-6 py-2  hover:bg-[#C2816B] hover:border-[#C2816B] transition-all duration-300"
+            >
               <span>Saiba Mais</span>
               <div className="group-hover:rotate-45 transition-transform duration-300">
                 <Image
@@ -600,7 +654,10 @@ export default function HomePage() {
       </div>
 
       {/* Projeto Section */}
-      <section id="projeto" className="bg-white relative min-h-screen py-16 md:py-24">
+      <section
+        id="projeto"
+        className="bg-white relative min-h-screen py-16 md:py-24"
+      >
         <Image
           src="/SHADOWUPLEFT.png"
           alt="Shadow"
@@ -608,99 +665,114 @@ export default function HomePage() {
           className="object-cover"
           quality={100}
         />
-        
+
         {/* Projeto Image - Top Left Corner */}
-       
-        
-        <div className="relative z-10 min-h-screen flex items-center justify-center px-6 md:px-20">
-          
+
+        <div className="relative z-10 min-h-screen flex items-center justify-between px-6 md:px-20">
           {/* Centered Container with Image and Text */}
-          <div className="flex flex-col lg:flex-row items-stretch gap-8 lg:gap-16 max-w-6xl w-full">
+          <div className="flex flex-col lg:flex-row items-center lg:items-stretch gap-8  max-w-6xl w-full">
             {/* Building Image - Left Side */}
             <AnimatedSection animation="slide-in-left">
-              <div className="flex justify-center lg:justify-start">
+              <div className="flex justify-center lg:min-w-[600px]">
                 <Image
                   src="/buildingcontact.png"
                   alt="Verus Building"
                   width={400}
                   height={800}
-                  className="w-full max-w-sm lg:max-w-md h-full object-contain rounded-lg"
+                  className="w-full max-w-sm lg:max-w-lg h-full object-cover rounded-lg"
                 />
               </div>
             </AnimatedSection>
-            
+
             {/* Text Content - Right Side */}
             <div className="text-left max-w-xl flex flex-col justify-between h-full">
               <AnimatedSection animation="fade-in-up">
-                <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight mb-8">
-                  VERUS, ONDE A VERDADE<br />
-                  SE TRANSFORMA EM <span className="text-[#C2816B]">LAR.</span>
-                </h2>
+                <div className="lg:absolute lg:max-w-[576px] lg:-left-28 lg:top-10 lg:max-h-[200px]">
+                  <h2 className="font-carla-sans text-3xl lg:text-2xl xl:text-4xl md:mt-2 font-normal text-gray-800 leading-tight mb-4 ">
+                    VERUS, ONDE A VERDADE
+                    <br />
+                    SE TRANSFORMA EM{" "}
+                    <span className="text-[#C2816B]">LAR.</span>
+                  </h2>
+                  <div className="font-new-black text-sm lg:text-sm xl:text-base font-normal text-gray-600 leading-relaxed mb-8 ">
+                    <p className="mb-2">
+                      O Verus foi criado para quem busca autenticidade, conforto
+                      e valorização. Com plantas inteligentes e áreas completas
+                      de lazer e convívio, une design sofisticado, praticidade e
+                      bem-estar em um dos endereços mais desejados de São José
+                      dos Pinhais.
+                    </p>
+
+                    {/* Contact Form */}
+                  </div>
+                </div>
               </AnimatedSection>
-              
-              <div className="font-new-black text-sm md:text-base font-normal text-gray-600 leading-relaxed mb-8">
-                <p className="mb-6">
-                O Verus foi criado para quem busca autenticidade, conforto e valorização.
-Com plantas inteligentes e áreas completas de lazer e convívio, une design sofisticado, praticidade e bem-estar em um dos endereços mais desejados de São José dos Pinhais.
 
-
+              <div className="min-h-[252px] xl:min-h-[272px] bg-none w-full hidden lg:block"></div>
+              <div className="flex flex-col justify-end h-full max-w-[calc(520px-56px)]">
+                <p className="font-new-black text-sm lg:text-sm font-normal text-gray-600 leading-relaxed mb-4">
+                  Cadastre-se e receba todos os detalhes em primeira mão
                 </p>
-                <p className="mb-8">
-                Cadastre-se e receba todos os detalhes em primeira mão
-                </p>
-                
-                {/* Contact Form */}
                 <form className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block font-new-black text-sm font-normal text-gray-700 mb-2">
                         Nome
                       </label>
-                      <input 
-                        type="text" 
-                        placeholder="Nome*" 
-                        className="w-full px-4 py-3 bg-white border border-[#E6E5EA] rounded-lg text-gray-900 placeholder:text-[#E6E5EA] focus:outline-none focus:border-[#C2816B] transition-colors"
+                      <input
+                        type="text"
+                        placeholder="Nome*"
+                        className="w-full px-4 py-1 bg-white border border-[#E6E5EA] rounded-lg text-gray-900 placeholder:text-[#E6E5EA] focus:outline-none focus:border-[#C2816B] transition-colors"
                       />
                     </div>
-                    
+
                     <div>
                       <label className="block font-new-black text-sm font-normal text-gray-700 mb-2">
                         Telefone
                       </label>
-                      <input 
-                        type="tel" 
-                        placeholder="Telefone" 
-                        className="w-full px-4 py-3 bg-white border border-[#E6E5EA] rounded-lg text-gray-900 placeholder:text-[#E6E5EA] focus:outline-none focus:border-[#C2816B] transition-colors"
+                      <input
+                        type="tel"
+                        placeholder="Telefone"
+                        className="w-full px-4 py-1 bg-white border border-[#E6E5EA] rounded-lg text-gray-900 placeholder:text-[#E6E5EA] focus:outline-none focus:border-[#C2816B] transition-colors"
                       />
                     </div>
-                    
+
                     <div className="md:col-span-2">
                       <label className="block font-new-black text-sm font-normal text-gray-700 mb-2">
                         E-mail
                       </label>
-                      <input 
-                        type="email" 
-                        placeholder="E-mail" 
-                        className="w-full px-4 py-3 bg-white border border-[#E6E5EA] rounded-lg text-gray-900 placeholder:text-[#E6E5EA] focus:outline-none focus:border-[#C2816B] transition-colors"
+                      <input
+                        type="email"
+                        placeholder="E-mail"
+                        className="w-full px-4 py-1 bg-white border border-[#E6E5EA] rounded-lg text-gray-900 placeholder:text-[#E6E5EA] focus:outline-none focus:border-[#C2816B] transition-colors"
                       />
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center space-x-3">
-                    <input 
-                      type="checkbox" 
+                    <input
+                      type="checkbox"
                       className="w-4 h-4 text-[#C2816B] border-[#E6E5EA] rounded focus:ring-[#C2816B]"
                     />
                     <label className="font-new-black text-sm font-normal text-gray-700">
                       Eu concordo em receber comunicações
                     </label>
                   </div>
-                  
+
                   <p className="font-new-black text-xs font-normal text-gray-500">
-                    Ao informar meus dados, estou ciente das diretrizes da <a href="#" className="underline hover:text-[#C2816B] transition-colors">Política de Privacidade</a>
+                    Ao informar meus dados, estou ciente das diretrizes da{" "}
+                    <a
+                      href="#"
+                      className="underline hover:text-[#C2816B] transition-colors"
+                    >
+                      Política de Privacidade
+                    </a>
                   </p>
-                  
-                  <button type="submit" className="group flex items-center space-x-3 mt-6 font-new-black text-base md:text-lg font-normal text-[#171715] border border-[#171715] rounded-full px-6 py-3 hover:bg-[#C2816B] hover:border-[#C2816B] hover:text-white transition-all duration-300">
+
+                  <button
+                    type="submit"
+                    className="group flex items-center space-x-3 mt-6 font-new-black text-base md:text-lg font-normal text-[#171715] border border-[#171715] rounded-full px-6 py-3 hover:bg-[#C2816B] hover:border-[#C2816B] hover:text-white transition-all duration-300"
+                  >
                     <span>Quero Saber Mais</span>
                     <div className="group-hover:rotate-45 transition-transform duration-300">
                       <Image
@@ -726,24 +798,36 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
             {/* Download Icon - Left */}
             <div className="flex-shrink-0">
               <div className="w-20 h-20 bg-white rounded-lg flex items-center justify-center">
-                <svg className="w-12 h-12 text-[#3E0D11]" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+                <svg
+                  className="w-12 h-12 text-[#3E0D11]"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </div>
             </div>
-            
+
             {/* Text - Center */}
             <div className="text-center md:text-left flex-1">
               <p className="font-new-black text-lg md:text-xl font-normal text-white text-center md:text-left">
                 Cadastre-se e tenha acesso ao material exclusivo do Verus.
                 <br className="md:hidden" />
-                Descubra plantas, diferenciais e tudo o que torna este projeto único.
+                Descubra plantas, diferenciais e tudo o que torna este projeto
+                único.
               </p>
             </div>
-            
+
             {/* Download Button - Right */}
             <div className="flex-shrink-0">
-              <button onClick={() => setIsModalOpen(true)} className="group flex items-center space-x-3 font-new-black text-base md:text-lg font-normal text-white border-2 border-white rounded-full px-6 py-3 hover:bg-[#C2816B] hover:border-[#C2816B] transition-all duration-300">
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="group flex items-center space-x-3 font-new-black text-base md:text-lg font-normal text-white border-2 border-white rounded-full px-6 py-3 hover:bg-[#C2816B] hover:border-[#C2816B] transition-all duration-300"
+              >
                 <span>Baixe Agora</span>
                 <div className="group-hover:rotate-45 transition-transform duration-300">
                   <Image
@@ -762,7 +846,10 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
 
       {/* Lazer Section */}
       <section className="relative">
-        <div className="relative w-full overflow-hidden" style={{aspectRatio: '21/9'}}>
+        <div
+          className="relative w-full overflow-hidden"
+          style={{ aspectRatio: "21/9" }}
+        >
           <Image
             src="/lazer/ED.VERUS.PISCINA.R01.png"
             alt="Piscina climatizada Verus"
@@ -775,7 +862,8 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
             <AnimatedSection animation="fade-in-up">
               <div className="text-center px-6 md:px-20">
                 <h2 className="font-carla-sans text-2xl md:text-4xl lg:text-6xl font-normal text-white leading-tight">
-                  Piscina climatizada com hidromassagem e academia para corpo e mente em equilÍbrio.
+                  Piscina climatizada com hidromassagem e academia para corpo e
+                  mente em equilÍbrio.
                 </h2>
               </div>
             </AnimatedSection>
@@ -784,7 +872,10 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
       </section>
 
       {/* Galeria Section */}
-      <section id="galeria" className="bg-white relative py-16 md:py-24 px-6 md:px-20">
+      <section
+        id="galeria"
+        className="bg-white relative py-16 md:py-24 px-6 md:px-20"
+      >
         <Image
           src="/SHADOWUPLEFT.png"
           alt="Shadow"
@@ -792,48 +883,51 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
           className="object-cover rotate-180"
           quality={100}
         />
-        
+
         <div className="relative z-10 max-w-6xl mx-auto">
           <AnimatedSection animation="fade-in-up">
             <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight text-center mb-8">
-              SEU ESPAÇO DO<br />
+              SEU ESPAÇO DO
+              <br />
               <span className="text-[#C2816B]">SEU JEITO.</span>
             </h2>
           </AnimatedSection>
 
           <AnimatedSection animation="fade-in-up" delay={200}>
             <p className="font-new-black text-base md:text-lg font-normal text-gray-600 text-center max-w-3xl mx-auto mb-12">
-              Mais que espaços, o Verus oferece liberdade para viver cada momento do seu jeito — com conforto, lazer e praticidade em harmonia.
+              Mais que espaços, o Verus oferece liberdade para viver cada
+              momento do seu jeito — com conforto, lazer e praticidade em
+              harmonia.
             </p>
           </AnimatedSection>
 
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mb-16">
-            <button 
-              onClick={() => setActiveGallery('apartamentos')}
+            <button
+              onClick={() => setActiveGallery("apartamentos")}
               className={`font-mirante text-base md:text-lg font-normal border-2 border-[#3E0D11] rounded-full px-8 py-3 transition-all duration-300 w-full md:w-auto ${
-                activeGallery === 'apartamentos' 
-                  ? 'bg-[#3E0D11] text-white' 
-                  : 'bg-transparent text-[#3E0D11] hover:bg-[#3E0D11] hover:text-white'
+                activeGallery === "apartamentos"
+                  ? "bg-[#3E0D11] text-white"
+                  : "bg-transparent text-[#3E0D11] hover:bg-[#3E0D11] hover:text-white"
               }`}
             >
               Apartamentos
             </button>
-            <button 
-              onClick={() => setActiveGallery('lazer')}
+            <button
+              onClick={() => setActiveGallery("lazer")}
               className={`font-mirante text-base md:text-lg font-normal border-2 border-[#3E0D11] rounded-full px-8 py-3 transition-all duration-300 w-full md:w-auto ${
-                activeGallery === 'lazer' 
-                  ? 'bg-[#3E0D11] text-white' 
-                  : 'bg-transparent text-[#3E0D11] hover:bg-[#3E0D11] hover:text-white'
+                activeGallery === "lazer"
+                  ? "bg-[#3E0D11] text-white"
+                  : "bg-transparent text-[#3E0D11] hover:bg-[#3E0D11] hover:text-white"
               }`}
             >
               Lazer e Bem-Estar
             </button>
-            <button 
-              onClick={() => setActiveGallery('comodidades')}
+            <button
+              onClick={() => setActiveGallery("comodidades")}
               className={`font-mirante text-base md:text-lg font-normal border-2 border-[#3E0D11] rounded-full px-8 py-3 transition-all duration-300 w-full md:w-auto ${
-                activeGallery === 'comodidades' 
-                  ? 'bg-[#3E0D11] text-white' 
-                  : 'bg-transparent text-[#3E0D11] hover:bg-[#3E0D11] hover:text-white'
+                activeGallery === "comodidades"
+                  ? "bg-[#3E0D11] text-white"
+                  : "bg-transparent text-[#3E0D11] hover:bg-[#3E0D11] hover:text-white"
               }`}
             >
               Comodidades
@@ -841,17 +935,19 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
           </div>
 
           <div className="relative max-w-4xl mx-auto">
-            {activeGallery === 'apartamentos' && (
+            {activeGallery === "apartamentos" && (
               <div>
                 <div className="overflow-hidden">
-                  <div 
+                  <div
                     className="flex transition-transform duration-500 ease-in-out"
-                    style={{ transform: `translateX(-${apartmentIndex * 100}%)` }}
+                    style={{
+                      transform: `translateX(-${apartmentIndex * 100}%)`,
+                    }}
                   >
                     {apartments.map((apartment, index) => (
                       <div key={index} className="w-full flex-shrink-0">
-                        <div 
-                          onClick={() => openImageModal('apartamentos', index)}
+                        <div
+                          onClick={() => openImageModal("apartamentos", index)}
                           className="bg-gray-200 rounded-lg overflow-hidden aspect-[16/10] mb-6 relative cursor-pointer hover:opacity-90 transition-opacity"
                         >
                           <Image
@@ -867,7 +963,7 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                 </div>
 
                 <div className="flex items-center justify-between gap-4">
-                  <button 
+                  <button
                     onClick={prevApartment}
                     className="flex-shrink-0 w-12 h-12 bg-[#C2816B] hover:bg-[#3E0D11] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300"
                   >
@@ -889,7 +985,7 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                     </p>
                   </div>
 
-                  <button 
+                  <button
                     onClick={nextApartment}
                     className="flex-shrink-0 w-12 h-12 bg-[#C2816B] hover:bg-[#3E0D11] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300"
                   >
@@ -905,17 +1001,17 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
               </div>
             )}
 
-            {activeGallery === 'lazer' && (
+            {activeGallery === "lazer" && (
               <div>
                 <div className="overflow-hidden">
-                  <div 
+                  <div
                     className="flex transition-transform duration-500 ease-in-out"
                     style={{ transform: `translateX(-${lazerIndex * 100}%)` }}
                   >
                     {lazerItems.map((item, index) => (
                       <div key={index} className="w-full flex-shrink-0">
-                        <div 
-                          onClick={() => openImageModal('lazer', index)}
+                        <div
+                          onClick={() => openImageModal("lazer", index)}
                           className="bg-gray-200 rounded-lg overflow-hidden aspect-[16/10] mb-6 relative cursor-pointer hover:opacity-90 transition-opacity"
                         >
                           <Image
@@ -931,7 +1027,7 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                 </div>
 
                 <div className="flex items-center justify-between gap-4">
-                  <button 
+                  <button
                     onClick={prevLazer}
                     className="flex-shrink-0 w-12 h-12 bg-[#C2816B] hover:bg-[#3E0D11] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300"
                   >
@@ -953,7 +1049,7 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                     </p>
                   </div>
 
-                  <button 
+                  <button
                     onClick={nextLazer}
                     className="flex-shrink-0 w-12 h-12 bg-[#C2816B] hover:bg-[#3E0D11] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300"
                   >
@@ -969,17 +1065,19 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
               </div>
             )}
 
-            {activeGallery === 'comodidades' && (
+            {activeGallery === "comodidades" && (
               <div>
                 <div className="overflow-hidden">
-                  <div 
+                  <div
                     className="flex transition-transform duration-500 ease-in-out"
-                    style={{ transform: `translateX(-${comodidadesIndex * 100}%)` }}
+                    style={{
+                      transform: `translateX(-${comodidadesIndex * 100}%)`,
+                    }}
                   >
                     {comodidadesItems.map((item, index) => (
                       <div key={index} className="w-full flex-shrink-0">
-                        <div 
-                          onClick={() => openImageModal('comodidades', index)}
+                        <div
+                          onClick={() => openImageModal("comodidades", index)}
                           className="bg-gray-200 rounded-lg overflow-hidden aspect-[16/10] mb-6 relative cursor-pointer hover:opacity-90 transition-opacity"
                         >
                           <Image
@@ -995,7 +1093,7 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                 </div>
 
                 <div className="flex items-center justify-between gap-4">
-                  <button 
+                  <button
                     onClick={prevComodidades}
                     className="flex-shrink-0 w-12 h-12 bg-[#C2816B] hover:bg-[#3E0D11] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300"
                   >
@@ -1017,7 +1115,7 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                     </p>
                   </div>
 
-                  <button 
+                  <button
                     onClick={nextComodidades}
                     className="flex-shrink-0 w-12 h-12 bg-[#C2816B] hover:bg-[#3E0D11] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300"
                   >
@@ -1057,14 +1155,18 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
               {/* Headline */}
               <AnimatedSection animation="fade-in-up">
                 <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-white leading-tight mb-8">
-                  Tecnologia, conforto e consciência em <span className="text-[#C2816B]">cada detalhe.</span>
+                  Tecnologia, conforto e consciência em{" "}
+                  <span className="text-[#C2816B]">cada detalhe.</span>
                 </h2>
               </AnimatedSection>
 
               {/* Paragraph */}
               <AnimatedSection animation="fade-in-up" delay={200}>
                 <p className="font-new-black text-base md:text-lg font-normal text-white leading-relaxed mb-12">
-                  O VERUS foi pensado para oferecer mais do que um bom lugar para viver. Ele entrega soluções modernas, sustentáveis e funcionais, que elevam a experiência de morar com praticidade, segurança e eficiência.
+                  O VERUS foi pensado para oferecer mais do que um bom lugar
+                  para viver. Ele entrega soluções modernas, sustentáveis e
+                  funcionais, que elevam a experiência de morar com praticidade,
+                  segurança e eficiência.
                 </p>
               </AnimatedSection>
 
@@ -1284,7 +1386,10 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
       </section>
 
       {/* Plantas Section */}
-      <section id="plantas" className="bg-white relative py-16 md:py-24 px-6 md:px-20">
+      <section
+        id="plantas"
+        className="bg-white relative py-16 md:py-24 px-6 md:px-20"
+      >
         <Image
           src="/SHADOWUPLEFT.png"
           alt="Shadow"
@@ -1292,7 +1397,7 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
           className="object-cover"
           quality={100}
         />
-        
+
         <div className="relative z-10 max-w-6xl mx-auto">
           <AnimatedSection animation="fade-in-up">
             <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight text-center mb-8">
@@ -1302,47 +1407,48 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
 
           <AnimatedSection animation="fade-in-up" delay={200}>
             <p className="font-new-black text-base md:text-lg font-normal text-gray-600 text-center max-w-3xl mx-auto mb-12">
-              Cada detalhe pensado para traduzir o seu estilo de vida. Descubra plantas versáteis que se adaptam aos seus sonhos
+              Cada detalhe pensado para traduzir o seu estilo de vida. Descubra
+              plantas versáteis que se adaptam aos seus sonhos
             </p>
           </AnimatedSection>
 
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mb-4 flex-wrap">
-            <button 
-              onClick={() => setActivePlanta('studios-funcionais')}
+            <button
+              onClick={() => setActivePlanta("studios-funcionais")}
               className={`font-mirante text-base md:text-lg font-normal border-2 border-[#3E0D11] rounded-full px-8 py-3 transition-all duration-300 w-full md:w-auto ${
-                activePlanta === 'studios-funcionais' 
-                  ? 'bg-[#3E0D11] text-white' 
-                  : 'bg-transparent text-[#3E0D11] hover:bg-[#3E0D11] hover:text-white'
+                activePlanta === "studios-funcionais"
+                  ? "bg-[#3E0D11] text-white"
+                  : "bg-transparent text-[#3E0D11] hover:bg-[#3E0D11] hover:text-white"
               }`}
             >
               Studios Funcionais
             </button>
-            <button 
-              onClick={() => setActivePlanta('studios-loft')}
+            <button
+              onClick={() => setActivePlanta("studios-loft")}
               className={`font-mirante text-base md:text-lg font-normal border-2 border-[#3E0D11] rounded-full px-8 py-3 transition-all duration-300 w-full md:w-auto ${
-                activePlanta === 'studios-loft' 
-                  ? 'bg-[#3E0D11] text-white' 
-                  : 'bg-transparent text-[#3E0D11] hover:bg-[#3E0D11] hover:text-white'
+                activePlanta === "studios-loft"
+                  ? "bg-[#3E0D11] text-white"
+                  : "bg-transparent text-[#3E0D11] hover:bg-[#3E0D11] hover:text-white"
               }`}
             >
               Studios Tipo Loft
             </button>
-            <button 
-              onClick={() => setActivePlanta('02-quartos')}
+            <button
+              onClick={() => setActivePlanta("02-quartos")}
               className={`font-mirante text-base md:text-lg font-normal border-2 border-[#3E0D11] rounded-full px-8 py-3 transition-all duration-300 w-full md:w-auto ${
-                activePlanta === '02-quartos' 
-                  ? 'bg-[#3E0D11] text-white' 
-                  : 'bg-transparent text-[#3E0D11] hover:bg-[#3E0D11] hover:text-white'
+                activePlanta === "02-quartos"
+                  ? "bg-[#3E0D11] text-white"
+                  : "bg-transparent text-[#3E0D11] hover:bg-[#3E0D11] hover:text-white"
               }`}
             >
               02 Quartos
             </button>
-            <button 
-              onClick={() => setActivePlanta('03-quartos')}
+            <button
+              onClick={() => setActivePlanta("03-quartos")}
               className={`font-mirante text-base md:text-lg font-normal border-2 border-[#3E0D11] rounded-full px-8 py-3 transition-all duration-300 w-full md:w-auto ${
-                activePlanta === '03-quartos' 
-                  ? 'bg-[#3E0D11] text-white' 
-                  : 'bg-transparent text-[#3E0D11] hover:bg-[#3E0D11] hover:text-white'
+                activePlanta === "03-quartos"
+                  ? "bg-[#3E0D11] text-white"
+                  : "bg-transparent text-[#3E0D11] hover:bg-[#3E0D11] hover:text-white"
               }`}
             >
               03 Quartos
@@ -1350,17 +1456,23 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
           </div>
 
           <div className="relative max-w-4xl mx-auto">
-            {activePlanta === 'studios-funcionais' && (
+            {activePlanta === "studios-funcionais" && (
               <div>
                 <div className="overflow-hidden">
-                  <div 
+                  <div
                     className="flex transition-transform duration-500 ease-in-out"
-                    style={{ transform: `translateX(-${studiosFuncionaisIndex * 100}%)` }}
+                    style={{
+                      transform: `translateX(-${
+                        studiosFuncionaisIndex * 100
+                      }%)`,
+                    }}
                   >
                     {studiosFuncionais.map((item, index) => (
                       <div key={index} className="w-full flex-shrink-0">
-                        <div 
-                          onClick={() => openImageModal('studios-funcionais', index)}
+                        <div
+                          onClick={() =>
+                            openImageModal("studios-funcionais", index)
+                          }
                           className="rounded-lg overflow-hidden aspect-[16/10] mb-6 relative cursor-pointer hover:opacity-90 transition-opacity"
                         >
                           <Image
@@ -1376,7 +1488,7 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                 </div>
 
                 <div className="flex items-center justify-between gap-4">
-                  <button 
+                  <button
                     onClick={prevStudiosFuncionais}
                     className="flex-shrink-0 w-12 h-12 bg-[#C2816B] hover:bg-[#3E0D11] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300"
                   >
@@ -1398,7 +1510,7 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                     </p>
                   </div>
 
-                  <button 
+                  <button
                     onClick={nextStudiosFuncionais}
                     className="flex-shrink-0 w-12 h-12 bg-[#C2816B] hover:bg-[#3E0D11] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300"
                   >
@@ -1414,17 +1526,19 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
               </div>
             )}
 
-            {activePlanta === 'studios-loft' && (
+            {activePlanta === "studios-loft" && (
               <div>
                 <div className="overflow-hidden">
-                  <div 
+                  <div
                     className="flex transition-transform duration-500 ease-in-out"
-                    style={{ transform: `translateX(-${studiosLoftIndex * 100}%)` }}
+                    style={{
+                      transform: `translateX(-${studiosLoftIndex * 100}%)`,
+                    }}
                   >
                     {studiosLoft.map((item, index) => (
                       <div key={index} className="w-full flex-shrink-0">
-                        <div 
-                          onClick={() => openImageModal('studios-loft', index)}
+                        <div
+                          onClick={() => openImageModal("studios-loft", index)}
                           className="rounded-lg overflow-hidden aspect-[16/10] mb-6 relative cursor-pointer hover:opacity-90 transition-opacity"
                         >
                           <Image
@@ -1440,7 +1554,7 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                 </div>
 
                 <div className="flex items-center justify-between gap-4">
-                  <button 
+                  <button
                     onClick={prevStudiosLoft}
                     className="flex-shrink-0 w-12 h-12 bg-[#C2816B] hover:bg-[#3E0D11] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300"
                   >
@@ -1462,7 +1576,7 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                     </p>
                   </div>
 
-                  <button 
+                  <button
                     onClick={nextStudiosLoft}
                     className="flex-shrink-0 w-12 h-12 bg-[#C2816B] hover:bg-[#3E0D11] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300"
                   >
@@ -1478,17 +1592,19 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
               </div>
             )}
 
-            {activePlanta === '02-quartos' && (
+            {activePlanta === "02-quartos" && (
               <div>
                 <div className="overflow-hidden">
-                  <div 
+                  <div
                     className="flex transition-transform duration-500 ease-in-out"
-                    style={{ transform: `translateX(-${doisQuartosIndex * 100}%)` }}
+                    style={{
+                      transform: `translateX(-${doisQuartosIndex * 100}%)`,
+                    }}
                   >
                     {doisQuartos.map((item, index) => (
                       <div key={index} className="w-full flex-shrink-0">
-                        <div 
-                          onClick={() => openImageModal('dois-quartos', index)}
+                        <div
+                          onClick={() => openImageModal("dois-quartos", index)}
                           className="rounded-lg overflow-hidden aspect-[16/10] mb-6 relative cursor-pointer hover:opacity-90 transition-opacity"
                         >
                           <Image
@@ -1504,7 +1620,7 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                 </div>
 
                 <div className="flex items-center justify-between gap-4">
-                  <button 
+                  <button
                     onClick={prevDoisQuartos}
                     className="flex-shrink-0 w-12 h-12 bg-[#C2816B] hover:bg-[#3E0D11] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300"
                   >
@@ -1526,7 +1642,7 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                     </p>
                   </div>
 
-                  <button 
+                  <button
                     onClick={nextDoisQuartos}
                     className="flex-shrink-0 w-12 h-12 bg-[#C2816B] hover:bg-[#3E0D11] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300"
                   >
@@ -1542,17 +1658,19 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
               </div>
             )}
 
-            {activePlanta === '03-quartos' && (
+            {activePlanta === "03-quartos" && (
               <div>
                 <div className="overflow-hidden">
-                  <div 
+                  <div
                     className="flex transition-transform duration-500 ease-in-out"
-                    style={{ transform: `translateX(-${tresQuartosIndex * 100}%)` }}
+                    style={{
+                      transform: `translateX(-${tresQuartosIndex * 100}%)`,
+                    }}
                   >
                     {tresQuartos.map((item, index) => (
                       <div key={index} className="w-full flex-shrink-0">
-                        <div 
-                          onClick={() => openImageModal('tres-quartos', index)}
+                        <div
+                          onClick={() => openImageModal("tres-quartos", index)}
                           className="rounded-lg overflow-hidden aspect-[16/10] mb-6 relative cursor-pointer hover:opacity-90 transition-opacity"
                         >
                           <Image
@@ -1568,7 +1686,7 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                 </div>
 
                 <div className="flex items-center justify-between gap-4">
-                  <button 
+                  <button
                     onClick={prevTresQuartos}
                     className="flex-shrink-0 w-12 h-12 bg-[#C2816B] hover:bg-[#3E0D11] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300"
                   >
@@ -1590,7 +1708,7 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                     </p>
                   </div>
 
-                  <button 
+                  <button
                     onClick={nextTresQuartos}
                     className="flex-shrink-0 w-12 h-12 bg-[#C2816B] hover:bg-[#3E0D11] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300"
                   >
@@ -1610,7 +1728,10 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
       </section>
 
       {/* Localização Section */}
-      <section id="localizacao" className="bg-white relative py-16 md:py-24 px-6 md:px-20">
+      <section
+        id="localizacao"
+        className="bg-white relative py-16 md:py-24 px-6 md:px-20"
+      >
         <Image
           src="/SHADOWUPLEFT.png"
           alt="Shadow"
@@ -1618,19 +1739,22 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
           className="object-cover rotate-180"
           quality={100}
         />
-        
+
         <div className="relative z-10 max-w-6xl mx-auto">
           <AnimatedSection animation="fade-in-up">
             <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight text-center mb-8">
-              VIVA NO CENTRO DE TUDO.<br />
+              VIVA NO CENTRO DE TUDO.
+              <br />
               <span className="text-[#C2816B]">VIVA NO SEU TEMPO.</span>
             </h2>
           </AnimatedSection>
 
           <AnimatedSection animation="fade-in-up" delay={200}>
             <p className="font-new-black text-base md:text-lg font-normal text-gray-600 text-center max-w-3xl mx-auto mb-12">
-              Viva cercado pelo que realmente importa: cultura, serviços, lazer e mobilidade.<br />
-              O endereço perfeito para quem quer praticidade no dia a dia sem abrir mão de qualidade de vida.
+              Viva cercado pelo que realmente importa: cultura, serviços, lazer
+              e mobilidade.
+              <br />O endereço perfeito para quem quer praticidade no dia a dia
+              sem abrir mão de qualidade de vida.
             </p>
           </AnimatedSection>
 
@@ -1655,65 +1779,97 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
               {/* Bar 1 */}
               <div className="relative bg-[#3E0D11] rounded-full px-5 py-2.5 flex items-center">
                 <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-4 flex items-center justify-center min-w-[70px]">
-                  <span className="font-new-black text-xs md:text-sm text-white font-normal">900m</span>
+                  <span className="font-new-black text-xs md:text-sm text-white font-normal">
+                    900m
+                  </span>
                 </div>
-                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[85px]">Shopping São José</span>
+                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[85px]">
+                  Shopping São José
+                </span>
               </div>
 
               {/* Bar 2 */}
               <div className="relative bg-[#3E0D11] rounded-full px-5 py-2.5 flex items-center">
                 <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-4 flex items-center justify-center min-w-[70px]">
-                  <span className="font-new-black text-xs md:text-sm text-white font-normal">4,6km</span>
+                  <span className="font-new-black text-xs md:text-sm text-white font-normal">
+                    4,6km
+                  </span>
                 </div>
-                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[85px]">Aeroporto Afonso Pena</span>
+                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[85px]">
+                  Aeroporto Afonso Pena
+                </span>
               </div>
 
               {/* Bar 3 */}
               <div className="relative bg-[#3E0D11] rounded-full px-5 py-2.5 flex items-center">
                 <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-4 flex items-center justify-center min-w-[70px]">
-                  <span className="font-new-black text-xs md:text-sm text-white font-normal">600m</span>
+                  <span className="font-new-black text-xs md:text-sm text-white font-normal">
+                    600m
+                  </span>
                 </div>
-                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[85px]">Supermercado Festval</span>
+                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[85px]">
+                  Supermercado Festval
+                </span>
               </div>
 
               {/* Bar 4 */}
               <div className="relative bg-[#3E0D11] rounded-full px-5 py-2.5 flex items-center">
                 <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-4 flex items-center justify-center min-w-[70px]">
-                  <span className="font-new-black text-xs md:text-sm text-white font-normal">450m</span>
+                  <span className="font-new-black text-xs md:text-sm text-white font-normal">
+                    450m
+                  </span>
                 </div>
-                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[85px]">Rua XV de Novembro</span>
+                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[85px]">
+                  Rua XV de Novembro
+                </span>
               </div>
 
               {/* Bar 5 */}
               <div className="relative bg-[#3E0D11] rounded-full px-5 py-2.5 flex items-center">
                 <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-4 flex items-center justify-center min-w-[70px]">
-                  <span className="font-new-black text-xs md:text-sm text-white font-normal">2,9km</span>
+                  <span className="font-new-black text-xs md:text-sm text-white font-normal">
+                    2,9km
+                  </span>
                 </div>
-                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[85px]">Parque São José</span>
+                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[85px]">
+                  Parque São José
+                </span>
               </div>
 
               {/* Bar 6 */}
               <div className="relative bg-[#3E0D11] rounded-full px-5 py-2.5 flex items-center">
                 <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-4 flex items-center justify-center min-w-[75px]">
-                  <span className="font-new-black text-xs md:text-sm text-white font-normal">20 min</span>
+                  <span className="font-new-black text-xs md:text-sm text-white font-normal">
+                    20 min
+                  </span>
                 </div>
-                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[90px]">Centro de Curitiba</span>
+                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[90px]">
+                  Centro de Curitiba
+                </span>
               </div>
 
               {/* Bar 7 */}
               <div className="relative bg-[#3E0D11] rounded-full px-5 py-2.5 flex items-center">
                 <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-4 flex items-center justify-center min-w-[85px]">
-                  <span className="font-new-black text-xs text-white font-normal">Próximo</span>
+                  <span className="font-new-black text-xs text-white font-normal">
+                    Próximo
+                  </span>
                 </div>
-                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[100px]">BR 376 - Ligação Curitiba / SC</span>
+                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[100px]">
+                  BR 376 - Ligação Curitiba / SC
+                </span>
               </div>
 
               {/* Bar 8 */}
               <div className="relative bg-[#3E0D11] rounded-full px-5 py-2.5 flex items-center">
                 <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-4 flex items-center justify-center min-w-[85px]">
-                  <span className="font-new-black text-xs text-white font-normal">Próximo</span>
+                  <span className="font-new-black text-xs text-white font-normal">
+                    Próximo
+                  </span>
                 </div>
-                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[100px]">Caminho do Vinho</span>
+                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[100px]">
+                  Caminho do Vinho
+                </span>
               </div>
             </div>
           </div>
@@ -1759,17 +1915,32 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
               <AnimatedSection animation="fade-in-up" delay={200}>
                 <div className="font-new-black text-base md:text-lg font-normal text-gray-700 leading-relaxed space-y-6 mb-8">
                   <p>
-                    A N8 Incorporadora nasceu com o propósito de transformar espaços em lugares que fazem sentido para as pessoas. Somos movidos pelo compromisso com a excelência em cada etapa – da concepção do projeto à entrega das chaves.
+                    A N8 Incorporadora nasceu com o propósito de transformar
+                    espaços em lugares que fazem sentido para as pessoas. Somos
+                    movidos pelo compromisso com a excelência em cada etapa – da
+                    concepção do projeto à entrega das chaves.
                   </p>
                   <p>
-                    Com uma atuação sólida no mercado de construção e incorporação imobiliária, desenvolvemos empreendimentos que unem arquitetura inteligente, inovação e qualidade construtiva. Buscamos ir além das expectativas, criando soluções que valorizam o bem-estar, a mobilidade e o investimento dos nossos clientes.
+                    Com uma atuação sólida no mercado de construção e
+                    incorporação imobiliária, desenvolvemos empreendimentos que
+                    unem arquitetura inteligente, inovação e qualidade
+                    construtiva. Buscamos ir além das expectativas, criando
+                    soluções que valorizam o bem-estar, a mobilidade e o
+                    investimento dos nossos clientes.
                   </p>
                   <p>
-                    Mais do que construir, acreditamos em criar experiências de vida – com responsabilidade, transparência e um olhar atento ao que realmente importa: pessoas.
+                    Mais do que construir, acreditamos em criar experiências de
+                    vida – com responsabilidade, transparência e um olhar atento
+                    ao que realmente importa: pessoas.
                   </p>
                 </div>
 
-                <a href="https://www.n8incorporadora.com/" target="_blank" rel="noopener noreferrer" className="group inline-flex items-center space-x-3 font-new-black text-base md:text-lg font-normal text-[#171715] border border-[#E6E5EA] rounded-full px-6 py-3 hover:bg-[#C2816B] hover:border-[#C2816B] hover:text-white transition-all duration-300">
+                <a
+                  href="https://www.n8incorporadora.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center space-x-3 font-new-black text-base md:text-lg font-normal text-[#171715] border border-[#E6E5EA] rounded-full px-6 py-3 hover:bg-[#C2816B] hover:border-[#C2816B] hover:text-white transition-all duration-300"
+                >
                   <span>Conheça</span>
                   <div className="group-hover:rotate-45 transition-transform duration-300">
                     <Image
@@ -1799,7 +1970,8 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                 />
               </div>
               <h3 className="font-mirante text-base md:text-lg font-semibold text-gray-800 mb-2">
-                MAIS DE <span className="text-[#C2816B]">3 MIL M²</span> CONSTRUÍDOS
+                MAIS DE <span className="text-[#C2816B]">3 MIL M²</span>{" "}
+                CONSTRUÍDOS
               </h3>
               <p className="font-new-black text-sm md:text-base font-normal text-gray-600">
                 Qualidade e solidez reconhecidas no mercado imobiliário
@@ -1818,7 +1990,8 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                 />
               </div>
               <h3 className="font-mirante text-base md:text-lg font-semibold text-gray-800 mb-2">
-                ACABAMENTOS DE <span className="text-[#C2816B]">ALTO PADRÃO</span>
+                ACABAMENTOS DE{" "}
+                <span className="text-[#C2816B]">ALTO PADRÃO</span>
               </h3>
               <p className="font-new-black text-sm md:text-base font-normal text-gray-600">
                 Detalhes sofisticados que valorizam cada ambiente
@@ -1856,10 +2029,12 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                 />
               </div>
               <h3 className="font-mirante text-base md:text-lg font-semibold text-gray-800 mb-2">
-                ALTO POTENCIAL DE <span className="text-[#C2816B]">VALORIZAÇÃO</span>
+                ALTO POTENCIAL DE{" "}
+                <span className="text-[#C2816B]">VALORIZAÇÃO</span>
               </h3>
               <p className="font-new-black text-sm md:text-base font-normal text-gray-600">
-                Planejados para valorizar: localização e arquitetura com retorno seguro
+                Planejados para valorizar: localização e arquitetura com retorno
+                seguro
               </p>
             </div>
           </div>
@@ -1886,14 +2061,21 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
             {/* Right Side - Content */}
             <div className="flex-1 lg:w-2/3">
               <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight mb-8">
-                ARQUITETURA COM<br />
-                <span className="text-[#C2816B]">IDENTIDADE LOCAL E</span><br />
+                ARQUITETURA COM
+                <br />
+                <span className="text-[#C2816B]">IDENTIDADE LOCAL E</span>
+                <br />
                 <span className="text-[#C2816B]">VISÃO CONTEMPORÂNEA</span>
               </h2>
 
               <div className="font-new-black text-base md:text-lg font-normal text-gray-700 leading-relaxed space-y-6 mb-8">
                 <p>
-                  O projeto Verus é da Grifo Arquitetura. Unimos tradição e contemporaneidade com uma abordagem crítica, funcional e conectada à cidade. Fundada em 2008 pelos arquitetos Fabio, Igor e Suzanna, focamos em projetos autorais que valorizam a experiência urbana e as raízes locais, entregando arquitetura com propósito, autenticidade e significado.
+                  O projeto Verus é da Grifo Arquitetura. Unimos tradição e
+                  contemporaneidade com uma abordagem crítica, funcional e
+                  conectada à cidade. Fundada em 2008 pelos arquitetos Fabio,
+                  Igor e Suzanna, focamos em projetos autorais que valorizam a
+                  experiência urbana e as raízes locais, entregando arquitetura
+                  com propósito, autenticidade e significado.
                 </p>
               </div>
 
@@ -1921,7 +2103,8 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
         />
         <div className="absolute inset-0 flex items-center justify-center px-4 max-h-[200px] md:max-h-[400px]">
           <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-white text-center leading-tight">
-            SEU ESPAÇO<br />
+            SEU ESPAÇO
+            <br />
             DO SEU JEITO.
           </h2>
         </div>
@@ -1934,7 +2117,7 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
             <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight mb-4">
               ESTÁGIO DA <span className="text-[#C2816B]">OBRA.</span>
             </h2>
-            
+
             <p className="font-new-black text-base md:text-lg font-normal text-gray-600 mb-12">
               Atualizado Outubro de 2025.
             </p>
@@ -1943,20 +2126,55 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
           <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-stretch">
             {/* Left Side - Progress Bars */}
             <div className="flex-1 flex flex-col justify-between space-y-4">
-              <AnimatedProgressBar label="Fundação e Estrutura" percentage={85} delay={0} />
-              <AnimatedProgressBar label="Alvenaria e Vedação" percentage={72} delay={100} />
-              <AnimatedProgressBar label="Instalações Elétricas" percentage={68} delay={200} />
-              <AnimatedProgressBar label="Instalações Hidráulicas" percentage={55} delay={300} />
-              <AnimatedProgressBar label="Acabamentos Internos" percentage={42} delay={400} />
-              <AnimatedProgressBar label="Acabamentos Externos" percentage={38} delay={500} />
-              <AnimatedProgressBar label="Paisagismo" percentage={25} delay={600} />
-              <AnimatedProgressBar label="Entrega Final" percentage={15} delay={700} />
+              <AnimatedProgressBar
+                label="Fundação e Estrutura"
+                percentage={85}
+                delay={0}
+              />
+              <AnimatedProgressBar
+                label="Alvenaria e Vedação"
+                percentage={72}
+                delay={100}
+              />
+              <AnimatedProgressBar
+                label="Instalações Elétricas"
+                percentage={68}
+                delay={200}
+              />
+              <AnimatedProgressBar
+                label="Instalações Hidráulicas"
+                percentage={55}
+                delay={300}
+              />
+              <AnimatedProgressBar
+                label="Acabamentos Internos"
+                percentage={42}
+                delay={400}
+              />
+              <AnimatedProgressBar
+                label="Acabamentos Externos"
+                percentage={38}
+                delay={500}
+              />
+              <AnimatedProgressBar
+                label="Paisagismo"
+                percentage={25}
+                delay={600}
+              />
+              <AnimatedProgressBar
+                label="Entrega Final"
+                percentage={15}
+                delay={700}
+              />
 
               {/* Paragraph below progress bars */}
               <div className="mt-6">
                 <p className="font-new-black text-sm md:text-base font-normal text-gray-600 leading-relaxed text-left">
-                  Cada etapa da obra revela um novo capítulo da história do Verus.<br />
-                  Acompanhe o progresso e veja o futuro tomando forma diante dos seus olhos.
+                  Cada etapa da obra revela um novo capítulo da história do
+                  Verus.
+                  <br />
+                  Acompanhe o progresso e veja o futuro tomando forma diante dos
+                  seus olhos.
                 </p>
               </div>
             </div>
@@ -2004,8 +2222,12 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
               </span>
               <div className="flex items-center gap-2">
                 <div className="w-6 h-6 flex items-center justify-center">
-                  <svg className="w-5 h-5 text-[#171715] group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
+                  <svg
+                    className="w-5 h-5 text-[#171715] group-hover:text-white transition-colors"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488" />
                   </svg>
                 </div>
                 <span className="font-new-black text-sm md:text-base font-normal text-[#171715] group-hover:text-white transition-colors">
@@ -2030,7 +2252,7 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                   className="w-full h-full object-contain"
                 />
               </a>
-              
+
               <a
                 href="mailto:falecom@n8incorporadora.com"
                 className="w-10 h-10 flex items-center justify-center hover:scale-110 transition-transform duration-300"
@@ -2058,7 +2280,7 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
           quality={100}
           priority
         />
-        
+
         <div className="relative z-10 py-16 md:py-20 px-6 md:px-20">
           <div className="max-w-4xl mx-auto text-center">
             {/* Verus Logo */}
@@ -2074,38 +2296,64 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
 
             {/* Menu Items */}
             <nav className="flex flex-wrap justify-center gap-6 md:gap-8 mb-12">
-              <a href="#projeto" className="font-mirante text-white font-normal relative group text-sm md:text-base">
+              <a
+                href="#projeto"
+                className="font-mirante text-white font-normal relative group text-sm md:text-base"
+              >
                 Projeto
                 <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-full h-0.5 bg-[#C2816B] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></div>
               </a>
-              <a href="#galeria" className="font-mirante text-white font-normal relative group text-sm md:text-base">
+              <a
+                href="#galeria"
+                className="font-mirante text-white font-normal relative group text-sm md:text-base"
+              >
                 Galeria
                 <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-full h-0.5 bg-[#C2816B] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></div>
               </a>
-              <a href="#diferenciais" className="font-mirante text-white font-normal relative group text-sm md:text-base">
+              <a
+                href="#diferenciais"
+                className="font-mirante text-white font-normal relative group text-sm md:text-base"
+              >
                 Diferenciais
                 <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-full h-0.5 bg-[#C2816B] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></div>
               </a>
-              <a href="#plantas" className="font-mirante text-white font-normal relative group text-sm md:text-base">
+              <a
+                href="#plantas"
+                className="font-mirante text-white font-normal relative group text-sm md:text-base"
+              >
                 Plantas
                 <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-full h-0.5 bg-[#C2816B] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></div>
               </a>
-              <a href="#autoria" className="font-mirante text-white font-normal relative group text-sm md:text-base">
+              <a
+                href="#autoria"
+                className="font-mirante text-white font-normal relative group text-sm md:text-base"
+              >
                 Autoria
                 <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-full h-0.5 bg-[#C2816B] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></div>
               </a>
-              <a href="#localizacao" className="font-mirante text-white font-normal relative group text-sm md:text-base">
+              <a
+                href="#localizacao"
+                className="font-mirante text-white font-normal relative group text-sm md:text-base"
+              >
                 Localização
                 <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-full h-0.5 bg-[#C2816B] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></div>
               </a>
-              <a href="#obras" className="font-mirante text-white font-normal relative group text-sm md:text-base">
+              <a
+                href="#obras"
+                className="font-mirante text-white font-normal relative group text-sm md:text-base"
+              >
                 Obras
                 <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-full h-0.5 bg-[#C2816B] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></div>
               </a>
             </nav>
 
             {/* Contact Button */}
-            <a href="http://wa.me/5541997188421?text=Vim%20do%20Site%20e%20Gostaria%20de%20Saber%20Mais%20sobre%20o%20Verus" target="_blank" rel="noopener noreferrer" className="bg-[#C2816B] hover:bg-[#3E0D11] text-white font-mirante font-normal px-6 md:px-8 py-3 md:py-4 rounded-full hover:scale-105 transition-all duration-300 text-sm md:text-base">
+            <a
+              href="http://wa.me/5541997188421?text=Vim%20do%20Site%20e%20Gostaria%20de%20Saber%20Mais%20sobre%20o%20Verus"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#C2816B] hover:bg-[#3E0D11] text-white font-mirante font-normal px-6 md:px-8 py-3 md:py-4 rounded-full hover:scale-105 transition-all duration-300 text-sm md:text-base"
+            >
               Entrar em Contato
             </a>
           </div>
@@ -2120,8 +2368,18 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
             className="absolute top-4 right-4 w-12 h-12 flex items-center justify-center rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 text-white transition-all duration-300 z-20"
             aria-label="Fechar"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
 
@@ -2163,7 +2421,7 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                 quality={100}
               />
             </div>
-            
+
             <div className="text-center px-4">
               <h3 className="font-carla-sans text-2xl md:text-3xl font-normal text-white mb-3">
                 {getCurrentImageData().title}
@@ -2179,29 +2437,42 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
       {/* Download Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-modal-fade-in">
-          <div 
+          <div
             className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm"
             onClick={() => setIsModalOpen(false)}
           ></div>
-          
+
           <div className="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-modal-slide-in">
             <button
               onClick={() => setIsModalOpen(false)}
               className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-[#C2816B] text-gray-600 hover:text-white transition-all duration-300 z-10"
               aria-label="Fechar"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
 
             <div className="p-8 md:p-12">
               <h2 className="font-carla-sans text-3xl md:text-4xl font-normal text-gray-800 leading-tight mb-4">
-                Baixe o Material <span className="text-[#C2816B]">Exclusivo</span>
+                Baixe o Material{" "}
+                <span className="text-[#C2816B]">Exclusivo</span>
               </h2>
-              
+
               <p className="font-new-black text-base md:text-lg font-normal text-gray-600 mb-8">
-                Cadastre-se e faça o download do material exclusivo do Verus. Descubra as plantas, diferenciais e todos os detalhes que tornam este projeto único.
+                Cadastre-se e faça o download do material exclusivo do Verus.
+                Descubra as plantas, diferenciais e todos os detalhes que tornam
+                este projeto único.
               </p>
 
               <form className="space-y-6">
@@ -2210,51 +2481,60 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
                     <label className="block font-new-black text-sm font-normal text-gray-700 mb-2">
                       Nome
                     </label>
-                    <input 
-                      type="text" 
-                      placeholder="Nome*" 
+                    <input
+                      type="text"
+                      placeholder="Nome*"
                       className="w-full px-4 py-3 bg-white border border-[#E6E5EA] rounded-lg text-gray-900 placeholder:text-[#E6E5EA] focus:outline-none focus:border-[#C2816B] transition-colors"
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block font-new-black text-sm font-normal text-gray-700 mb-2">
                       Telefone
                     </label>
-                    <input 
-                      type="tel" 
-                      placeholder="Telefone" 
+                    <input
+                      type="tel"
+                      placeholder="Telefone"
                       className="w-full px-4 py-3 bg-white border border-[#E6E5EA] rounded-lg text-gray-900 placeholder:text-[#E6E5EA] focus:outline-none focus:border-[#C2816B] transition-colors"
                     />
                   </div>
-                  
+
                   <div className="md:col-span-2">
                     <label className="block font-new-black text-sm font-normal text-gray-700 mb-2">
                       E-mail
                     </label>
-                    <input 
-                      type="email" 
-                      placeholder="E-mail" 
+                    <input
+                      type="email"
+                      placeholder="E-mail"
                       className="w-full px-4 py-3 bg-white border border-[#E6E5EA] rounded-lg text-gray-900 placeholder:text-[#E6E5EA] focus:outline-none focus:border-[#C2816B] transition-colors"
                     />
                   </div>
                 </div>
-                
+
                 <div className="flex items-center space-x-3">
-                  <input 
-                    type="checkbox" 
+                  <input
+                    type="checkbox"
                     className="w-4 h-4 text-[#C2816B] border-[#E6E5EA] rounded focus:ring-[#C2816B]"
                   />
                   <label className="font-new-black text-sm font-normal text-gray-700">
                     Eu concordo em receber comunicações
                   </label>
                 </div>
-                
+
                 <p className="font-new-black text-xs font-normal text-gray-500">
-                  Ao informar meus dados, estou ciente das diretrizes da <a href="#" className="underline hover:text-[#C2816B] transition-colors">Política de Privacidade</a>
+                  Ao informar meus dados, estou ciente das diretrizes da{" "}
+                  <a
+                    href="#"
+                    className="underline hover:text-[#C2816B] transition-colors"
+                  >
+                    Política de Privacidade
+                  </a>
                 </p>
-                
-                <button type="submit" className="group flex items-center justify-center space-x-3 w-full font-new-black text-base md:text-lg font-normal text-white bg-[#C2816B] border border-[#C2816B] rounded-full px-6 py-3 hover:bg-[#3E0D11] hover:border-[#3E0D11] transition-all duration-300">
+
+                <button
+                  type="submit"
+                  className="group flex items-center justify-center space-x-3 w-full font-new-black text-base md:text-lg font-normal text-white bg-[#C2816B] border border-[#C2816B] rounded-full px-6 py-3 hover:bg-[#3E0D11] hover:border-[#3E0D11] transition-all duration-300"
+                >
                   <span>Baixar Material</span>
                   <div className="group-hover:rotate-45 transition-transform duration-300">
                     <Image
@@ -2275,7 +2555,7 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
       {/* Scroll to Top Button */}
       <button
         onClick={scrollToTop}
-        className="fixed bottom-6 right-6 w-12 h-12 bg-[#C2816B] hover:bg-[#3E0D11] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300 z-50"
+        className="fixed bottom-6 right-6 w-12 h-12 bg-[#C2816B] hover:bg-[#3E0D11] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300 z-30"
         aria-label="Voltar ao topo"
       >
         <Image
@@ -2287,5 +2567,5 @@ Com plantas inteligentes e áreas completas de lazer e convívio, une design sof
         />
       </button>
     </main>
-  )
+  );
 }
