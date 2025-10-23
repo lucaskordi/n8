@@ -1,6 +1,7 @@
 "use client";
 
 import { Header } from "@/components/header";
+import { TagLayer } from "@/components/tag-layer";
 import { cn } from "@/lib/cn";
 import Image from "next/image";
 import { useState, useEffect, useRef, useCallback } from "react";
@@ -658,6 +659,8 @@ export default function HomePage() {
         id="projeto"
         className="bg-white relative min-h-screen py-16 md:py-24"
       >
+        <TagLayer title="PROJETO" />
+
         <Image
           src="/SHADOWUPLEFT.png"
           alt="Shadow"
@@ -668,7 +671,7 @@ export default function HomePage() {
 
         {/* Projeto Image - Top Left Corner */}
 
-        <div className="relative z-10 min-h-screen flex items-center justify-between px-6 md:px-20">
+        <div className="relative z-10 min-h-screen flex items-center justify-center px-6 md:px-20">
           {/* Centered Container with Image and Text */}
           <div className="flex flex-col lg:flex-row items-center lg:items-stretch gap-8  max-w-6xl w-full">
             {/* Building Image - Left Side */}
@@ -876,6 +879,7 @@ export default function HomePage() {
         id="galeria"
         className="bg-white relative py-16 md:py-24 px-6 md:px-20"
       >
+        <TagLayer title="FOTOS" />
         <Image
           src="/SHADOWUPLEFT.png"
           alt="Shadow"
@@ -885,26 +889,33 @@ export default function HomePage() {
         />
 
         <div className="relative z-10 max-w-6xl mx-auto">
-          <AnimatedSection animation="fade-in-up">
-            <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight text-center mb-8">
-              SEU ESPAÇO DO
-              <br />
-              <span className="text-[#C2816B]">SEU JEITO.</span>
-            </h2>
+          <AnimatedSection
+            animation="fade-in-up"
+            className="lg:absolute lg:left-[430px] lg:-top-[27px]"
+          >
+            <div className="flex justify-center items-center">
+              <div className="">
+                <div className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight mb-6">
+                  <div>SEU ESPAÇO DO</div>
+                  <span className="text-[#C2816B]">SEU JEITO.</span>
+                </div>
+                <AnimatedSection animation="fade-in-up" delay={200}>
+                  <p className="font-new-black text-base md:text-lg font-normal text-gray-600 max-w-3xl  mb-6">
+                    Mais que espaços, o Verus oferece liberdade para viver cada
+                    momento do seu jeito — com conforto, lazer e praticidade em
+                    harmonia.
+                  </p>
+                </AnimatedSection>
+              </div>
+            </div>
           </AnimatedSection>
 
-          <AnimatedSection animation="fade-in-up" delay={200}>
-            <p className="font-new-black text-base md:text-lg font-normal text-gray-600 text-center max-w-3xl mx-auto mb-12">
-              Mais que espaços, o Verus oferece liberdade para viver cada
-              momento do seu jeito — com conforto, lazer e praticidade em
-              harmonia.
-            </p>
-          </AnimatedSection>
+          <div className="bg-none h-[200px] hidden lg:block"></div>
 
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mb-16">
             <button
               onClick={() => setActiveGallery("apartamentos")}
-              className={`font-mirante text-base md:text-lg font-normal border-2 border-[#3E0D11] rounded-full px-8 py-3 transition-all duration-300 w-full md:w-auto ${
+              className={`font-mirante text-base  font-normal border-2 border-[#3E0D11] rounded-full px-8 transition-all duration-300 w-full md:w-auto ${
                 activeGallery === "apartamentos"
                   ? "bg-[#3E0D11] text-white"
                   : "bg-transparent text-[#3E0D11] hover:bg-[#3E0D11] hover:text-white"
@@ -914,7 +925,7 @@ export default function HomePage() {
             </button>
             <button
               onClick={() => setActiveGallery("lazer")}
-              className={`font-mirante text-base md:text-lg font-normal border-2 border-[#3E0D11] rounded-full px-8 py-3 transition-all duration-300 w-full md:w-auto ${
+              className={`font-mirante text-base  font-normal border-2 border-[#3E0D11] rounded-full px-8  transition-all duration-300 w-full md:w-auto ${
                 activeGallery === "lazer"
                   ? "bg-[#3E0D11] text-white"
                   : "bg-transparent text-[#3E0D11] hover:bg-[#3E0D11] hover:text-white"
@@ -924,7 +935,7 @@ export default function HomePage() {
             </button>
             <button
               onClick={() => setActiveGallery("comodidades")}
-              className={`font-mirante text-base md:text-lg font-normal border-2 border-[#3E0D11] rounded-full px-8 py-3 transition-all duration-300 w-full md:w-auto ${
+              className={`font-mirante text-base  font-normal border-2 border-[#3E0D11] rounded-full px-8  transition-all duration-300 w-full md:w-auto ${
                 activeGallery === "comodidades"
                   ? "bg-[#3E0D11] text-white"
                   : "bg-transparent text-[#3E0D11] hover:bg-[#3E0D11] hover:text-white"
@@ -1390,6 +1401,7 @@ export default function HomePage() {
         id="plantas"
         className="bg-white relative py-16 md:py-24 px-6 md:px-20"
       >
+        <TagLayer title="PLANTAS" />
         <Image
           src="/SHADOWUPLEFT.png"
           alt="Shadow"
@@ -1399,18 +1411,25 @@ export default function HomePage() {
         />
 
         <div className="relative z-10 max-w-6xl mx-auto">
-          <AnimatedSection animation="fade-in-up">
-            <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight text-center mb-8">
-              PLANTAS DAS <span className="text-[#C2816B]">UNIDADES</span>
-            </h2>
+          <AnimatedSection
+            animation="fade-in-up"
+            className="lg:absolute lg:left-[430px] lg:top-[27px]"
+          >
+            <div className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight text-center mb-4 flex justify-center items-start flex-col ">
+              <div className="text-start">
+                <div>PLANTAS DAS</div>{" "}
+                <span className="text-[#C2816B]">UNIDADES</span>
+              </div>
+            </div>
+            <AnimatedSection animation="fade-in-up" delay={200}>
+              <p className="font-new-black text-base md:text-lg font-normal text-gray-600 text-start max-w-3xl  mb-12">
+                Cada detalhe pensado para traduzir o seu estilo de vida.
+                Descubra plantas versáteis que se adaptam aos seus sonhos
+              </p>
+            </AnimatedSection>
           </AnimatedSection>
 
-          <AnimatedSection animation="fade-in-up" delay={200}>
-            <p className="font-new-black text-base md:text-lg font-normal text-gray-600 text-center max-w-3xl mx-auto mb-12">
-              Cada detalhe pensado para traduzir o seu estilo de vida. Descubra
-              plantas versáteis que se adaptam aos seus sonhos
-            </p>
-          </AnimatedSection>
+          <div className="w-full bg-none h-[244px] hidden lg:block"></div>
 
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mb-4 flex-wrap">
             <button
@@ -1732,6 +1751,7 @@ export default function HomePage() {
         id="localizacao"
         className="bg-white relative py-16 md:py-24 px-6 md:px-20"
       >
+        <TagLayer title="PLANTAS" />
         <Image
           src="/SHADOWUPLEFT.png"
           alt="Shadow"
@@ -1888,7 +1908,18 @@ export default function HomePage() {
       </section>
 
       {/* Sobre Section */}
-      <section id="autoria" className="bg-white py-16 md:py-24 px-6 md:px-20">
+      <section
+        id="autoria"
+        className="bg-white py-16 md:py-24 px-6 md:px-20 relative"
+      >
+        <TagLayer title="AUTORIA" />
+        <Image
+          src="/SHADOWUPLEFT.png"
+          alt="Shadow"
+          fill
+          className="object-cover rotate-180"
+          quality={100}
+        />
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
             {/* Left Side - Logo */}
@@ -2111,7 +2142,18 @@ export default function HomePage() {
       </section>
 
       {/* Obra Section */}
-      <section id="obras" className="bg-white py-16 md:py-24 px-6 md:px-20">
+      <section
+        id="obras"
+        className="bg-white py-16 md:py-24 px-6 md:px-20 relative"
+      >
+        <TagLayer title="OBRA" />
+        <Image
+          src="/SHADOWUPLEFT.png"
+          alt="Shadow"
+          fill
+          className="object-cover "
+          quality={100}
+        />
         <div className="max-w-6xl mx-auto">
           <AnimatedSection animation="fade-in-up">
             <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight mb-4">
