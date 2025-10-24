@@ -85,8 +85,13 @@ interface RootLayoutProps {
 }
 
 export const metadata = {
-  title: "N8 - Next.js App",
-  description: "A modern Next.js application with Tailwind CSS",
+  title: "Verus - N8 Incorporadora",
+  description: "Verus - A Verdade em Cada Detalhe",
+  icons: {
+    icon: "/verusico.svg",
+    shortcut: "/verusico.svg",
+    apple: "/verusico.svg",
+  },
 };
 
 export default function RootLayout({ children }: RootLayoutProps) {
