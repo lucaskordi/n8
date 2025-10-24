@@ -6,7 +6,7 @@ import { AnimatedSection } from "@/components/animated-section";
 import { AnimatedProgressBar } from "@/components/animated-progress-bar";
 import { cn } from "@/lib/cn";
 import Image from "next/image";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 
 export default function HomePage() {
   const [activeGallery, setActiveGallery] = useState("apartamentos");
@@ -32,220 +32,242 @@ export default function HomePage() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [imagesPreloaded, setImagesPreloaded] = useState(false);
 
-  const apartments = [
-    {
-      image: "/65m/grifo_ed_verus_65_sala.png",
-      title: "Unidade 65 m²",
-      description:
-        "Ampla, iluminada e acolhedora: a sala perfeita para compartilhar momentos.",
-    },
-    {
-      image: "/65m/grifo_ed_verus_65_suite.png",
-      title: "Unidade 65 m²",
-      description:
-        "Suíte aconchegante, iluminada e feita para relaxar com estilo.",
-    },
-    {
-      image: "/75m/grifo_ed_verus_75m2.png",
-      title: "Unidade 75 m²",
-      description:
-        "Ambientes integrados, elegantes e pensados para receber com estilo.",
-    },
-    {
-      image: "/95m/grifo_ed_verus_95_sala_estar.png",
-      title: "Unidade 95 m²",
-      description: "Um espaço amplo e elegante para viver grandes momentos.",
-    },
-    {
-      image: "/95m/grifo_ed_verus_95_sala2.png",
-      title: "Unidade 95 m²",
-      description:
-        "Convivência elevada: cozinha e jantar integrados para receber com estilo.",
-    },
-    {
-      image: "/loft/grifo_ed_verus_Loft.png",
-      title: "Loft",
-      description:
-        "Loft com pé-direito duplo: amplitude e estilo em cada detalhe.",
-    },
-    {
-      image: "/studio/GRIFO_ED_VERUS_STUDIO.png",
-      title: "Studio",
-      description: "Um espaço versátil para viver com estilo e autenticidade.",
-    },
-  ];
+  const apartments = useMemo(
+    () => [
+      {
+        image: "/65m/grifo_ed_verus_65_sala.png",
+        title: "Unidade 65 m²",
+        description:
+          "Ampla, iluminada e acolhedora: a sala perfeita para compartilhar momentos.",
+      },
+      {
+        image: "/65m/grifo_ed_verus_65_suite.png",
+        title: "Unidade 65 m²",
+        description:
+          "Suíte aconchegante, iluminada e feita para relaxar com estilo.",
+      },
+      {
+        image: "/75m/grifo_ed_verus_75m2.png",
+        title: "Unidade 75 m²",
+        description:
+          "Ambientes integrados, elegantes e pensados para receber com estilo.",
+      },
+      {
+        image: "/95m/grifo_ed_verus_95_sala_estar.png",
+        title: "Unidade 95 m²",
+        description: "Um espaço amplo e elegante para viver grandes momentos.",
+      },
+      {
+        image: "/95m/grifo_ed_verus_95_sala2.png",
+        title: "Unidade 95 m²",
+        description:
+          "Convivência elevada: cozinha e jantar integrados para receber com estilo.",
+      },
+      {
+        image: "/loft/grifo_ed_verus_Loft.png",
+        title: "Loft",
+        description:
+          "Loft com pé-direito duplo: amplitude e estilo em cada detalhe.",
+      },
+      {
+        image: "/studio/GRIFO_ED_VERUS_STUDIO.png",
+        title: "Studio",
+        description:
+          "Um espaço versátil para viver com estilo e autenticidade.",
+      },
+    ],
+    []
+  );
 
-  const lazerItems = [
-    {
-      image: "/lazer/ED.VERUS.PISCINA.R01.png",
-      title: "Piscina Climatizada",
-      description:
-        "Piscina climatizada com fundo artístico: elegância até nos detalhes",
-    },
-    {
-      image: "/lazer/ED.VERUS.FIREPLACE.R00.png",
-      title: "Fireplace",
-      description: "Um espaço acolhedor para brindar momentos especiais",
-    },
-    {
-      image: "/lazer/ED.VERUS.QUIOSQUE.png",
-      title: "Quiosque",
-      description:
-        "Ambiente completo com churrasqueira e bar molhado para reunir e brindar",
-    },
-    {
-      image: "/lazer/ED.VERUS.SOLARIUM.png",
-      title: "SolÁrio",
-      description:
-        "Solário, Jacuzzi e Champanheira: relaxamento com exclusividade",
-    },
-    {
-      image: "/lazer/QUADRA.png",
-      title: "Quadra",
-      description: "Quadra para esporte, diversão e momentos em movimento",
-    },
-    {
-      image: "/lazer/PLAYGROUND.png",
-      title: "Playground",
-      description: "Para brincar, crescer e se divertir com segurança",
-    },
-    {
-      image: "/lazer/ED.VERUS.KIDS.png",
-      title: "Espaço Kids",
-      description: "Um universo de diversão e descobertas para os pequenos",
-    },
-    {
-      image: "/lazer/ED.VERUS.ACADEMIA.png",
-      title: "Academia",
-      description:
-        "Espaço completo para corpo em movimento e mente em equilÍbrio",
-    },
-    {
-      image: "/lazer/ED.VERUS.PET.PLACE.png",
-      title: "Pet Place",
-      description:
-        "Porque viver bem também é proporcionar momentos especiais ao seu pet",
-    },
-    {
-      image: "/lazer/ED.VERUS.PET.CARE.png",
-      title: "Pet Care",
-      description:
-        "Mais do que praticidade, um cuidado especial para quem faz parte da família",
-    },
-    {
-      image: "/lazer/ED.VERUS.BEAUTY.png",
-      title: "Espaço Beauty",
-      description: "Seu refúgio de cuidado e renovação dentro do Verus",
-    },
-  ];
+  const lazerItems = useMemo(
+    () => [
+      {
+        image: "/lazer/ED.VERUS.PISCINA.R01.png",
+        title: "Piscina Climatizada",
+        description:
+          "Piscina climatizada com fundo artístico: elegância até nos detalhes",
+      },
+      {
+        image: "/lazer/ED.VERUS.FIREPLACE.R00.png",
+        title: "Fireplace",
+        description: "Um espaço acolhedor para brindar momentos especiais",
+      },
+      {
+        image: "/lazer/ED.VERUS.QUIOSQUE.png",
+        title: "Quiosque",
+        description:
+          "Ambiente completo com churrasqueira e bar molhado para reunir e brindar",
+      },
+      {
+        image: "/lazer/ED.VERUS.SOLARIUM.png",
+        title: "SolÁrio",
+        description:
+          "Solário, Jacuzzi e Champanheira: relaxamento com exclusividade",
+      },
+      {
+        image: "/lazer/QUADRA.png",
+        title: "Quadra",
+        description: "Quadra para esporte, diversão e momentos em movimento",
+      },
+      {
+        image: "/lazer/PLAYGROUND.png",
+        title: "Playground",
+        description: "Para brincar, crescer e se divertir com segurança",
+      },
+      {
+        image: "/lazer/ED.VERUS.KIDS.png",
+        title: "Espaço Kids",
+        description: "Um universo de diversão e descobertas para os pequenos",
+      },
+      {
+        image: "/lazer/ED.VERUS.ACADEMIA.png",
+        title: "Academia",
+        description:
+          "Espaço completo para corpo em movimento e mente em equilÍbrio",
+      },
+      {
+        image: "/lazer/ED.VERUS.PET.PLACE.png",
+        title: "Pet Place",
+        description:
+          "Porque viver bem também é proporcionar momentos especiais ao seu pet",
+      },
+      {
+        image: "/lazer/ED.VERUS.PET.CARE.png",
+        title: "Pet Care",
+        description:
+          "Mais do que praticidade, um cuidado especial para quem faz parte da família",
+      },
+      {
+        image: "/lazer/ED.VERUS.BEAUTY.png",
+        title: "Espaço Beauty",
+        description: "Seu refúgio de cuidado e renovação dentro do Verus",
+      },
+    ],
+    []
+  );
 
-  const comodidadesItems = [
-    {
-      image: "/comodidades/ED_VERUS_GOURMET.R00 (2).png",
-      title: "EspaÇo Gourmet",
-      description: "Conforto e sofisticação para celebrar bons momentos",
-    },
-    {
-      image: "/comodidades/ED.VERUS.COZINHA.GOURMET (1).png",
-      title: "Cozinha Gourmet",
-      description: "Cenário ideal para receber e celebrar momentos especiais",
-    },
-    {
-      image: "/comodidades/ED.VERUS.COWORKING (1).png",
-      title: "Coworking",
-      description: "Ambiente ideal para reuniões, estudos e novas ideias",
-    },
-    {
-      image: "/comodidades/ED.VERUS.BIKE (1).png",
-      title: "BicicletÁrio",
-      description: "Um espaço exclusivo para guardar e cuidar da sua bike",
-    },
-    {
-      image: "/comodidades/ED.VERUS.MARKET (1).png",
-      title: "Mini Market",
-      description: "Conveniência 24h dentro do seu condomínio",
-    },
-    {
-      image: "/comodidades/ED.VERUS.LAVANDERIA (1).png",
-      title: "Lavanderia",
-      description: "Mais conforto, menos preocupação",
-    },
-    {
-      image: "/comodidades/ED.VERUS.HALL (1).png",
-      title: "Hall de Entrada",
-      description: "Elegância e sofisticação logo na chegada",
-    },
-  ];
+  const comodidadesItems = useMemo(
+    () => [
+      {
+        image: "/comodidades/ED_VERUS_GOURMET.R00 (2).png",
+        title: "EspaÇo Gourmet",
+        description: "Conforto e sofisticação para celebrar bons momentos",
+      },
+      {
+        image: "/comodidades/ED.VERUS.COZINHA.GOURMET (1).png",
+        title: "Cozinha Gourmet",
+        description: "Cenário ideal para receber e celebrar momentos especiais",
+      },
+      {
+        image: "/comodidades/ED.VERUS.COWORKING (1).png",
+        title: "Coworking",
+        description: "Ambiente ideal para reuniões, estudos e novas ideias",
+      },
+      {
+        image: "/comodidades/ED.VERUS.BIKE (1).png",
+        title: "BicicletÁrio",
+        description: "Um espaço exclusivo para guardar e cuidar da sua bike",
+      },
+      {
+        image: "/comodidades/ED.VERUS.MARKET (1).png",
+        title: "Mini Market",
+        description: "Conveniência 24h dentro do seu condomínio",
+      },
+      {
+        image: "/comodidades/ED.VERUS.LAVANDERIA (1).png",
+        title: "Lavanderia",
+        description: "Mais conforto, menos preocupação",
+      },
+      {
+        image: "/comodidades/ED.VERUS.HALL (1).png",
+        title: "Hall de Entrada",
+        description: "Elegância e sofisticação logo na chegada",
+      },
+    ],
+    []
+  );
 
-  const studiosFuncionais = [
-    {
-      image: "/studio funcional/studio_terraco.png",
-      title: "Studio com TerraÇo",
-      description:
-        "25 m² internos + 10,25 m² externos que ampliam sua experiência de viver bem",
-    },
-    {
-      image: "/studio funcional/studio_funcional.png",
-      title: "Studio Funcional – 25 m²",
-      description: "Conforto otimizado com varanda integrada ao ambiente",
-    },
-  ];
+  const studiosFuncionais = useMemo(
+    () => [
+      {
+        image: "/studio funcional/studio_terraco.png",
+        title: "Studio com TerraÇo",
+        description:
+          "25 m² internos + 10,25 m² externos que ampliam sua experiência de viver bem",
+      },
+      {
+        image: "/studio funcional/studio_funcional.png",
+        title: "Studio Funcional – 25 m²",
+        description: "Conforto otimizado com varanda integrada ao ambiente",
+      },
+    ],
+    []
+  );
 
-  const studiosLoft = [
-    {
-      image: "/loft com varanda/loft_varanda.png",
-      title: "Loft com varanda",
-      description:
-        "Design inteligente em 25 m² e pé-direito que chega a 5,7 m, trazendo sofisticação e amplitude.",
-    },
-  ];
+  const studiosLoft = useMemo(
+    () => [
+      {
+        image: "/loft com varanda/loft_varanda.png",
+        title: "Loft com varanda",
+        description:
+          "Design inteligente em 25 m² e pé-direito que chega a 5,7 m, trazendo sofisticação e amplitude.",
+      },
+    ],
+    []
+  );
 
-  const doisQuartos = [
-    {
-      image: "/2qt/2qt_terraco.png",
-      title: "2 Quartos e Amplo TerraÇo",
-      description:
-        "47 m² internos + 29 m² de terraço: mais conforto em cada detalhe",
-    },
-    {
-      image: "/2qt/2qt_suite.png",
-      title: "2 Quartos com SuÍte",
-      description:
-        "65 m² com suíte: o espaço ideal para receber, descansar e aproveitar a vida",
-    },
-    {
-      image: "/2qt/2qt_suite_2.png",
-      title: "2 Quartos com SuÍte",
-      description: "65 m² que equilibram espaço, conforto e estilo de vida",
-    },
-  ];
+  const doisQuartos = useMemo(
+    () => [
+      {
+        image: "/2qt/2qt_terraco.png",
+        title: "2 Quartos e Amplo TerraÇo",
+        description:
+          "47 m² internos + 29 m² de terraço: mais conforto em cada detalhe",
+      },
+      {
+        image: "/2qt/2qt_suite.png",
+        title: "2 Quartos com SuÍte",
+        description:
+          "65 m² com suíte: o espaço ideal para receber, descansar e aproveitar a vida",
+      },
+      {
+        image: "/2qt/2qt_suite_2.png",
+        title: "2 Quartos com SuÍte",
+        description: "65 m² que equilibram espaço, conforto e estilo de vida",
+      },
+    ],
+    []
+  );
 
-  const tresQuartos = [
-    {
-      image: "/3qt/3qt_suite.png",
-      title: "3 Quartos com SuÍte",
-      description:
-        "75 m² que unem espaço, privacidade e bem-estar para toda a família",
-    },
-    {
-      image: "/3qt/3qt_2vg.png",
-      title: "3 Quartos com SuÍte e 2 Vagas",
-      description:
-        "88 m² de amplitude, modernidade e praticidade para viver com mais liberdade",
-    },
-    {
-      image: "/3qt/3qt_terraco.png",
-      title: "3 Quartos com SuÍte – TerraÇo de 43 m²",
-      description:
-        "Mais que um apartamento, 131 m² no total para viver intensamente dentro e fora de casa.",
-    },
-    {
-      image: "/3qt/3qt_2vg.png",
-      title: "3 Quartos com SuÍte e 2 Vagas",
-      description:
-        "95 m² planejados para oferecer amplitude, conforto e praticidade no dia a dia",
-    },
-  ];
+  const tresQuartos = useMemo(
+    () => [
+      {
+        image: "/3qt/3qt_suite.png",
+        title: "3 Quartos com SuÍte",
+        description:
+          "75 m² que unem espaço, privacidade e bem-estar para toda a família",
+      },
+      {
+        image: "/3qt/3qt_2vg.png",
+        title: "3 Quartos com SuÍte e 2 Vagas",
+        description:
+          "88 m² de amplitude, modernidade e praticidade para viver com mais liberdade",
+      },
+      {
+        image: "/3qt/3qt_terraco.png",
+        title: "3 Quartos com SuÍte – TerraÇo de 43 m²",
+        description:
+          "Mais que um apartamento, 131 m² no total para viver intensamente dentro e fora de casa.",
+      },
+      {
+        image: "/3qt/3qt_2vg.png",
+        title: "3 Quartos com SuÍte e 2 Vagas",
+        description:
+          "95 m² planejados para oferecer amplitude, conforto e praticidade no dia a dia",
+      },
+    ],
+    []
+  );
 
   const nextApartment = () => {
     setApartmentIndex((prev) => (prev + 1) % apartments.length);
@@ -777,30 +799,25 @@ export default function HomePage() {
         id="galeria"
         className="bg-white relative py-16 md:py-24 px-4 md:px-6 lg:px-20 overflow-hidden"
       >
-        <TagLayer
-          title="FOTOS"
-          children={
-            <>
-              <AnimatedSection animation="fade-in-up">
-                <div className="flex justify-center items-center">
-                  <div className="">
-                    <div className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight mb-6">
-                      <div>SEU ESPAÇO DO</div>
-                      <span className="text-[#C2816B]">SEU JEITO.</span>
-                    </div>
-                    <AnimatedSection animation="fade-in-up" delay={200}>
-                      <p className="font-new-black text-base md:text-lg font-normal text-gray-600 max-w-3xl  mb-6">
-                        Mais que espaços, o Verus oferece liberdade para viver
-                        cada momento do seu jeito — com conforto, lazer e
-                        praticidade em harmonia.
-                      </p>
-                    </AnimatedSection>
-                  </div>
+        <TagLayer title="FOTOS">
+          <AnimatedSection animation="fade-in-up">
+            <div className="flex justify-center items-center">
+              <div className="">
+                <div className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight mb-6">
+                  <div>SEU ESPAÇO DO</div>
+                  <span className="text-[#C2816B]">SEU JEITO.</span>
                 </div>
-              </AnimatedSection>
-            </>
-          }
-        />
+                <AnimatedSection animation="fade-in-up" delay={200}>
+                  <p className="font-new-black text-base md:text-lg font-normal text-gray-600 max-w-3xl  mb-6">
+                    Mais que espaços, o Verus oferece liberdade para viver cada
+                    momento do seu jeito — com conforto, lazer e praticidade em
+                    harmonia.
+                  </p>
+                </AnimatedSection>
+              </div>
+            </div>
+          </AnimatedSection>
+        </TagLayer>
         <Image
           src="/SHADOWUPLEFT.png"
           alt="Shadow"
@@ -1301,27 +1318,22 @@ export default function HomePage() {
         id="plantas"
         className="bg-white relative py-16 md:py-24 px-4 md:px-6 lg:px-20 overflow-hidden"
       >
-        <TagLayer
-          title="PLANTAS"
-          children={
-            <>
-              <AnimatedSection animation="fade-in-up">
-                <div className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight text-center mb-4 flex justify-center items-start flex-col ">
-                  <div className="text-start">
-                    <div>PLANTAS DAS</div>{" "}
-                    <span className="text-[#C2816B]">UNIDADES</span>
-                  </div>
-                </div>
-                <AnimatedSection animation="fade-in-up" delay={200}>
-                  <p className="font-new-black text-base md:text-lg font-normal text-gray-600 text-start max-w-3xl  mb-12">
-                    Cada detalhe pensado para traduzir o seu estilo de vida.
-                    Descubra plantas versáteis que se adaptam aos seus sonhos
-                  </p>
-                </AnimatedSection>
-              </AnimatedSection>
-            </>
-          }
-        />
+        <TagLayer title="PLANTAS">
+          <AnimatedSection animation="fade-in-up">
+            <div className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight text-center mb-4 flex justify-center items-start flex-col ">
+              <div className="text-start">
+                <div>PLANTAS DAS</div>{" "}
+                <span className="text-[#C2816B]">UNIDADES</span>
+              </div>
+            </div>
+            <AnimatedSection animation="fade-in-up" delay={200}>
+              <p className="font-new-black text-base md:text-lg font-normal text-gray-600 text-start max-w-3xl  mb-12">
+                Cada detalhe pensado para traduzir o seu estilo de vida.
+                Descubra plantas versáteis que se adaptam aos seus sonhos
+              </p>
+            </AnimatedSection>
+          </AnimatedSection>
+        </TagLayer>
         <Image
           src="/SHADOWUPLEFT.png"
           alt="Shadow"
@@ -1653,30 +1665,25 @@ export default function HomePage() {
         id="localizacao"
         className="bg-white relative py-16 md:py-24 px-4 md:px-6 lg:px-20 overflow-hidden"
       >
-        <TagLayer
-          title="PLANTAS"
-          children={
-            <>
-              <AnimatedSection animation="fade-in-up">
-                <div className="flex flex-col items-start justify-center">
-                  <div className="font-carla-sans text-3xl lg:text-4xl xl:text-5xl font-normal text-gray-800 leading-tight text-start mb-4">
-                    VIVA NO CENTRO DE TUDO.
-                    <br />
-                    <span className="text-[#C2816B]">VIVA NO SEU TEMPO.</span>
-                  </div>
-                </div>
-                <AnimatedSection animation="fade-in-up" delay={200}>
-                  <p className="font-new-black text-base md:text-lg font-normal text-gray-600  max-w-3xl  mb-12 text-start">
-                    Viva cercado pelo que realmente importa: cultura, serviços,
-                    lazer e mobilidade.
-                    <br />O endereço perfeito para quem quer praticidade no dia
-                    a dia sem abrir mão de qualidade de vida.
-                  </p>
-                </AnimatedSection>
-              </AnimatedSection>
-            </>
-          }
-        />
+        <TagLayer title="PLANTAS">
+          <AnimatedSection animation="fade-in-up">
+            <div className="flex flex-col items-start justify-center">
+              <div className="font-carla-sans text-3xl lg:text-4xl xl:text-5xl font-normal text-gray-800 leading-tight text-start mb-4">
+                VIVA NO CENTRO DE TUDO.
+                <br />
+                <span className="text-[#C2816B]">VIVA NO SEU TEMPO.</span>
+              </div>
+            </div>
+            <AnimatedSection animation="fade-in-up" delay={200}>
+              <p className="font-new-black text-base md:text-lg font-normal text-gray-600  max-w-3xl  mb-12 text-start">
+                Viva cercado pelo que realmente importa: cultura, serviços,
+                lazer e mobilidade.
+                <br />O endereço perfeito para quem quer praticidade no dia a
+                dia sem abrir mão de qualidade de vida.
+              </p>
+            </AnimatedSection>
+          </AnimatedSection>
+        </TagLayer>
         <Image
           src="/SHADOWUPLEFT.png"
           alt="Shadow"
@@ -1822,60 +1829,54 @@ export default function HomePage() {
         id="autoria"
         className="bg-white relative py-16 md:py-24 px-4 md:px-6 lg:px-20 overflow-hidden"
       >
-        <TagLayer
-          title="AUTORIA"
-          hasN8Logo={true}
-          children={
-            <>
-              <AnimatedSection animation="fade-in-up">
-                <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight mb-8">
-                  A <span className="text-[#C2816B]">N8 INCORPORADORA.</span>
-                </h2>
-                <AnimatedSection animation="fade-in-up" delay={200}>
-                  <div className="font-new-black text-sm md:text-base lg:text-lg font-normal text-gray-700 leading-relaxed space-y-4 md:space-y-6 mb-6 md:mb-8 max-w-[711px] w-full">
-                    <p>
-                      A N8 Incorporadora nasceu com o propósito de transformar
-                      espaços em lugares que fazem sentido para as pessoas.
-                      Somos movidos pelo compromisso com a excelência em cada
-                      etapa – da concepção do projeto à entrega das chaves.
-                    </p>
-                    <p>
-                      Com uma atuação sólida no mercado de construção e
-                      incorporação imobiliária, desenvolvemos empreendimentos
-                      que unem arquitetura inteligente, inovação e qualidade
-                      construtiva. Buscamos ir além das expectativas, criando
-                      soluções que valorizam o bem-estar, a mobilidade e o
-                      investimento dos nossos clientes.
-                    </p>
-                    <p>
-                      Mais do que construir, acreditamos em criar experiências
-                      de vida – com responsabilidade, transparência e um olhar
-                      atento ao que realmente importa: pessoas.
-                    </p>
-                  </div>
+        <TagLayer title="AUTORIA" hasN8Logo={true}>
+          <AnimatedSection animation="fade-in-up">
+            <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight mb-8">
+              A <span className="text-[#C2816B]">N8 INCORPORADORA.</span>
+            </h2>
+            <AnimatedSection animation="fade-in-up" delay={200}>
+              <div className="font-new-black text-sm md:text-base lg:text-lg font-normal text-gray-700 leading-relaxed space-y-4 md:space-y-6 mb-6 md:mb-8 max-w-[711px] w-full">
+                <p>
+                  A N8 Incorporadora nasceu com o propósito de transformar
+                  espaços em lugares que fazem sentido para as pessoas. Somos
+                  movidos pelo compromisso com a excelência em cada etapa – da
+                  concepção do projeto à entrega das chaves.
+                </p>
+                <p>
+                  Com uma atuação sólida no mercado de construção e incorporação
+                  imobiliária, desenvolvemos empreendimentos que unem
+                  arquitetura inteligente, inovação e qualidade construtiva.
+                  Buscamos ir além das expectativas, criando soluções que
+                  valorizam o bem-estar, a mobilidade e o investimento dos
+                  nossos clientes.
+                </p>
+                <p>
+                  Mais do que construir, acreditamos em criar experiências de
+                  vida – com responsabilidade, transparência e um olhar atento
+                  ao que realmente importa: pessoas.
+                </p>
+              </div>
 
-                  <a
-                    href="https://www.n8incorporadora.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group inline-flex items-center space-x-2 md:space-x-3 font-new-black text-sm md:text-base lg:text-lg font-normal text-[#171715] border border-[#E6E5EA] rounded-full px-4 md:px-6 py-2 md:py-3 hover:bg-[#C2816B] hover:border-[#C2816B] hover:text-white transition-all duration-300 max-w-full"
-                  >
-                    <span>Conheça</span>
-                    <div className="group-hover:rotate-45 transition-transform duration-300">
-                      <Image
-                        src="/arrow.png"
-                        alt="Arrow"
-                        width={24}
-                        height={24}
-                        className="w-5 h-5 md:w-6 md:h-6"
-                      />
-                    </div>
-                  </a>
-                </AnimatedSection>
-              </AnimatedSection>
-            </>
-          }
-        />
+              <a
+                href="https://www.n8incorporadora.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center space-x-2 md:space-x-3 font-new-black text-sm md:text-base lg:text-lg font-normal text-[#171715] border border-[#E6E5EA] rounded-full px-4 md:px-6 py-2 md:py-3 hover:bg-[#C2816B] hover:border-[#C2816B] hover:text-white transition-all duration-300 max-w-full"
+              >
+                <span>Conheça</span>
+                <div className="group-hover:rotate-45 transition-transform duration-300">
+                  <Image
+                    src="/arrow.png"
+                    alt="Arrow"
+                    width={24}
+                    height={24}
+                    className="w-5 h-5 md:w-6 md:h-6"
+                  />
+                </div>
+              </a>
+            </AnimatedSection>
+          </AnimatedSection>
+        </TagLayer>
         <Image
           src="/SHADOWUPLEFT.png"
           alt="Shadow"
@@ -2046,22 +2047,17 @@ export default function HomePage() {
         id="obras"
         className="bg-white py-16 md:py-24 px-4 md:px-6 lg:px-20 relative overflow-hidden"
       >
-        <TagLayer
-          title="OBRA"
-          children={
-            <>
-              <AnimatedSection animation="fade-in-up">
-                <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight mb-4">
-                  ESTÁGIO DA <span className="text-[#C2816B]">OBRA.</span>
-                </h2>
+        <TagLayer title="OBRA">
+          <AnimatedSection animation="fade-in-up">
+            <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight mb-4">
+              ESTÁGIO DA <span className="text-[#C2816B]">OBRA.</span>
+            </h2>
 
-                <p className="font-new-black text-base md:text-lg font-normal text-gray-600 mb-12">
-                  Atualizado Outubro de 2025.
-                </p>
-              </AnimatedSection>
-            </>
-          }
-        />
+            <p className="font-new-black text-base md:text-lg font-normal text-gray-600 mb-12">
+              Atualizado Outubro de 2025.
+            </p>
+          </AnimatedSection>
+        </TagLayer>
         <Image
           src="/SHADOWUPLEFT.png"
           alt="Shadow"
