@@ -1,4 +1,3 @@
-import { AnimatedSection } from "@/app/page";
 import Image from "next/image";
 
 export function TagLayer({
