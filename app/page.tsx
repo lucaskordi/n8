@@ -770,7 +770,7 @@ export default function HomePage() {
       {/* Lazer Section */}
       <section className="relative">
         <div
-          className="relative w-full overflow-hidden"
+          className="relative w-full overflow-hidden min-h-[220px]"
           style={{ aspectRatio: "21/9" }}
         >
           <Image
@@ -781,9 +781,9 @@ export default function HomePage() {
             quality={100}
             priority
           />
-          <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center ">
             <AnimatedSection animation="fade-in-up">
-              <div className="text-center px-6 md:px-20">
+              <div className="text-center px-6 md:px-20 ">
                 <h2 className="font-carla-sans text-2xl md:text-4xl lg:text-6xl font-normal text-white leading-tight">
                   Piscina climatizada com hidromassagem e academia para corpo e
                   mente em equilÍbrio.
