@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const navItems = [
   { href: "#projeto", label: "Projeto" },
@@ -15,8 +15,6 @@ const navItems = [
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -24,35 +22,8 @@ export function Header() {
     setIsMenuOpen(false);
   };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      // Mostra o header quando está no topo ou quando scrolla para cima
-      if (currentScrollY < 10) {
-        setIsHeaderVisible(true);
-      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        // Esconde o header quando scrolla para baixo (após 100px)
-        setIsHeaderVisible(false);
-      } else if (currentScrollY < lastScrollY) {
-        // Mostra o header quando scrolla para cima
-        setIsHeaderVisible(true);
-      }
-
-      setLastScrollY(currentScrollY);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
-
   return (
-    <header
-      className={`fixed top-0 w-full z-50 h-16 md:h-20 overflow-hidden max-w-full transition-transform duration-300 ease-in-out ${
-        isHeaderVisible ? "translate-y-0" : "-translate-y-full"
-      }`}
-    >
+    <header className="fixed top-0 w-full z-50 h-16 md:h-20 overflow-hidden max-w-full">
       <div
         className="absolute inset-0 backdrop-blur-sm transition-opacity duration-300"
         style={{
@@ -99,7 +70,7 @@ export function Header() {
 
           <button
             onClick={toggleMenu}
-            className="lg:hidden w-10 h-10 bg-[#C2816B] rounded-full flex items-center justify-center hover:bg-[#3E0D11] transition-all duration-300 hover:scale-105 z-50"
+            className="lg:hidden w-10 h-10 bg-[#C2816B] rounded-full flex items-center justify-center hover:bg-[#3E0D11] transition-all duration-300 hover:scale-105 z-50 relative"
             aria-label="Menu"
           >
             <div className="w-4 h-3 flex flex-col justify-between">
@@ -123,15 +94,15 @@ export function Header() {
         </div>
       </div>
 
-      <div
-        className={`fixed inset-0 bg-black/60 backdrop-blur-sm transition-all duration-500 lg:hidden ${
-          isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
-        }`}
-        onClick={handleNavClick}
-      ></div>
+      {isMenuOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-all duration-500 lg:hidden z-30"
+          onClick={handleNavClick}
+        ></div>
+      )}
 
       <nav
-        className={`fixed top-16 right-0 w-80 max-w-[85vw] h-[80vh] bg-gradient-to-b from-[#3E0D11] to-[#2A0A0C] shadow-2xl transition-all duration-500 ease-out lg:hidden z-40 ${
+        className={`fixed top-16 right-0 w-80 max-w-[85vw] h-[calc(100vh-4rem)] bg-gradient-to-b from-[#3E0D11] to-[#2A0A0C] shadow-2xl transition-all duration-500 ease-out lg:hidden z-40 ${
           isMenuOpen
             ? "translate-x-0 opacity-100"
             : "translate-x-full opacity-0"
