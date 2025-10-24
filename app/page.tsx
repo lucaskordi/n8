@@ -2073,42 +2073,42 @@ export default function HomePage() {
             <div className="flex-1 flex flex-col justify-between space-y-4">
               <AnimatedProgressBar
                 label="Fundação e Estrutura"
-                percentage={85}
+                percentage={0}
                 delay={0}
               />
               <AnimatedProgressBar
                 label="Alvenaria e Vedação"
-                percentage={72}
+                percentage={0}
                 delay={100}
               />
               <AnimatedProgressBar
                 label="Instalações Elétricas"
-                percentage={68}
+                percentage={0}
                 delay={200}
               />
               <AnimatedProgressBar
                 label="Instalações Hidráulicas"
-                percentage={55}
+                percentage={0}
                 delay={300}
               />
               <AnimatedProgressBar
                 label="Acabamentos Internos"
-                percentage={42}
+                percentage={0}
                 delay={400}
               />
               <AnimatedProgressBar
                 label="Acabamentos Externos"
-                percentage={38}
+                percentage={0}
                 delay={500}
               />
               <AnimatedProgressBar
                 label="Paisagismo"
-                percentage={25}
+                percentage={0}
                 delay={600}
               />
               <AnimatedProgressBar
                 label="Entrega Final"
-                percentage={15}
+                percentage={0}
                 delay={700}
               />
 
