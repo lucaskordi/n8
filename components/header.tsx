@@ -89,7 +89,7 @@ export function Header() {
 
                   scrollToSection(sectionId, 0);
                 }}
-                className="font-mirante text-white font-normal relative group text-sm md:text-base hover:text-[#C2816B] transition-colors duration-300"
+                className="font-mirante text-white font-normal relative group text-sm md:text-base hover:text-white transition-colors duration-300"
               >
                 {item.label}
                 <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-full h-0.5 bg-[#C2816B] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></div>
@@ -157,7 +157,7 @@ export function Header() {
                   scrollToSection(sectionId, 0);
                   handleNavClick();
                 }}
-                className="font-mirante text-white font-normal text-lg hover:text-[#C2816B] transition-all duration-300 hover:translate-x-2 relative group"
+                className="font-mirante text-white font-normal text-lg hover:text-white transition-all duration-300 hover:translate-x-2 relative group"
                 style={{
                   animation: isMenuOpen
                     ? `slideIn 0.4s ease-out ${index * 0.05}s both`
