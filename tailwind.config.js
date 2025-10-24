@@ -17,6 +17,13 @@ module.exports = {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
       },
+      screens: {
+
+        '1112xl': '1192px',
+        '3xl': '1720px',
+
+        '4xl': '1920px',
+      },
     },
   },
   plugins: [],

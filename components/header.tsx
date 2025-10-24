@@ -23,7 +23,7 @@ export function Header() {
   };
 
   return (
-    <header className="fixed top-0 w-full z-50 h-16 md:h-20">
+    <header className="fixed top-0 w-full z-50 h-16 md:h-20 overflow-hidden max-w-full">
       <div
         className="absolute inset-0 backdrop-blur-sm transition-opacity duration-300"
         style={{
@@ -32,7 +32,7 @@ export function Header() {
         }}
       ></div>
 
-      <div className="relative w-full px-4 md:px-[40px]">
+      <div className="relative w-full px-4 md:px-[40px] max-w-full">
         <div className="flex justify-between items-center h-16 md:h-20">
           <div className="flex items-center space-x-4 md:space-x-12">
             <div className="flex items-center">

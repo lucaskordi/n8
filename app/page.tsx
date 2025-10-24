@@ -40,7 +40,7 @@ function useIntersectionObserver() {
   return [ref, isVisible] as const;
 }
 
-function AnimatedSection({
+export function AnimatedSection({
   children,
   animation = "fade-in-up",
   delay = 0,
@@ -657,7 +657,7 @@ export default function HomePage() {
       {/* Projeto Section */}
       <section
         id="projeto"
-        className="bg-white relative min-h-screen py-16 md:py-24"
+        className="bg-white relative min-h-screen py-16 md:py-24 overflow-hidden"
       >
         <TagLayer title="PROJETO" />
 
@@ -877,9 +877,32 @@ export default function HomePage() {
       {/* Galeria Section */}
       <section
         id="galeria"
-        className="bg-white relative py-16 md:py-24 px-6 md:px-20"
+        className="bg-white relative py-16 md:py-24 px-4 md:px-6 lg:px-20 overflow-hidden"
       >
-        <TagLayer title="FOTOS" />
+        <TagLayer
+          title="FOTOS"
+          children={
+            <>
+              <AnimatedSection animation="fade-in-up">
+                <div className="flex justify-center items-center">
+                  <div className="">
+                    <div className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight mb-6">
+                      <div>SEU ESPAÇO DO</div>
+                      <span className="text-[#C2816B]">SEU JEITO.</span>
+                    </div>
+                    <AnimatedSection animation="fade-in-up" delay={200}>
+                      <p className="font-new-black text-base md:text-lg font-normal text-gray-600 max-w-3xl  mb-6">
+                        Mais que espaços, o Verus oferece liberdade para viver
+                        cada momento do seu jeito — com conforto, lazer e
+                        praticidade em harmonia.
+                      </p>
+                    </AnimatedSection>
+                  </div>
+                </div>
+              </AnimatedSection>
+            </>
+          }
+        />
         <Image
           src="/SHADOWUPLEFT.png"
           alt="Shadow"
@@ -888,34 +911,13 @@ export default function HomePage() {
           quality={100}
         />
 
-        <div className="relative z-10 max-w-6xl mx-auto">
-          <AnimatedSection
-            animation="fade-in-up"
-            className="lg:absolute lg:left-[430px] lg:-top-[27px]"
-          >
-            <div className="flex justify-center items-center">
-              <div className="">
-                <div className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight mb-6">
-                  <div>SEU ESPAÇO DO</div>
-                  <span className="text-[#C2816B]">SEU JEITO.</span>
-                </div>
-                <AnimatedSection animation="fade-in-up" delay={200}>
-                  <p className="font-new-black text-base md:text-lg font-normal text-gray-600 max-w-3xl  mb-6">
-                    Mais que espaços, o Verus oferece liberdade para viver cada
-                    momento do seu jeito — com conforto, lazer e praticidade em
-                    harmonia.
-                  </p>
-                </AnimatedSection>
-              </div>
-            </div>
-          </AnimatedSection>
+        <div className="relative z-10 max-w-6xl mx-auto w-full">
+          <div className="bg-none h-[244px] hidden lg:block"></div>
 
-          <div className="bg-none h-[200px] hidden lg:block"></div>
-
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mb-16">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mb-16 w-full max-w-full">
             <button
               onClick={() => setActiveGallery("apartamentos")}
-              className={`font-mirante text-base  font-normal border-2 border-[#3E0D11] rounded-full px-8 transition-all duration-300 w-full md:w-auto ${
+              className={`font-mirante text-sm md:text-base font-normal border-2 border-[#3E0D11] rounded-full px-4 md:px-8 transition-all duration-300 w-full md:w-auto max-w-full ${
                 activeGallery === "apartamentos"
                   ? "bg-[#3E0D11] text-white"
                   : "bg-transparent text-[#3E0D11] hover:bg-[#3E0D11] hover:text-white"
@@ -925,7 +927,7 @@ export default function HomePage() {
             </button>
             <button
               onClick={() => setActiveGallery("lazer")}
-              className={`font-mirante text-base  font-normal border-2 border-[#3E0D11] rounded-full px-8  transition-all duration-300 w-full md:w-auto ${
+              className={`font-mirante text-sm md:text-base font-normal border-2 border-[#3E0D11] rounded-full px-4 md:px-8 transition-all duration-300 w-full md:w-auto max-w-full ${
                 activeGallery === "lazer"
                   ? "bg-[#3E0D11] text-white"
                   : "bg-transparent text-[#3E0D11] hover:bg-[#3E0D11] hover:text-white"
@@ -935,7 +937,7 @@ export default function HomePage() {
             </button>
             <button
               onClick={() => setActiveGallery("comodidades")}
-              className={`font-mirante text-base  font-normal border-2 border-[#3E0D11] rounded-full px-8  transition-all duration-300 w-full md:w-auto ${
+              className={`font-mirante text-sm md:text-base font-normal border-2 border-[#3E0D11] rounded-full px-4 md:px-8 transition-all duration-300 w-full md:w-auto max-w-full ${
                 activeGallery === "comodidades"
                   ? "bg-[#3E0D11] text-white"
                   : "bg-transparent text-[#3E0D11] hover:bg-[#3E0D11] hover:text-white"
@@ -945,7 +947,7 @@ export default function HomePage() {
             </button>
           </div>
 
-          <div className="relative max-w-4xl mx-auto">
+          <div className="relative max-w-4xl mx-auto w-full overflow-hidden">
             {activeGallery === "apartamentos" && (
               <div>
                 <div className="overflow-hidden">
@@ -991,7 +993,7 @@ export default function HomePage() {
                     <h3 className="font-carla-sans text-xl md:text-2xl font-normal text-[#C2816B] mb-2">
                       {apartments[apartmentIndex].title}
                     </h3>
-                    <p className="font-new-black text-sm md:text-base font-normal text-gray-600">
+                    <p className="font-new-black text-xs md:text-sm lg:text-base font-normal text-gray-600 break-words">
                       {apartments[apartmentIndex].description}
                     </p>
                   </div>
@@ -1055,7 +1057,7 @@ export default function HomePage() {
                     <h3 className="font-carla-sans text-xl md:text-2xl font-normal text-[#C2816B] mb-2">
                       {lazerItems[lazerIndex].title}
                     </h3>
-                    <p className="font-new-black text-sm md:text-base font-normal text-gray-600">
+                    <p className="font-new-black text-xs md:text-sm lg:text-base font-normal text-gray-600 break-words">
                       {lazerItems[lazerIndex].description}
                     </p>
                   </div>
@@ -1121,7 +1123,7 @@ export default function HomePage() {
                     <h3 className="font-carla-sans text-xl md:text-2xl font-normal text-[#C2816B] mb-2">
                       {comodidadesItems[comodidadesIndex].title}
                     </h3>
-                    <p className="font-new-black text-sm md:text-base font-normal text-gray-600">
+                    <p className="font-new-black text-xs md:text-sm lg:text-base font-normal text-gray-600 break-words">
                       {comodidadesItems[comodidadesIndex].description}
                     </p>
                   </div>
@@ -1399,9 +1401,29 @@ export default function HomePage() {
       {/* Plantas Section */}
       <section
         id="plantas"
-        className="bg-white relative py-16 md:py-24 px-6 md:px-20"
+        className="bg-white relative py-16 md:py-24 px-4 md:px-6 lg:px-20 overflow-hidden"
       >
-        <TagLayer title="PLANTAS" />
+        <TagLayer
+          title="PLANTAS"
+          children={
+            <>
+              <AnimatedSection animation="fade-in-up">
+                <div className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight text-center mb-4 flex justify-center items-start flex-col ">
+                  <div className="text-start">
+                    <div>PLANTAS DAS</div>{" "}
+                    <span className="text-[#C2816B]">UNIDADES</span>
+                  </div>
+                </div>
+                <AnimatedSection animation="fade-in-up" delay={200}>
+                  <p className="font-new-black text-base md:text-lg font-normal text-gray-600 text-start max-w-3xl  mb-12">
+                    Cada detalhe pensado para traduzir o seu estilo de vida.
+                    Descubra plantas versáteis que se adaptam aos seus sonhos
+                  </p>
+                </AnimatedSection>
+              </AnimatedSection>
+            </>
+          }
+        />
         <Image
           src="/SHADOWUPLEFT.png"
           alt="Shadow"
@@ -1410,31 +1432,13 @@ export default function HomePage() {
           quality={100}
         />
 
-        <div className="relative z-10 max-w-6xl mx-auto">
-          <AnimatedSection
-            animation="fade-in-up"
-            className="lg:absolute lg:left-[430px] lg:top-[27px]"
-          >
-            <div className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight text-center mb-4 flex justify-center items-start flex-col ">
-              <div className="text-start">
-                <div>PLANTAS DAS</div>{" "}
-                <span className="text-[#C2816B]">UNIDADES</span>
-              </div>
-            </div>
-            <AnimatedSection animation="fade-in-up" delay={200}>
-              <p className="font-new-black text-base md:text-lg font-normal text-gray-600 text-start max-w-3xl  mb-12">
-                Cada detalhe pensado para traduzir o seu estilo de vida.
-                Descubra plantas versáteis que se adaptam aos seus sonhos
-              </p>
-            </AnimatedSection>
-          </AnimatedSection>
-
+        <div className="relative z-10 max-w-6xl mx-auto w-full">
           <div className="w-full bg-none h-[244px] hidden lg:block"></div>
 
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mb-4 flex-wrap">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mb-4 flex-wrap w-full max-w-full">
             <button
               onClick={() => setActivePlanta("studios-funcionais")}
-              className={`font-mirante text-base md:text-lg font-normal border-2 border-[#3E0D11] rounded-full px-8 py-3 transition-all duration-300 w-full md:w-auto ${
+              className={`font-mirante text-sm md:text-base font-normal border-2 border-[#3E0D11] rounded-full px-4 md:px-8 py-2 md:py-3 transition-all duration-300 w-full md:w-auto max-w-full ${
                 activePlanta === "studios-funcionais"
                   ? "bg-[#3E0D11] text-white"
                   : "bg-transparent text-[#3E0D11] hover:bg-[#3E0D11] hover:text-white"
@@ -1444,7 +1448,7 @@ export default function HomePage() {
             </button>
             <button
               onClick={() => setActivePlanta("studios-loft")}
-              className={`font-mirante text-base md:text-lg font-normal border-2 border-[#3E0D11] rounded-full px-8 py-3 transition-all duration-300 w-full md:w-auto ${
+              className={`font-mirante text-sm md:text-base font-normal border-2 border-[#3E0D11] rounded-full px-4 md:px-8 py-2 md:py-3 transition-all duration-300 w-full md:w-auto max-w-full ${
                 activePlanta === "studios-loft"
                   ? "bg-[#3E0D11] text-white"
                   : "bg-transparent text-[#3E0D11] hover:bg-[#3E0D11] hover:text-white"
@@ -1454,7 +1458,7 @@ export default function HomePage() {
             </button>
             <button
               onClick={() => setActivePlanta("02-quartos")}
-              className={`font-mirante text-base md:text-lg font-normal border-2 border-[#3E0D11] rounded-full px-8 py-3 transition-all duration-300 w-full md:w-auto ${
+              className={`font-mirante text-sm md:text-base font-normal border-2 border-[#3E0D11] rounded-full px-4 md:px-8 py-2 md:py-3 transition-all duration-300 w-full md:w-auto max-w-full ${
                 activePlanta === "02-quartos"
                   ? "bg-[#3E0D11] text-white"
                   : "bg-transparent text-[#3E0D11] hover:bg-[#3E0D11] hover:text-white"
@@ -1464,7 +1468,7 @@ export default function HomePage() {
             </button>
             <button
               onClick={() => setActivePlanta("03-quartos")}
-              className={`font-mirante text-base md:text-lg font-normal border-2 border-[#3E0D11] rounded-full px-8 py-3 transition-all duration-300 w-full md:w-auto ${
+              className={`font-mirante text-sm md:text-base font-normal border-2 border-[#3E0D11] rounded-full px-4 md:px-8 py-2 md:py-3 transition-all duration-300 w-full md:w-auto max-w-full ${
                 activePlanta === "03-quartos"
                   ? "bg-[#3E0D11] text-white"
                   : "bg-transparent text-[#3E0D11] hover:bg-[#3E0D11] hover:text-white"
@@ -1474,7 +1478,7 @@ export default function HomePage() {
             </button>
           </div>
 
-          <div className="relative max-w-4xl mx-auto">
+          <div className="relative max-w-4xl mx-auto w-full overflow-hidden">
             {activePlanta === "studios-funcionais" && (
               <div>
                 <div className="overflow-hidden">
@@ -1524,7 +1528,7 @@ export default function HomePage() {
                     <h3 className="font-carla-sans text-xl md:text-2xl font-normal text-[#C2816B] mb-2">
                       {studiosFuncionais[studiosFuncionaisIndex].title}
                     </h3>
-                    <p className="font-new-black text-sm md:text-base font-normal text-gray-600">
+                    <p className="font-new-black text-xs md:text-sm lg:text-base font-normal text-gray-600 break-words">
                       {studiosFuncionais[studiosFuncionaisIndex].description}
                     </p>
                   </div>
@@ -1590,7 +1594,7 @@ export default function HomePage() {
                     <h3 className="font-carla-sans text-xl md:text-2xl font-normal text-[#C2816B] mb-2">
                       {studiosLoft[studiosLoftIndex].title}
                     </h3>
-                    <p className="font-new-black text-sm md:text-base font-normal text-gray-600">
+                    <p className="font-new-black text-xs md:text-sm lg:text-base font-normal text-gray-600 break-words">
                       {studiosLoft[studiosLoftIndex].description}
                     </p>
                   </div>
@@ -1656,7 +1660,7 @@ export default function HomePage() {
                     <h3 className="font-carla-sans text-xl md:text-2xl font-normal text-[#C2816B] mb-2">
                       {doisQuartos[doisQuartosIndex].title}
                     </h3>
-                    <p className="font-new-black text-sm md:text-base font-normal text-gray-600">
+                    <p className="font-new-black text-xs md:text-sm lg:text-base font-normal text-gray-600 break-words">
                       {doisQuartos[doisQuartosIndex].description}
                     </p>
                   </div>
@@ -1722,7 +1726,7 @@ export default function HomePage() {
                     <h3 className="font-carla-sans text-xl md:text-2xl font-normal text-[#C2816B] mb-2">
                       {tresQuartos[tresQuartosIndex].title}
                     </h3>
-                    <p className="font-new-black text-sm md:text-base font-normal text-gray-600">
+                    <p className="font-new-black text-xs md:text-sm lg:text-base font-normal text-gray-600 break-words">
                       {tresQuartos[tresQuartosIndex].description}
                     </p>
                   </div>
@@ -1749,9 +1753,32 @@ export default function HomePage() {
       {/* Localização Section */}
       <section
         id="localizacao"
-        className="bg-white relative py-16 md:py-24 px-6 md:px-20"
+        className="bg-white relative py-16 md:py-24 px-4 md:px-6 lg:px-20 overflow-hidden"
       >
-        <TagLayer title="PLANTAS" />
+        <TagLayer
+          title="PLANTAS"
+          children={
+            <>
+              <AnimatedSection animation="fade-in-up">
+                <div className="flex flex-col items-start justify-center">
+                  <div className="font-carla-sans text-3xl lg:text-4xl xl:text-5xl font-normal text-gray-800 leading-tight text-start mb-4">
+                    VIVA NO CENTRO DE TUDO.
+                    <br />
+                    <span className="text-[#C2816B]">VIVA NO SEU TEMPO.</span>
+                  </div>
+                </div>
+                <AnimatedSection animation="fade-in-up" delay={200}>
+                  <p className="font-new-black text-base md:text-lg font-normal text-gray-600  max-w-3xl  mb-12 text-start">
+                    Viva cercado pelo que realmente importa: cultura, serviços,
+                    lazer e mobilidade.
+                    <br />O endereço perfeito para quem quer praticidade no dia
+                    a dia sem abrir mão de qualidade de vida.
+                  </p>
+                </AnimatedSection>
+              </AnimatedSection>
+            </>
+          }
+        />
         <Image
           src="/SHADOWUPLEFT.png"
           alt="Shadow"
@@ -1760,28 +1787,13 @@ export default function HomePage() {
           quality={100}
         />
 
-        <div className="relative z-10 max-w-6xl mx-auto">
-          <AnimatedSection animation="fade-in-up">
-            <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight text-center mb-8">
-              VIVA NO CENTRO DE TUDO.
-              <br />
-              <span className="text-[#C2816B]">VIVA NO SEU TEMPO.</span>
-            </h2>
-          </AnimatedSection>
-
-          <AnimatedSection animation="fade-in-up" delay={200}>
-            <p className="font-new-black text-base md:text-lg font-normal text-gray-600 text-center max-w-3xl mx-auto mb-12">
-              Viva cercado pelo que realmente importa: cultura, serviços, lazer
-              e mobilidade.
-              <br />O endereço perfeito para quem quer praticidade no dia a dia
-              sem abrir mão de qualidade de vida.
-            </p>
-          </AnimatedSection>
+        <div className="relative z-10 max-w-6xl mx-auto w-full">
+          <div className="bg-none h-[320px] hidden lg:block"></div>
 
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-center">
             {/* Google Map - Left Side */}
-            <div className="w-full lg:w-[55%]">
-              <div className="w-full h-[500px] md:h-[600px] rounded-2xl overflow-hidden bg-gray-200">
+            <div className="w-full lg:w-[55%] max-w-full">
+              <div className="w-full h-[500px] md:h-[600px] rounded-2xl overflow-hidden bg-gray-200 max-w-full">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3603.6891234567!2d-49.2054321!3d-25.5326789!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94dce3d8c8c8c8c8%3A0x1234567890abcdef!2sR.%20Ver%C3%ADssimo%20Marques%2C%201753%20-%20Centro%2C%20S%C3%A3o%20Jos%C3%A9%20dos%20Pinhais%20-%20PR%2C%2083005-410!5e0!3m2!1spt-BR!2sbr!4v1234567890123!5m2!1spt-BR!2sbr"
                   width="100%"
@@ -1795,69 +1807,69 @@ export default function HomePage() {
             </div>
 
             {/* Location Bars - Right Side */}
-            <div className="w-full lg:w-[45%] space-y-3">
+            <div className="w-full lg:w-[45%] space-y-3 max-w-full">
               {/* Bar 1 */}
-              <div className="relative bg-[#3E0D11] rounded-full px-5 py-2.5 flex items-center">
-                <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-4 flex items-center justify-center min-w-[70px]">
+              <div className="relative bg-[#3E0D11] rounded-full px-3 md:px-5 py-2 md:py-2.5 flex items-center w-full max-w-full overflow-hidden">
+                <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-2 md:px-4 flex items-center justify-center min-w-[60px] md:min-w-[70px]">
                   <span className="font-new-black text-xs md:text-sm text-white font-normal">
                     900m
                   </span>
                 </div>
-                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[85px]">
+                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[70px] md:ml-[85px] truncate">
                   Shopping São José
                 </span>
               </div>
 
               {/* Bar 2 */}
-              <div className="relative bg-[#3E0D11] rounded-full px-5 py-2.5 flex items-center">
-                <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-4 flex items-center justify-center min-w-[70px]">
+              <div className="relative bg-[#3E0D11] rounded-full px-3 md:px-5 py-2 md:py-2.5 flex items-center w-full max-w-full overflow-hidden">
+                <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-2 md:px-4 flex items-center justify-center min-w-[60px] md:min-w-[70px]">
                   <span className="font-new-black text-xs md:text-sm text-white font-normal">
                     4,6km
                   </span>
                 </div>
-                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[85px]">
+                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[70px] md:ml-[85px] truncate">
                   Aeroporto Afonso Pena
                 </span>
               </div>
 
               {/* Bar 3 */}
-              <div className="relative bg-[#3E0D11] rounded-full px-5 py-2.5 flex items-center">
-                <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-4 flex items-center justify-center min-w-[70px]">
+              <div className="relative bg-[#3E0D11] rounded-full px-3 md:px-5 py-2 md:py-2.5 flex items-center w-full max-w-full overflow-hidden">
+                <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-2 md:px-4 flex items-center justify-center min-w-[60px] md:min-w-[70px]">
                   <span className="font-new-black text-xs md:text-sm text-white font-normal">
                     600m
                   </span>
                 </div>
-                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[85px]">
+                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[70px] md:ml-[85px] truncate">
                   Supermercado Festval
                 </span>
               </div>
 
               {/* Bar 4 */}
-              <div className="relative bg-[#3E0D11] rounded-full px-5 py-2.5 flex items-center">
-                <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-4 flex items-center justify-center min-w-[70px]">
+              <div className="relative bg-[#3E0D11] rounded-full px-3 md:px-5 py-2 md:py-2.5 flex items-center w-full max-w-full overflow-hidden">
+                <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-2 md:px-4 flex items-center justify-center min-w-[60px] md:min-w-[70px]">
                   <span className="font-new-black text-xs md:text-sm text-white font-normal">
                     450m
                   </span>
                 </div>
-                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[85px]">
+                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[70px] md:ml-[85px] truncate">
                   Rua XV de Novembro
                 </span>
               </div>
 
               {/* Bar 5 */}
-              <div className="relative bg-[#3E0D11] rounded-full px-5 py-2.5 flex items-center">
-                <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-4 flex items-center justify-center min-w-[70px]">
+              <div className="relative bg-[#3E0D11] rounded-full px-3 md:px-5 py-2 md:py-2.5 flex items-center w-full max-w-full overflow-hidden">
+                <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-2 md:px-4 flex items-center justify-center min-w-[60px] md:min-w-[70px]">
                   <span className="font-new-black text-xs md:text-sm text-white font-normal">
                     2,9km
                   </span>
                 </div>
-                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[85px]">
+                <span className="font-new-black text-xs md:text-sm text-white font-normal ml-[70px] md:ml-[85px] truncate">
                   Parque São José
                 </span>
               </div>
 
               {/* Bar 6 */}
-              <div className="relative bg-[#3E0D11] rounded-full px-5 py-2.5 flex items-center">
+              <div className="relative bg-[#3E0D11] rounded-full px-3 md:px-5 py-2 md:py-2.5 flex items-center w-full max-w-full overflow-hidden">
                 <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-4 flex items-center justify-center min-w-[75px]">
                   <span className="font-new-black text-xs md:text-sm text-white font-normal">
                     20 min
@@ -1869,7 +1881,7 @@ export default function HomePage() {
               </div>
 
               {/* Bar 7 */}
-              <div className="relative bg-[#3E0D11] rounded-full px-5 py-2.5 flex items-center">
+              <div className="relative bg-[#3E0D11] rounded-full px-3 md:px-5 py-2 md:py-2.5 flex items-center w-full max-w-full overflow-hidden">
                 <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-4 flex items-center justify-center min-w-[85px]">
                   <span className="font-new-black text-xs text-white font-normal">
                     Próximo
@@ -1881,7 +1893,7 @@ export default function HomePage() {
               </div>
 
               {/* Bar 8 */}
-              <div className="relative bg-[#3E0D11] rounded-full px-5 py-2.5 flex items-center">
+              <div className="relative bg-[#3E0D11] rounded-full px-3 md:px-5 py-2 md:py-2.5 flex items-center w-full max-w-full overflow-hidden">
                 <div className="absolute left-0 top-0 bottom-0 bg-[#C2816B] rounded-full px-4 flex items-center justify-center min-w-[85px]">
                   <span className="font-new-black text-xs text-white font-normal">
                     Próximo
@@ -1910,9 +1922,62 @@ export default function HomePage() {
       {/* Sobre Section */}
       <section
         id="autoria"
-        className="bg-white py-16 md:py-24 px-6 md:px-20 relative"
+        className="bg-white relative py-16 md:py-24 px-4 md:px-6 lg:px-20 overflow-hidden"
       >
-        <TagLayer title="AUTORIA" />
+        <TagLayer
+          title="AUTORIA"
+          hasN8Logo={true}
+          children={
+            <>
+              <AnimatedSection animation="fade-in-up">
+                <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight mb-8">
+                  A <span className="text-[#C2816B]">N8 INCORPORADORA.</span>
+                </h2>
+                <AnimatedSection animation="fade-in-up" delay={200}>
+                  <div className="font-new-black text-sm md:text-base lg:text-lg font-normal text-gray-700 leading-relaxed space-y-4 md:space-y-6 mb-6 md:mb-8 max-w-[711px] w-full">
+                    <p>
+                      A N8 Incorporadora nasceu com o propósito de transformar
+                      espaços em lugares que fazem sentido para as pessoas.
+                      Somos movidos pelo compromisso com a excelência em cada
+                      etapa – da concepção do projeto à entrega das chaves.
+                    </p>
+                    <p>
+                      Com uma atuação sólida no mercado de construção e
+                      incorporação imobiliária, desenvolvemos empreendimentos
+                      que unem arquitetura inteligente, inovação e qualidade
+                      construtiva. Buscamos ir além das expectativas, criando
+                      soluções que valorizam o bem-estar, a mobilidade e o
+                      investimento dos nossos clientes.
+                    </p>
+                    <p>
+                      Mais do que construir, acreditamos em criar experiências
+                      de vida – com responsabilidade, transparência e um olhar
+                      atento ao que realmente importa: pessoas.
+                    </p>
+                  </div>
+
+                  <a
+                    href="https://www.n8incorporadora.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group inline-flex items-center space-x-2 md:space-x-3 font-new-black text-sm md:text-base lg:text-lg font-normal text-[#171715] border border-[#E6E5EA] rounded-full px-4 md:px-6 py-2 md:py-3 hover:bg-[#C2816B] hover:border-[#C2816B] hover:text-white transition-all duration-300 max-w-full"
+                  >
+                    <span>Conheça</span>
+                    <div className="group-hover:rotate-45 transition-transform duration-300">
+                      <Image
+                        src="/arrow.png"
+                        alt="Arrow"
+                        width={24}
+                        height={24}
+                        className="w-5 h-5 md:w-6 md:h-6"
+                      />
+                    </div>
+                  </a>
+                </AnimatedSection>
+              </AnimatedSection>
+            </>
+          }
+        />
         <Image
           src="/SHADOWUPLEFT.png"
           alt="Shadow"
@@ -1920,77 +1985,14 @@ export default function HomePage() {
           className="object-cover rotate-180"
           quality={100}
         />
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
-            {/* Left Side - Logo */}
-            <div className="flex-shrink-0">
-              <div className="flex flex-col items-center">
-                <Image
-                  src="/logo_n8.png"
-                  alt="N8 Incorporadora"
-                  width={160}
-                  height={160}
-                  className="w-32 h-32 md:w-40 md:h-40 object-contain"
-                />
-              </div>
-            </div>
-
-            {/* Right Side - Content */}
-            <div className="flex-1">
-              <AnimatedSection animation="fade-in-up">
-                <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight mb-8">
-                  A <span className="text-[#C2816B]">N8 INCORPORADORA.</span>
-                </h2>
-              </AnimatedSection>
-
-              <AnimatedSection animation="fade-in-up" delay={200}>
-                <div className="font-new-black text-base md:text-lg font-normal text-gray-700 leading-relaxed space-y-6 mb-8">
-                  <p>
-                    A N8 Incorporadora nasceu com o propósito de transformar
-                    espaços em lugares que fazem sentido para as pessoas. Somos
-                    movidos pelo compromisso com a excelência em cada etapa – da
-                    concepção do projeto à entrega das chaves.
-                  </p>
-                  <p>
-                    Com uma atuação sólida no mercado de construção e
-                    incorporação imobiliária, desenvolvemos empreendimentos que
-                    unem arquitetura inteligente, inovação e qualidade
-                    construtiva. Buscamos ir além das expectativas, criando
-                    soluções que valorizam o bem-estar, a mobilidade e o
-                    investimento dos nossos clientes.
-                  </p>
-                  <p>
-                    Mais do que construir, acreditamos em criar experiências de
-                    vida – com responsabilidade, transparência e um olhar atento
-                    ao que realmente importa: pessoas.
-                  </p>
-                </div>
-
-                <a
-                  href="https://www.n8incorporadora.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group inline-flex items-center space-x-3 font-new-black text-base md:text-lg font-normal text-[#171715] border border-[#E6E5EA] rounded-full px-6 py-3 hover:bg-[#C2816B] hover:border-[#C2816B] hover:text-white transition-all duration-300"
-                >
-                  <span>Conheça</span>
-                  <div className="group-hover:rotate-45 transition-transform duration-300">
-                    <Image
-                      src="/arrow.png"
-                      alt="Arrow"
-                      width={24}
-                      height={24}
-                      className="w-5 h-5 md:w-6 md:h-6"
-                    />
-                  </div>
-                </a>
-              </AnimatedSection>
-            </div>
-          </div>
-
+        <div className="relative z-10 max-w-6xl mx-auto w-full">
+          <div className="bg-none h-[710px] hidden lg:block 1112xl:h-[524px]"></div>
+        </div>
+        <div>
           {/* Feature Blocks */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-16 md:mt-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mt-16 md:mt-20 max-w-6xl mx-auto w-full px-4 md:px-6 lg:px-0">
             {/* Feature 1 */}
-            <div className="text-center">
+            <div className="text-center max-w-full">
               <div className="w-24 h-24 mx-auto mb-4 flex items-center justify-center">
                 <Image
                   src="/constr.svg"
@@ -2000,17 +2002,17 @@ export default function HomePage() {
                   className="w-16 h-16"
                 />
               </div>
-              <h3 className="font-mirante text-base md:text-lg font-semibold text-gray-800 mb-2">
+              <h3 className="font-mirante text-sm md:text-base lg:text-lg font-semibold text-gray-800 mb-2 break-words">
                 MAIS DE <span className="text-[#C2816B]">3 MIL M²</span>{" "}
                 CONSTRUÍDOS
               </h3>
-              <p className="font-new-black text-sm md:text-base font-normal text-gray-600">
+              <p className="font-new-black text-xs md:text-sm lg:text-base font-normal text-gray-600 break-words">
                 Qualidade e solidez reconhecidas no mercado imobiliário
               </p>
             </div>
 
             {/* Feature 2 */}
-            <div className="text-center">
+            <div className="text-center max-w-full">
               <div className="w-24 h-24 mx-auto mb-4 flex items-center justify-center">
                 <Image
                   src="/diamond.svg"
@@ -2020,17 +2022,17 @@ export default function HomePage() {
                   className="w-16 h-16"
                 />
               </div>
-              <h3 className="font-mirante text-base md:text-lg font-semibold text-gray-800 mb-2">
+              <h3 className="font-mirante text-sm md:text-base lg:text-lg font-semibold text-gray-800 mb-2 break-words">
                 ACABAMENTOS DE{" "}
                 <span className="text-[#C2816B]">ALTO PADRÃO</span>
               </h3>
-              <p className="font-new-black text-sm md:text-base font-normal text-gray-600">
+              <p className="font-new-black text-xs md:text-sm lg:text-base font-normal text-gray-600 break-words">
                 Detalhes sofisticados que valorizam cada ambiente
               </p>
             </div>
 
             {/* Feature 3 */}
-            <div className="text-center">
+            <div className="text-center max-w-full">
               <div className="w-24 h-24 mx-auto mb-4 flex items-center justify-center">
                 <Image
                   src="/sust.svg"
@@ -2040,16 +2042,16 @@ export default function HomePage() {
                   className="w-16 h-16"
                 />
               </div>
-              <h3 className="font-mirante text-base md:text-lg font-semibold text-gray-800 mb-2">
+              <h3 className="font-mirante text-sm md:text-base lg:text-lg font-semibold text-gray-800 mb-2 break-words">
                 <span className="text-[#C2816B]">SUSTENTABILIDADE</span> EM FOCO
               </h3>
-              <p className="font-new-black text-sm md:text-base font-normal text-gray-600">
+              <p className="font-new-black text-xs md:text-sm lg:text-base font-normal text-gray-600 break-words">
                 Tecnologias que reduzem impacto e otimizam recursos
               </p>
             </div>
 
             {/* Feature 4 */}
-            <div className="text-center">
+            <div className="text-center max-w-full">
               <div className="w-24 h-24 mx-auto mb-4 flex items-center justify-center">
                 <Image
                   src="/valor.svg"
@@ -2059,11 +2061,11 @@ export default function HomePage() {
                   className="w-16 h-16"
                 />
               </div>
-              <h3 className="font-mirante text-base md:text-lg font-semibold text-gray-800 mb-2">
+              <h3 className="font-mirante text-sm md:text-base lg:text-lg font-semibold text-gray-800 mb-2 break-words">
                 ALTO POTENCIAL DE{" "}
                 <span className="text-[#C2816B]">VALORIZAÇÃO</span>
               </h3>
-              <p className="font-new-black text-sm md:text-base font-normal text-gray-600">
+              <p className="font-new-black text-xs md:text-sm lg:text-base font-normal text-gray-600 break-words">
                 Planejados para valorizar: localização e arquitetura com retorno
                 seguro
               </p>
@@ -2124,7 +2126,7 @@ export default function HomePage() {
       </section>
 
       {/* Divider with Text */}
-      <section className="relative pb-12 md:pb-16">
+      <section className="relative ">
         <Image
           src="/divider.png"
           alt="Divider"
@@ -2144,9 +2146,24 @@ export default function HomePage() {
       {/* Obra Section */}
       <section
         id="obras"
-        className="bg-white py-16 md:py-24 px-6 md:px-20 relative"
+        className="bg-white py-16 md:py-24 px-4 md:px-6 lg:px-20 relative overflow-hidden"
       >
-        <TagLayer title="OBRA" />
+        <TagLayer
+          title="OBRA"
+          children={
+            <>
+              <AnimatedSection animation="fade-in-up">
+                <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight mb-4">
+                  ESTÁGIO DA <span className="text-[#C2816B]">OBRA.</span>
+                </h2>
+
+                <p className="font-new-black text-base md:text-lg font-normal text-gray-600 mb-12">
+                  Atualizado Outubro de 2025.
+                </p>
+              </AnimatedSection>
+            </>
+          }
+        />
         <Image
           src="/SHADOWUPLEFT.png"
           alt="Shadow"
@@ -2154,18 +2171,10 @@ export default function HomePage() {
           className="object-cover "
           quality={100}
         />
-        <div className="max-w-6xl mx-auto">
-          <AnimatedSection animation="fade-in-up">
-            <h2 className="font-carla-sans text-3xl md:text-4xl lg:text-5xl font-normal text-gray-800 leading-tight mb-4">
-              ESTÁGIO DA <span className="text-[#C2816B]">OBRA.</span>
-            </h2>
+        <div className="max-w-6xl mx-auto w-full">
+          <div className="bg-none h-[160px] hidden lg:block"></div>
 
-            <p className="font-new-black text-base md:text-lg font-normal text-gray-600 mb-12">
-              Atualizado Outubro de 2025.
-            </p>
-          </AnimatedSection>
-
-          <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-stretch">
+          <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-stretch w-full">
             {/* Left Side - Progress Bars */}
             <div className="flex-1 flex flex-col justify-between space-y-4">
               <AnimatedProgressBar
@@ -2235,82 +2244,82 @@ export default function HomePage() {
             </AnimatedSection>
           </div>
         </div>
-      </section>
-
-      {/* Information Bar */}
-      <section className="bg-gray-50 py-12 md:py-8 px-6 md:px-20">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-            {/* Logo */}
-            <div className="flex items-center">
-              <Image
-                src="/logo_n8.png"
-                alt="N8 Incorporadora"
-                width={80}
-                height={80}
-                className="w-16 h-16 md:w-20 md:h-20 object-contain"
-              />
-            </div>
-
-            {/* WhatsApp Button */}
-            <a
-              href="http://wa.me/5541997188421?text=Vim%20do%20Site%20e%20Gostaria%20de%20Saber%20Mais%20sobre%20o%20Verus"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex flex-col items-center gap-1 px-6 py-3 border-2 border-[#171715] rounded-lg hover:bg-[#3E0D11] hover:border-[#3E0D11] hover:scale-105 transition-all duration-300 group"
-            >
-              <span className="font-new-black text-sm md:text-base font-normal text-[#171715] group-hover:text-white transition-colors">
-                Fale pelo
-              </span>
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-6 flex items-center justify-center">
-                  <svg
-                    className="w-5 h-5 text-[#171715] group-hover:text-white transition-colors"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488" />
-                  </svg>
-                </div>
-                <span className="font-new-black text-sm md:text-base font-normal text-[#171715] group-hover:text-white transition-colors">
-                  WhatsApp
-                </span>
+        <div className="pt-16 md:pt-20 pb-12 md:pb-8 px-6 md:px-20">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+              {/* Logo */}
+              <div className="flex items-center">
+                <Image
+                  src="/logo_n8.png"
+                  alt="N8 Incorporadora"
+                  width={80}
+                  height={80}
+                  className="w-16 h-16 md:w-20 md:h-20 object-contain"
+                />
               </div>
-            </a>
 
-            {/* Social Media Icons */}
-            <div className="flex items-center gap-4">
+              {/* WhatsApp Button */}
               <a
-                href="https://www.instagram.com/n8.inc/"
+                href="http://wa.me/5541997188421?text=Vim%20do%20Site%20e%20Gostaria%20de%20Saber%20Mais%20sobre%20o%20Verus"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 flex items-center justify-center hover:scale-110 transition-transform duration-300"
+                className="flex flex-col items-center gap-1 px-6 py-3 border-2 border-[#171715] rounded-lg hover:bg-[#3E0D11] hover:border-[#3E0D11] hover:scale-105 transition-all duration-300 group"
               >
-                <Image
-                  src="/iglogo.svg"
-                  alt="Instagram"
-                  width={40}
-                  height={40}
-                  className="w-full h-full object-contain"
-                />
+                <span className="font-new-black text-sm md:text-base font-normal text-[#171715] group-hover:text-white transition-colors">
+                  Fale pelo
+                </span>
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <svg
+                      className="w-5 h-5 text-[#171715] group-hover:text-white transition-colors"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488" />
+                    </svg>
+                  </div>
+                  <span className="font-new-black text-sm md:text-base font-normal text-[#171715] group-hover:text-white transition-colors">
+                    WhatsApp
+                  </span>
+                </div>
               </a>
 
-              <a
-                href="mailto:falecom@n8incorporadora.com"
-                className="w-10 h-10 flex items-center justify-center hover:scale-110 transition-transform duration-300"
-              >
-                <Image
-                  src="/maillogo.svg"
-                  alt="Email"
-                  width={40}
-                  height={40}
-                  className="w-full h-full object-contain"
-                />
-              </a>
+              {/* Social Media Icons */}
+              <div className="flex items-center gap-4">
+                <a
+                  href="https://www.instagram.com/n8.inc/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 flex items-center justify-center hover:scale-110 transition-transform duration-300"
+                >
+                  <Image
+                    src="/iglogo.svg"
+                    alt="Instagram"
+                    width={40}
+                    height={40}
+                    className="w-full h-full object-contain"
+                  />
+                </a>
+
+                <a
+                  href="mailto:falecom@n8incorporadora.com"
+                  className="w-10 h-10 flex items-center justify-center hover:scale-110 transition-transform duration-300"
+                >
+                  <Image
+                    src="/maillogo.svg"
+                    alt="Email"
+                    width={40}
+                    height={40}
+                    className="w-full h-full object-contain"
+                  />
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Information Bar */}
 
       {/* Footer */}
       <footer className="relative">
