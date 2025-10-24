@@ -9,6 +9,11 @@ export function middleware(request: NextRequest) {
   response.headers.set('Content-Security-Policy', 'frame-ancestors *;')
   response.headers.set('Referrer-Policy', 'no-referrer-when-downgrade')
   
+  // Headers CORS
+  response.headers.set('Access-Control-Allow-Origin', '*')
+  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With')
+  
   // Headers adicionais para iframe
   response.headers.set('X-Content-Type-Options', 'nosniff')
   response.headers.set('X-DNS-Prefetch-Control', 'off')
