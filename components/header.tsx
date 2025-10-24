@@ -2,6 +2,9 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { scrollToSection } from "@/utils/scroll-to-section";
+import { useMotionValueEvent, useScroll } from "framer-motion";
+import { motion } from "framer-motion";
 
 const navItems = [
   { href: "#projeto", label: "Projeto" },
@@ -15,6 +18,9 @@ const navItems = [
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const { scrollY } = useScroll();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -22,10 +28,38 @@ export function Header() {
     setIsMenuOpen(false);
   };
 
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = scrollY.getPrevious();
+
+    // Check if scrolled down from top
+    if (latest > 50) {
+      setIsScrolled(true);
+    } else {
+      setIsScrolled(false);
+    }
+
+    if (previous) {
+      if (latest > previous && latest > 150) {
+        setHidden(true);
+        setIsMenuOpen(false);
+      } else {
+        setHidden(false);
+      }
+    }
+  });
+
   return (
-    <header className="fixed top-0 w-full z-50 h-16 md:h-20 overflow-hidden max-w-full">
+    <motion.header
+      variants={{
+        visible: { y: 0, zIndex: 50 },
+        hidden: { y: "-100%", zIndex: 1 },
+      }}
+      animate={hidden ? "hidden" : "visible"}
+      transition={{ duration: 0.35, ease: "easeInOut" }}
+      className="fixed top-0 w-full h-16 md:h-20 overflow-hidden max-w-full"
+    >
       <div
-        className="absolute inset-0 backdrop-blur-sm transition-opacity duration-300"
+        className={`absolute inset-0 backdrop-blur-sm transition-all duration-300`}
         style={{
           background:
             "linear-gradient(to bottom, rgba(62, 13, 17, 0.9), rgba(62, 13, 17, 0.6), rgba(62, 13, 17, 0.3), rgba(62, 13, 17, 0.1), rgba(62, 13, 17, 0))",
@@ -48,14 +82,18 @@ export function Header() {
 
           <nav className="hidden lg:flex items-center space-x-4 md:space-x-6">
             {navItems.map((item) => (
-              <a
+              <button
                 key={item.href}
-                href={item.href}
-                className="font-mirante text-white font-normal relative group text-sm md:text-base"
+                onClick={() => {
+                  const sectionId = item.href.replace("#", "");
+
+                  scrollToSection(sectionId, 0);
+                }}
+                className="font-mirante text-white font-normal relative group text-sm md:text-base hover:text-[#C2816B] transition-colors duration-300"
               >
                 {item.label}
                 <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-full h-0.5 bg-[#C2816B] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></div>
-              </a>
+              </button>
             ))}
           </nav>
 
@@ -111,10 +149,14 @@ export function Header() {
         <div className="flex flex-col h-full p-6">
           <div className="flex-1 flex flex-col space-y-4">
             {navItems.map((item, index) => (
-              <a
+              <button
                 key={item.href}
-                href={item.href}
-                onClick={handleNavClick}
+                onClick={() => {
+                  const sectionId = item.href.replace("#", "");
+
+                  scrollToSection(sectionId, 0);
+                  handleNavClick();
+                }}
                 className="font-mirante text-white font-normal text-lg hover:text-[#C2816B] transition-all duration-300 hover:translate-x-2 relative group"
                 style={{
                   animation: isMenuOpen
@@ -124,7 +166,7 @@ export function Header() {
               >
                 {item.label}
                 <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#C2816B] group-hover:w-full transition-all duration-300"></div>
-              </a>
+              </button>
             ))}
           </div>
 
@@ -157,6 +199,6 @@ export function Header() {
           }
         }
       `}</style>
-    </header>
+    </motion.header>
   );
 }
